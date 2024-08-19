@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home</title>
+</head>
+<body>
+    <header>
+        <% if (isAuthenticated) { %>
+            <a href="/account"><img src="/path/to/user-icon.png" alt="User Account"></a>
+        <% } else { %>
+            <a href="/account/login">Log In</a>
+        <% } %>
+    </header>
+    <main>
+        <h1>Welcome to the Home Page</h1>
+        <!-- Add your main content here -->
+    </main>
+</body>
+</html>
