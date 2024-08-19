@@ -8,6 +8,7 @@ const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 const passport = require('passport');
 const MongoStore = require('connect-mongo');
+const flash = require('express-flash');
 /* Connect-mongo is a MongoDB session store for Express and Connect.
 Specifically designed to store session data in MongoDB.
 Used in conjunction with express-session middleware to persist session information in MongoDB instead of in-memory storage.
@@ -63,6 +64,7 @@ The session data is then available in your route handlers via req.session.
 
 app.use(passport.initialize());
 app.use(passport.session());
+app.use(flash());
 /* Passport works in conjunction with Express sessions to handle authentication
 the main purpose is add an addtional leyer with passport that provides persistent login sessions
 breakdown of how express-session integrated with passport session management process works :
@@ -102,12 +104,14 @@ Assigns the original URL to the session variable returnTo if the user is not aut
 or if teh user is logged in and trying to access the account page
 This allows the app to redirect users back to the page they were trying to access before being prompted to log in.
 */
-app.use('/', homeController.getHome);
+
+
+
 app.use('/faq', homeController.getFAQ);
 app.use('/account', accountRoutes);
 app.use('/marketplace', marketplaceRoutes);
 app.use('/packets', packetRoutes);
-
+app.use('/', homeController.getHome);
 // app.use('/addpoints', stripetestpayment)
 
 

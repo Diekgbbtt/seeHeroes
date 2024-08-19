@@ -45,6 +45,7 @@ The user object is then attached to the request as req.user.
  */
 passport.use( new LocalStrategy({ usernameField: 'email'}, (email, password, done) => {
     user.findOne({ email: email.toLowerCase() })
+    console.log(email)
         .then((user) => {
             if(!user) {
                 return done(null, false, { msg: 'Email ${email} not found' });

@@ -1,21 +1,374 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Home</title>
-</head>
-<body>
-    <header>
-        <% if (isAuthenticated) { %>
-            <a href="/account"><img src="/path/to/user-icon.png" alt="User Account"></a>
-        <% } else { %>
-            <a href="/account/login">Log In</a>
-        <% } %>
-    </header>
-    <main>
-        <h1>Welcome to the Home Page</h1>
-        <!-- Add your main content here -->
-    </main>
-</body>
+
+	<head>
+		<title></title>
+		<meta charset="utf-8" />
+		<meta content="width=device-width" name="viewport" />
+		<style>
+			body {
+				background-color: #f1a92b;
+				color: #000000;
+				font-family: Arial, "Helvetica Neue", Helvetica, sans-serif;
+			}
+
+			a {
+				text-decoration: none;
+				color: inherit;
+			}
+
+			* {
+				box-sizing: border-box
+			}
+
+			body,
+			h1,
+			p {
+				margin: 0
+			}
+
+			.row-1 {
+				height: 80px;
+				display: flex;
+				justify-content: space-between;
+				align-items: center;
+				border-bottom: 2px solid #b11616
+			}
+
+			.row-1 .row-content {
+				display: flex;
+				width: 100%;
+			}
+
+			.row-1 .col {
+				flex: 1;
+				display: flex;
+				justify-content: center;
+				align-items: center;
+				
+			}
+
+			.row-1 .col-2 {
+				display: flex;
+				justify-content: space-between;
+				align-items: center;
+				width: 100%;
+				color: white;
+			}
+
+			.row-1 .col-2 .parallelogram-3d-box {
+				position: relative;
+				width: 180px;
+				height: 40px;
+				background-color: #b11616;
+				margin: 10px;
+			}
+
+			.row-1 .col-2 .parallelogram-3d-box .mrvworld {
+				width: 240px;
+			}
+			.row-1 .col-2 .parallelogram-3d-box a {
+				position: absolute;
+				width: 100%;
+				height: 100%;
+				display: flex;
+				justify-content: center;
+				align-items: center;
+				color: white;
+				font-weight: bold;
+				transform: skew(20deg);
+			}
+
+
+			.parallelogram-3d-box {
+				position: relative;
+				width: 120px;
+				height: 40px;
+				transform: skew(-20deg);
+				background-color: #b11616;
+				transition: transform 0.3s ease;
+			}
+			.parallelogram-3d-box:hover {
+				transform: perspective(500px) translateZ(20px);
+			}
+			.parallelogram-3d-box .front {
+				position: absolute;
+				width: 100%;
+				height: 100%;
+				display: flex;
+				justify-content: center;
+				align-items: center;
+				color: white;
+				font-weight: bold;
+			}
+
+
+			.envelope-icon {
+				display: inline-block;
+				transition: transform 0.3s ease
+			}
+			.envelope-icon:hover {
+					transform: scale(1.1);
+			}
+
+			.mobile-menu {
+				display: none;
+			}
+			.row-2 .col-1 .block-1 h1 {
+				color:#b11616;
+				direction:ltr;
+				font-family:'Permanent Marker', Impact, Charcoal, sans-serif;
+				font-size:44px;
+				font-weight:400;
+				letter-spacing:1px;
+				line-height:150%;
+				margin-top:0;
+				margin-bottom:0;
+			}
+
+			.row-2 .col-1 .block-2 {
+				color: #b11616
+			}
+			
+			.row-3 .col, 
+			.row-4 .col {
+				height: 20vh
+			} 
+
+			.row-3 .col .parallelogram-3d-box,
+			.row-4 .col .parallelogram-3d-box {
+				width: 80%;
+				height: 80%;
+				background-color: #b11616;
+				margin: 10%;
+			}
+			
+			.row-3 p, .row-4 p {
+				font-size: 16px;
+				text-align: center;
+				width: 100%;
+			}
+
+			.row-5 {
+				display: flex; 
+				justify-content: space-between; 
+				align-items: center; 
+				padding: 20px; 
+				background-color: #f1a92b;
+				border-top: 2px solid #b11616
+			}
+
+
+
+			@media (max-width: 768px) {
+				.row-1 {
+					display: none;
+				}
+
+				.mobile-menu {
+					display: block;
+				}
+
+				.mobile-menu-icon {
+					font-size: 24px;
+					cursor: pointer;
+					padding: 10px;
+				}
+
+				.mobile-menu-content {
+					display: none;
+					background-color: #b11616;
+					color: #ffffff;
+					padding: 10px;
+				}
+
+				.mobile-menu-content.show {
+					display: block;
+					gap: 10px
+				}
+				
+				.mobile-menu-content .mobile-menu-row {
+					border-bottom: 1px solid #ffffff;
+					padding: 5px
+
+				}
+				.mobile-menu-content .mobile-menu-row a {
+					color: #ffffff;
+				}
+
+				.row-3 .row-content,
+				.row-4 .row-content {
+					flex-direction: column;
+				}
+
+				.row-3 .col,
+				.row-4 .col {
+					width: 100%;
+					height: 20vh;
+					padding: 10px 0;
+				}
+
+				.row-3 .parallelogram-3d-box,
+				.row-4 .parallelogram-3d-box {
+					width: 100%;
+					height: 20vh;
+					margin: 10px 0;
+				}
+			}
+		</style>
+		<link href="https://fonts.googleapis.com/css2?family=Permanent+Marker:wght@100;200;300;400;500;600;700;800;900" rel="stylesheet" type="text/css" />
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+
+	</head>
+
+	<body>
+			<div class="row row-1">
+				<div class="row-content">
+					<div class="col col-1">
+						<% if (isAuthenticated) { %>
+						<div class="block block-1 button">
+							<a href="/account" class="envelope-icon" >
+								<i class="fas fa-envelope"></i>
+							</a>
+						</div>
+						<% } else { %>
+						<div class="placeholder login envelope"></div>
+						<% } %>
+					</div>
+					<div class="col col-2">
+						<div class="parallelogram-3d-box market"> 
+							<a href="/marketplace">Marketplace</a>
+						</div>
+						<div class="parallelogram-3d-box mrvworld"> 
+							<a href="/mrvworld">Marvel World News</a>
+						</div>
+						<div class="parallelogram-3d-box faq"> 
+							<a href="/faq">FAQs</a>
+						</div>
+
+					</div>
+					<div class="col col-3">
+						<% if (isAuthenticated) { %>
+						<div class="block block-1 profile-image">
+							<div class="profile-image-container" style="width: 40px; height: 40px; border-radius: 50%; background-color: transparent; display: flex; justify-content: center; align-items: center; overflow: hidden; border: 2px solid #ffffff;">
+								<i class="fas fa-user" style="font-size: 24px; color: #ffffff;"></i>
+							</div>
+						</div>
+						<% } else { %>
+							<div class="parallelogram-3d-box">
+								<a href="/account/login" class="front">Log In</a>
+							</div>
+						<% } %>
+					</div>
+				</div>
+			</div>
+
+			<div class="mobile-menu">
+				<div class="mobile-menu-icon" onclick="toggleMobileMenu()">
+					<i class="fas fa-bars"></i>
+				</div>
+				<div class="mobile-menu-content">
+					<div class="mobile-menu-row mobile-row-1">
+						<% if (isAuthenticated) { %>
+							<a href="/dashboard">Dashboard</a>
+						<% } else { %>
+							<a href="/login">Log In</a>
+						<% } %>
+					</div>
+						<br>
+					<div class="mobile-menu-row mobile-row-2">
+						<a href="/marketplace"> Marketplace </a>
+					</div>
+						<br>
+					<div class="mobile-menu-row mobile-row-3">
+						<a href="/mrvworld"> Marvel World News </a>
+					</div>
+						<br>
+					<div class="mobile-menu-row mobile-row-4">
+						<a href="/faq"> FAQs </a>
+					</div>
+				</div>
+			</div>
+
+			<script>
+				function toggleMobileMenu() {
+					const mobileMenuContent = document.querySelector('.mobile-menu-content');
+					mobileMenuContent.classList.toggle('show');
+				}
+			</script>
+			
+				<div class="row row-2" style="height: 40vh; display: flex; justify-content: center; align-items: center;">
+					<div class="row-content">
+						<div class="col col-1" style="text-align: center;">
+							<div class="block block-1 heading">
+								<h1>See Heroes</h1>
+							</div>
+							<div class="block block-2 paragraph">
+								<p style="color:#b11616;">Collect digital representations of your favorites marvel super heroes</p>
+							</div>
+						</div>
+					</div>
+				</div>
+			<div class="row row-3" style="height: auto; display: flex; width: 100%;">
+				<div class="row-content" style="width: 100%; display: flex;">
+					<div class="col col-1" style="flex: 1; padding: 10px;">
+						<div class="parallelogram-3d-box">
+							<div class="front" style="color: white; display: flex; justify-content: center; align-items: center;">
+								<p>Acquista pacchetti di figurine</p>
+							</div>
+						</div>
+					</div>
+					<div class="col col-2" style="flex: 1; padding: 10px;">
+						<div class="parallelogram-3d-box">
+							<div class="front" style="color: white; display: flex; justify-content: center; align-items: center;">
+								<p>Scambia figurine con altri utenti</p>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="row row-4" style="height: auto; display: flex; width: 100%;">
+				<div class="row-content" style="width: 100%; display: flex;">
+					<div class="col col-1" style="flex: 1; padding: 10px;">
+						<div class="parallelogram-3d-box">
+							<div class="front" style="color: white; display: flex; justify-content: center; align-items: center;">
+								<p>Registra le figurine in un album organizzato per serie</p>
+							</div>
+						</div>
+					</div>
+					<div class="col col-2" style="flex: 1; padding: 10px;">
+						<div class="parallelogram-3d-box">
+							<div class="front" style="color: white; display: flex; justify-content: center; align-items: center;">
+								<p>Guadagna punti partecipando al mondo marvel</p>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div style="height: 7em;"></div>
+			<div class="row row-5">
+				<div class="col col-1" style="flex: 1;">
+					<div class="block block-1 paragraph">
+						<p>&copy; 2023 See Heroes. All rights reserved.</p>
+					</div>
+				</div>
+				<div class="col col-2" style="flex: 1; text-align: right;">
+					<div class="block block-1 social-media">
+						<a href="https://www.facebook.com/Marvel" target="_blank" rel="noopener noreferrer" style="margin-right: 10px;">
+							<i class="fab fa-facebook-f" style="font-size: 24px; color: #b11616;"></i>
+						</a>
+						<a href="https://www.twitter.com/Marvel" target="_blank" rel="noopener noreferrer" style="margin-right: 10px;">
+							<i class="fab fa-twitter" style="font-size: 24px; color: #b11616;"></i>
+						</a>
+						<a href="https://www.instagram.com/marvel" target="_blank" rel="noopener noreferrer" style="margin-right: 10px;">
+							<i class="fab fa-instagram" style="font-size: 24px; color: #b11616;"></i>
+						</a>
+						<a href="https://www.youtube.com/marvel" target="_blank" rel="noopener noreferrer">
+							<i class="fab fa-youtube" style="font-size: 24px; color: #b11616;"></i>
+						</a>
+					</div>
+				</div>
+			</div>
+	</body>
+
 </html>
