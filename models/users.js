@@ -7,7 +7,8 @@ const userSchema = new mongoose.Schema({
   password: { type: String, required: true },
   email: { type: String, required: true, unique: true },
   name: { type: String, required: true },
-  createdAt: { type: Date, default: Date.now },
+  points: { type: Number, required: true },
+  createdAt: { type: String, default: () => new Date().toLocaleDateString('en-GB', { day: '2-digit', month: '2-digit', year: 'numeric' }).replace(/\//g, '-') },
 });
 
 userSchema.pre('save', async function save(next) {
@@ -31,4 +32,4 @@ userSchema.methods.comparePassword = async function comparePassword(candidatePas
   };
 
 
-module.exports = mongoose.model('User', userSchema);
+module.exports = mongoose.model('users', userSchema);

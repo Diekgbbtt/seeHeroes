@@ -111,6 +111,7 @@ app.use('/faq', homeController.getFAQ);
 app.use('/account', accountRoutes);
 app.use('/marketplace', marketplaceRoutes);
 app.use('/packets', packetRoutes);
+// app.use('/buypoints', /* define route stripe test form*/)
 app.use('/', homeController.getHome);
 // app.use('/addpoints', stripetestpayment)
 

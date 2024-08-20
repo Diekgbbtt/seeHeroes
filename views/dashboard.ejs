@@ -1,0 +1,479 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<title></title>
+	<meta charset="utf-8" />
+	<meta content="width=device-width" name="viewport" />
+    <link href="https://fonts.googleapis.com/css2?family=Permanent+Marker:wght@100;200;300;400;500;600;700;800;900" rel="stylesheet" type="text/css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+	<style>
+
+		.button .content,
+		.html-block {
+			text-align: center
+		}
+
+		body {
+			background-color: #f1a92b;
+			color: #b11616;
+			font-family: Arial, "Helvetica Neue", Helvetica, sans-serif
+		}
+
+		.row-content {
+			display: flex
+		}
+
+		.button a,
+		.icon .icon-label-right a,
+		.menu ul li a {
+			text-decoration: none
+		}
+
+
+        .row-1 .col-1 .block-1 h3 {
+            color:#b11616;
+            direction:ltr;
+            font-family:'Permanent Marker', Impact, Charcoal, sans-serif;
+            font-size:36px;
+            font-weight:400;
+            letter-spacing:1px;
+            line-height:150%;
+            margin-top:0;
+            margin-bottom:0;
+        }
+
+
+		.row-1 .col-1 {
+			padding: 20px 10px 20px 20px;
+			display: flex;
+			flex-direction: column;
+			justify-content: center;
+            width: 40vw;
+		}
+
+		.row-1 .col-2 {
+			padding-bottom: 20px;
+			padding-left: 10px;
+			padding-top: 20px;
+			display: flex;
+			justify-content: right;
+            width:70vw;
+		}
+
+        .row-1 .col-2 .parallelogram-3d-box .mrvworld {
+				width: 320px;
+		}
+		.row-1 .col-2 .parallelogram-3d-box a {
+				position: absolute;
+				width: 100%;
+				height: 100%;
+				display: flex;
+				justify-content: center;
+				align-items: center;
+				color: white;
+				font-weight: bold;
+				transform: skew(20deg);
+                text-decoration: none;
+		}
+        
+        .row-1 .col-2 .parallelogram-3d-box {
+				position: relative;
+				width: 200px;
+				height: 40px;
+				background-color: #b11616;
+                margin: 10px
+		}
+
+        .parallelogram-3d-box {
+            transform: skew(-20deg);
+            transition: transform 0.3s ease;
+
+        }
+		
+        .parallelogram-3d-box:hover {
+				transform: perspective(500px) translateZ(20px);
+		}
+		
+        .parallelogram-3d-box .front {
+				position: absolute;
+				width: 100%;
+				height: 100%;
+				display: flex;
+				justify-content: center;
+				align-items: center;
+				color: white;
+				font-weight: bold;
+		}
+
+		.mobile-menu {
+				display: none;
+		}
+
+        .row-2 {
+            height: 30vh;
+            margin-bottom: 50px;
+        }
+
+        .row-2 .row-content {
+            height: 100%;
+            display: flex;
+            flex-direction: row;
+            
+        }
+
+		.row-2 .col-1 {
+            display: flex;
+            flex-direction: row;
+            align-items: flex-start;
+            margin-top: 30px;
+            width: 27vw;
+
+        }
+
+        .row-2 .col-1 .picture {
+            width: 150px; 
+            height: 150px; 
+            border-radius: 50%;
+            background-color: transparent; 
+            display: flex; 
+            justify-content: center; 
+            align-items: flex-start; 
+            overflow: hidden;
+            border: 2px solid #b11616;
+            margin-right: 20px
+        }
+        .row-2 .col-1 .picture i {
+            font-size: 100px; 
+            color: #b11616;
+            padding: 20px
+        }
+
+        .row-2 .col-1 .data {
+            width: 20vw;
+            height:100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: top;
+        }
+
+        .row-2 .col-1 .data p {
+            font-weight: bold;
+        }
+
+        .button-logout {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin-top: 15px;
+        margin-bottom: 10px;
+        text-decoration: none;
+        }
+
+        .button-logout i {
+            color: #b11616;
+            font-size:35px;
+            text-decoration: none;
+        }
+
+        .row-2 .col-2 {
+            width: 20vw;
+            display: flex; 
+            flex-direction: column;
+            justify-content: space-between; 
+            align-items: center;
+            height: 100%;
+            border: 1px solid #000000
+        }
+
+        .row-2 .col-2 .container-mrvcard {
+            margin-top: 30px;
+            margin-right: 10px;
+            height: 30%;
+        }
+
+
+        .row-2 .col-2 .text-container-mrvcard {
+            background-color: #b11616; 
+            border: 3px solid #8b0000; 
+            border-radius: 10px;
+            padding: 20px; 
+            width: 90%; 
+            height: 100%; 
+            color: white; 
+            display: flex; 
+            flex-direction: column; 
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .row-2 .col-2 p {
+            padding: 3px;
+            font-weight: bold;
+        }
+
+        .row-2 .col-2 .button-buypoints {
+            margin-bottom: 30px;
+        }
+
+		.row-2 .col-3 {
+            margin-left: 10px;
+			width: 40vw;
+            border: 1px solid #000000
+
+		}
+
+		.row-3 .col-1 .block-2,
+		.row-3 .col-2 .block-2 {
+			padding-bottom: 10px;
+			padding-top: 20px;
+			text-align: center;
+			width: 100%
+		}
+
+		.row-3 .col-1 .block-4,
+		.row-3 .col-2 .block-4 {
+			padding-bottom: 10px;
+			padding-top: 20px;
+			text-align: center
+		}
+
+
+
+
+		.row-5 .col-1 .block-1 {
+			color: #1e0e4b;
+			font-family: Inter, sans-serif;
+			font-size: 15px;
+			padding-bottom: 5px;
+			padding-top: 5px;
+			text-align: center
+		}
+
+
+
+
+		.row-4 .col-1 .block-1 {
+			color: #101112;
+			direction: ltr;
+			font-size: 16px;
+			font-weight: 400;
+			letter-spacing: 0;
+			line-height: 120%;
+			text-align: left
+		}
+
+
+		@media (max-width:768px) {
+
+            .row-1 {
+				display: none;
+            }
+
+            .mobile-menu {
+                display: block;
+            }
+
+            .mobile-menu-icon {
+                display: block;
+                font-size: 24px;
+                cursor: pointer;
+                padding: 10px;
+            }
+
+
+			.mobile-menu-content {
+					display: none;
+					background-color: #b11616;
+					color: #ffffff;
+					padding: 10px;
+			}
+
+			.mobile-menu-content.show {
+					display: block;
+					gap: 10px
+			}
+				
+			.mobile-menu-content .mobile-menu-row {
+					border-bottom: 1px solid #ffffff;
+					padding: 5px
+
+			}
+			
+            .mobile-menu-content .mobile-menu-row a {
+					color: #ffffff;
+                    text-decoration: none;
+			
+            }
+		}
+
+	</style>
+</head>
+
+<body>
+	<div class="page-container">
+		<div class="row row-1">
+			<div class="row-content">
+				<div class="col col-1 ">
+					<div class="block block-1 title"> 
+                        <h3> See Heroes </h3> 
+                    </div>
+				</div>
+				<div class="col col-2 ">
+					<div class="container col-2">
+                        <div class="parallelogram-3d-box market"> 
+                            <a href="/marketplace">Marketplace</a>
+                        </div>
+                        <div class="parallelogram-3d-box mrvworld"> 
+                            <a href="/mrvworld">Marvel World News</a>
+                        </div>
+                        <div class="parallelogram-3d-box faq"> 
+                            <a href="/faq">FAQs</a>
+                        </div>
+                    </div>
+				</div>
+            </div>
+		</div>
+
+        <div class="mobile-menu">
+            <div class="mobile-menu-icon" onclick="toggleMobileMenu()">
+                <i class="fas fa-bars"></i>
+            </div>
+            <div class="mobile-menu-content">
+                <div class="mobile-menu-row mobile-row-1">
+                    <a href="/marketplace"> Marketplace </a>
+                </div>
+                    <br>
+                <div class="mobile-menu-row mobile-row-3">
+                    <a href="/mrvworld"> Marvel World News </a>
+                </div>
+                    <br>
+                <div class="mobile-menu-row mobile-row-4">
+                    <a href="/faq"> FAQs </a>
+                </div>
+            </div>
+        </div>
+
+        <script>
+            function toggleMobileMenu() {
+                const mobileMenuContent = document.querySelector('.mobile-menu-content');
+                mobileMenuContent.classList.toggle('show');
+            }
+        </script>
+
+
+		<div class="row row-2" style="border: 1px solid #000000">
+			<div class="row-content" style="border: 1px solid #000000">
+
+				<div class="col col-1 profile">
+                    <div class="block block-1">
+                        <div class="block picture" >
+                            <i class="fas fa-user"></i>
+                        </div>
+                        <a href="/account/logout" class="button-logout"><i class="fas fa-sign-out-alt"></i></a>	
+                    </div>
+					<div class="block block-2 data">
+                        <p><%= user_profile.name %></p>
+                        <p><%= user_profile.username %></p>
+                        <p><%= user_profile.email %></p>
+                        <br>
+                        <div class="edit-button">
+                            <a href="/dashboard/edit" style="display: inline-block; padding: 10px 20px; background-color: #b11616; color: white; text-decoration: none; border-radius: 25px; font-weight: bold;">Edit Profile</a>
+                        </div>
+                    </div>
+				</div>
+				
+				<div class="col col-2 mrvcard">
+					<div class="container-mrvcard">
+                        <div class="text-container-mrvcard" style="height: 100%; display: flex; flex-direction: column; justify-content: space-between;">
+                            <h3 style="text-align: left; margin: 0;"> <%= user_profile.username %>'s Marvel Card</h3>
+                            <br>
+                            <h3 style="text-align: left; margin: 0;">Points: <%= user_profile.points %></h3>
+                            <br>
+                            <p style="text-align: left; margin: 0;">Date Created: <%= user_profile.createdAt %></p>                       
+                        </div>
+                    </div>
+                    <div class="button-buypoints" style="margin-top: 20px;">
+                        <a href="/buypoints" style="display: inline-block; padding: 10px 20px; background-color: #b11616; color: white; text-decoration: none; border-radius: 25px; font-weight: bold; border: 2px solid #8b0000;">Buy Points</a>
+                    </div>
+				</div>				
+                
+                <div class="col col-3 packets" style="display: flex; align-items: center; ">
+					<div class="container-packets" style="height:100%; width: 100%; border: 1px solid #000000">
+						<div class="packet-box" style="margin-top: 35px; height:60%; border: 5px solid #b11616; border-radius: 15px; padding: 15px; color: b11616;">
+							<div class="packet-header">
+								<h4 style="text-align: center; margin: 0; height:15px">Your Packets</h4>
+							</div>
+							<hr style="border-color: #b11616;">
+							<div class="packet-main">
+                                <ul class="packet-list" style="list-style-type: none; padding: 0; display: flex; justify-content: space-around; align-items: center; height: 80px">
+                                    <li>
+                                        <svg width="70" height="100" viewBox="0 0 70 100">
+                                            <defs>
+                                                <pattern id="stripes" patternUnits="userSpaceOnUse" width="10" height="10">
+                                                    <rect width="10" height="5" fill="#b11616"/>
+                                                    <rect width="10" height="5" y="5" fill="#8b0000"/>
+                                                </pattern>
+                                            </defs>
+                                            <path d="M0,6.25 L5.83,0 L11.67,6.25 L17.5,0 L23.33,6.25 L29.17,0 L35,6.25 L40.83,0 L46.67,6.25 L52.5,0 L58.33,6.25 L64.17,0 L70,6.25 V93.75 L64.17,100 L58.33,93.75 L52.5,100 L46.67,93.75 L40.83,100 L35,93.75 L29.17,100 L23.33,93.75 L17.5,100 L11.67,93.75 L5.83,100 L0,93.75 Z" fill="url(#stripes)" stroke="#000000"/>
+                                        </svg>
+                                    </li>
+                                </ul>							</div>
+							<hr style="border-color: #b11616;">
+							<div class="packet-footer">
+								<h4 style="text-align: center; margin: 0;">Buy packets</h4>
+							</div>
+						</div>
+					</div>
+				</div>
+        
+			</div>
+
+
+
+
+
+
+		</div>
+		<div class="row row-3">
+			<div class="row-content">
+				<div class="col col-1 ">
+					<div class="block block-1 image"><img alt="" class="center fixedwidth fullwidthOnMobile" src="https://beefree.imgdist.com/public/default-rows-images/yellow-image.png" style="max-width:597px;border-radius:8px;" /></div>
+					<div class="block block-2 heading">
+						<h2 style="color:#26045d;direction:ltr;font-family:Arial, 'Helvetica Neue', Helvetica, sans-serif;font-size:24px;font-weight:700;letter-spacing:normal;line-height:150%;text-align:center;margin-top:0;margin-bottom:0;"><strong>Maintain brand consistency</strong> </h2>
+					</div>
+					<div class="block block-3 paragraph">
+						<p>Speed up your design production with our user-friendly drag-and-drop HTML builder. Effortlessly export designs with a few clicks.</p>
+					</div>
+					<div class="block block-4 button"><a class="button-content" href="https://example.com/" style="font-size: 16px; background-color: #7747ff; border-bottom: 0px solid #7747FF; border-left: 0px solid #7747FF; border-radius: 4px; border-right: 0px solid #7747FF; border-top: 0px solid #7747FF; color: #ffffff; direction: ltr; font-family: Arial, 'Helvetica Neue', Helvetica, sans-serif; font-weight: 400; max-width: 100%; padding-bottom: 8px; padding-left: 20px; padding-right: 20px; padding-top: 8px; width: auto; display: inline-block;" target="_blank"><span style="word-break: break-word; font-size: 16px; line-height: 200%;">Read more</span></a></div>
+				</div>
+				<div class="col col-2 ">
+					<div class="block block-1 image"><img alt="" class="center fixedwidth fullwidthOnMobile" src="https://beefree.imgdist.com/public/default-rows-images/yellow-image.png" style="max-width:597px;border-radius:8px;" /></div>
+					<div class="block block-2 heading">
+						<h2 style="color:#26045d;direction:ltr;font-family:Arial, 'Helvetica Neue', Helvetica, sans-serif;font-size:24px;font-weight:700;letter-spacing:normal;line-height:150%;text-align:center;margin-top:0;margin-bottom:0;"><strong>Harmonious integration</strong> </h2>
+					</div>
+					<div class="block block-3 paragraph">
+						<p>Speed up your design production with our user-friendly drag-and-drop HTML builder. Effortlessly export designs with a few clicks.</p>
+					</div>
+					<div class="block block-4 button"><a class="button-content" href="https://example.com/" style="font-size: 16px; background-color: #7747ff; border-bottom: 0px solid #7747FF; border-left: 0px solid #7747FF; border-radius: 4px; border-right: 0px solid #7747FF; border-top: 0px solid #7747FF; color: #ffffff; direction: ltr; font-family: Arial, 'Helvetica Neue', Helvetica, sans-serif; font-weight: 400; max-width: 100%; padding-bottom: 8px; padding-left: 20px; padding-right: 20px; padding-top: 8px; width: auto; display: inline-block;" target="_blank"><span style="word-break: break-word; font-size: 16px; line-height: 200%;">Read more</span></a></div>
+				</div>
+			</div>
+		</div>
+		<div class="row row-4">
+			<div class="row-content">
+				<div class="col col-1 ">
+					<div class="block block-1 paragraph">
+						<p>Copyright placeholder</p>
+					</div>
+				</div>
+				<div class="col col-2 ">
+					<div class="block block-1 html-block">
+						<div class="our-class"> social medias placeholder </div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</body>
+
+</html>

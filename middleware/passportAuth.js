@@ -44,8 +44,8 @@ The user object is then attached to the request as req.user.
  * Sign in using Email and Password.
  */
 passport.use( new LocalStrategy({ usernameField: 'email'}, (email, password, done) => {
-    user.findOne({ email: email.toLowerCase() })
     console.log(email)
+    user.findOne({ email: email.toLowerCase() })
         .then((user) => {
             if(!user) {
                 return done(null, false, { msg: 'Email ${email} not found' });
@@ -56,6 +56,7 @@ passport.use( new LocalStrategy({ usernameField: 'email'}, (email, password, don
             user.comparePassword(password, (err, isMatch) => {
                 if (err) { return done(err); }
                 if (isMatch) {
+                  console.log('succesfull login')
                   return done(null, user);
                 }
                 return done(null, false, { msg: 'Invalid email or password.' });

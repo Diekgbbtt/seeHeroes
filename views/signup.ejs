@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign Up - See Heroes</title>
+    <link href="https://fonts.googleapis.com/css2?family=Permanent+Marker&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f1a92b;
+            color: #b11616;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+        header {
+            text-align: center;
+            padding: 20px 0;
+        }
+        h1 {
+            font-family: 'Permanent Marker', Impact, Charcoal, sans-serif;
+            margin: 0;
+        }
+        main {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        form {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            width: 30vw;
+        }
+        input {
+            display: block;
+            width: 80%;
+            margin-bottom: 10px;
+            padding: 8px;
+            border: 1px solid #b11616;
+            border-radius: 4px;
+        }
+        button {
+            width: 30%;
+            padding: 10px;
+            background-color: #b11616;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .login-link {
+            text-align: center;
+            margin-top: 15px;
+        }
+        footer {
+            text-align: center;
+            padding: 10px 0;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>See Heroes</h1>
+    </header>
+    <main>
+        <div>
+            <form action="/account/signup" method="POST">
+                <input type="text" name="username" placeholder="Username" required>
+                <input type="password" name="password" placeholder="Password" required>
+                <input type="email" name="email" placeholder="Email" required>
+                <input type="text" name="name" placeholder="Name" required>
+                <button type="submit">Sign Up</button>
+                <br>
+                <% if(messages.errors && messages.errors.length) { %>
+                    <% messages.errors.forEach((error) => { %>
+                        <div class="error-message">
+                            <%= error.msg %>
+                        </div>
+                    <% }); %>
+                <% } %>
+            </form>
+            <div class="login-link">
+                <p>Already have an account? <a href="/account/login">Log in</a></p>
+            </div>
+        </div>
+    </main>
+    <footer>
+        <p>&copy; 2023 See Heroes. All rights reserved.</p>
+    </footer>
+</body>
+</html>
