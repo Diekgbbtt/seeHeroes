@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Purchase Page</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+            background-color: #f1a92b;
+            color: #b11616;
+        }
+        .container {
+            display: flex;
+            height: 100vh;
+        }
+        .col-1, .col-2 {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .col-1 {
+            text-align: center;
+            padding-left: 200px
+        }
+        
+        .col-2 {
+            text-align: center;
+            padding-right: 200px
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
+            width: 100vw;
+            max-width: 300px;
+        }
+        select, button {
+            padding: 12px;
+            font-size: 16px;
+            background-color: #b11616;
+            border: 2px solid #3f0707;
+            color: white;
+            display: flex;
+            justify-content: center;
+            text-align: center;
+            border-radius: 25px;
+            width: 100%;
+        }
+        select:hover {
+            cursor: pointer;
+        }
+
+        button {
+            cursor: pointer;
+            background-color: #b11616;
+            border: 2px solid #3f0707;
+            border-radius: 25px;
+            color: white;
+            transition: background-color 0.3s ease;
+            width: 60%;
+        }
+        button:hover {
+            background-color: #8f1212;
+        }
+        .favicon {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            font-size: 24px;
+            color: #b11616;
+            text-decoration: none;
+        }
+
+        .product-image {
+            max-width: 100%; /* Adjust this value to make the image smaller */
+            height: 80vh;
+            border-radius: 25px;
+            border: 2px solid #3f0707;
+        }
+
+    </style>
+</head>
+<body>
+    <a href="/account/dashboard" class="favicon">
+        <i style="font-size: 48px;"; class="fas fa-user-circle"></i>
+    </a>
+    <div class="container">
+        <div class="col-1">
+            <div class="container-left">
+                    <img src="/views/image_packet_2.jpg" alt="Product Image" class="product-image">
+            </div>
+        </div>
+        <div class="col-2">
+                <form class="buyForm" action="/account/dashboard/buypackets/confirm" method="POST">
+                    <select name="amount" id="amount">
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                        <option value="3">3</option>
+                        <option value="4">4</option>
+                        <option value="5">5</option>
+                    </select>
+                    <select name="type" id="type">
+                        <option value="basic">Basic</option>
+                        <option value="rare">Rare</option>
+                        <option value="legendary">Legendary</option>
+                    </select>
+                    <button type="submit">Submit</button>
+                </form>
+        </div>
+    </div>
+</div>
+<script>
+    const buyForm = document.getElementsByClassName('buyForm');
+    
+    buyForm.addEventListener('submit', function(event) {
+
+        event.preventDefault();
+
+        const buyDetails = {
+            amount: document.getElementById('amount'),
+            type: document.getElementById('type')
+        }
+
+        fetch('/account/dashboard/buypackets/confirm', {
+            method: 'POST',
+            headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(buyDetails)
+        })
+            .then((response) => response.json())
+                .then((reponseData) => {
+                    if(reponseData.success){
+                        buyForm.reset();
+                    }
+                })
+                .catch((error) => {
+                        console.error('Error:', error);
+                 });
+    })
+</script>
+</body>
+</html>
