@@ -23,3 +23,5 @@ const notiSchema = new mongoose.Schema({
         ref: 'marketplaceOffers'
     }
 })
+
+module.exports = mongoose.model('notifications', notiSchema);

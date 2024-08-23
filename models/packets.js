@@ -10,12 +10,15 @@ const packetsSchema = new mongoose.Schema({
     },
 
     type: {
-        type: Number,
+        type: String,
         required: true
     },
     
     boughtAt: {
-        type: Date,
+        type: String, default: () => new Date().toLocaleDateString('en-GB', { day: '2-digit', month: '2-digit', year: 'numeric' }).replace(/\//g, '-'),
         required: false
     }
+
 });
+
+module.exports = mongoose.model('packets', packetsSchema);
