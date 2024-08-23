@@ -25,6 +25,12 @@ const packetRoutes = require('./routes/packetRoutes');
 dotenv.config({ path: '.env' });
 
 const app = express();
+
+
+app.use(express.static(path.join(__dirname)));
+
+
+
 app.set('port', process.env.PORT || 8080);
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
@@ -111,7 +117,6 @@ app.use('/faq', homeController.getFAQ);
 app.use('/account', accountRoutes);
 app.use('/marketplace', marketplaceRoutes);
 app.use('/packets', packetRoutes);
-// app.use('/buypoints', /* define route stripe test form*/)
 app.use('/', homeController.getHome);
 // app.use('/addpoints', stripetestpayment)
 
