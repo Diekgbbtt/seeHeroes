@@ -1,7 +1,8 @@
 const users = require('../models/users');
 const usersPackets = require('../models/packets');
 const usersFigurines = require('../models/usersFigurines')
-const usersNotifications = require('../models/notifications')
+const usersNotifications = require('../models/notifications');
+const crypto = require('crypto');
 
 
 exports.getDashboard = async (req, res) => {
@@ -131,8 +132,21 @@ exports.postBuyPackets = async (req, res) => {
 
 
 exports.openPacket = (req, res) => {
+    console.log(req.params.id)
     if(req.isAuthenticated()){
         usersPackets.findByIdAndDelete( { _id: req.params.id } )
+        .then( () => {
+            /* All calls to the Marvel Comics API must pass your public key via an “apikey” parameter. 
+            In addition server-sdie applications must pass: timestamp in ts parameter and md5 digest of (ts+privateKey+publicKey) as hash parameter */
+            const ts = new Date()
+            console.log(ts)
+            const hash_data = `${process.env.MARVEL_PUBLIC_KEY}${process.env.MARVEL_PRIVATE_KEY}${ts}`;
+            const hash = crypto.createHash('md5').update(hash_data).digest('hex');
+            /* get a random value from series list*/
+            fetch('https://gateway.marvel.com:443/v1/public/series/**RANDOM**/characters', 
+                /* set parameters in request url apikey , ts, hash*/
+            )
+        })
 
         
     }

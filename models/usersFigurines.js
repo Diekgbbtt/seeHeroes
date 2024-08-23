@@ -4,7 +4,7 @@ const bcrypt = require('@node-rs/bcrypt');
 
 
 const userFigurineSchema = new mongoose.Schema({
-    id_user: { 
+      id_user: { 
         type: mongoose.Schema.Types.ObjectId, 
         ref: 'User',
         required: true
