@@ -60,14 +60,14 @@
         button {
             cursor: pointer;
             background-color: #b11616;
-            border: 2px solid #3f0707;
+            border: 2px solid #8b0000;
             border-radius: 25px;
             color: white;
             transition: background-color 0.3s ease;
             width: 60%;
         }
         button:hover {
-            background-color: #8f1212;
+            background-color: #8b0000;
         }
         .favicon {
             position: absolute;
@@ -83,6 +83,42 @@
             height: 80vh;
             border-radius: 25px;
             border: 2px solid #3f0707;
+        }
+
+        @media  only screen and (max-width: 856px) {
+            .container {
+                flex-direction: column;
+            }
+
+            .col-1 {
+                padding: 0;
+                margin-top: 20px;
+            }
+
+            
+            .col-2 {
+                width: 100%;
+                padding: 0;
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+            }
+
+            .buyForm {
+                width: 70%;
+            }
+
+            form {
+                max-width: 100%;
+            }
+
+            .product-image {
+            max-width: 100%; /* Adjust this value to make the image smaller */
+            height: 60vh;
+            border-radius: 25px;
+            border: 2px solid #3f0707;
+        }
         }
 
     </style>

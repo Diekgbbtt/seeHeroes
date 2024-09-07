@@ -4,29 +4,81 @@ const usersFigurines = require('../models/usersFigurines')
 const usersNotifications = require('../models/notifications');
 const crypto = require('crypto');
 
+const colors = {
+    reset: "\x1b[0m",
+    bright: "\x1b[1m",
+    dim: "\x1b[2m",
+    underscore: "\x1b[4m",
+    blink: "\x1b[5m",
+    reverse: "\x1b[7m",
+    hidden: "\x1b[8m",
+    
+    fg: {
+      black: "\x1b[30m",
+      red: "\x1b[31m",
+      green: "\x1b[32m",
+      yellow: "\x1b[33m",
+      blue: "\x1b[34m",
+      magenta: "\x1b[35m",
+      cyan: "\x1b[36m",
+      white: "\x1b[37m"
+    },
+    bg: {
+      black: "\x1b[40m",
+      red: "\x1b[41m",
+      green: "\x1b[42m",
+      yellow: "\x1b[43m",
+      blue: "\x1b[44m",
+      magenta: "\x1b[45m",
+      cyan: "\x1b[46m",
+      white: "\x1b[47m"
+    }
+  };
+
+  function checkDoubleFigs(userFigurines) {
+
+    const userDoubleFigurines = [];
+
+    userFigurines.forEach(figurine => {
+        userFigurines.forEach(figurine_1 => {
+            if(figurine._id !== figurine_1._id && figurine.id_figurine === figurine_1.id_figurine) {
+                userFigurines.splice(userFigurines.indexOf(figurine_1), 1);
+                userDoubleFigurines.push(figurine_1);
+            }
+        });
+    });
+    return {userFigurines, userDoubleFigurines};
+  }
+  
+
 
 exports.getDashboard = async (req, res) => {
     /* middleware that evaluates if the request has SessionID and if it is correct */
     /* redirect a /dashboard se cookie ed è corretto */
     if(req.isAuthenticated()) {
-
         users.findById(req.session.passport.user)
             .then((user_profile) => {
-                console.log(user_profile)
                 usersPackets.find( { id_user: user_profile.id } )
                     .then((user_packets) => {
-                        user_packets.forEach(packet => {
-                            console.log(packet)
-                        });
-                        return res.render('dashboard', {user_profile: user_profile, user_packets: user_packets} );
+                        usersFigurines.find( { id_user: user_profile.id } )
+                            .then((user_figurines) => {
+                                console.log(user_figurines)
+                                const { userFigurines, userDoubleFigurines } = checkDoubleFigs(user_figurines)
+                                console.log(colors.fg.black + colors.bg.red + "list of user figurine : \n" + userFigurines + colors.reset)
+                                console.log(colors.fg.black + colors.bg.yellow + "list of user double figurine : \n" + userDoubleFigurines + colors.reset)
+                                return res.render('dashboard', {user_profile: user_profile, user_packets: user_packets, user_figurines: userFigurines, user_doublefigurines: userDoubleFigurines } );
+                            })
+                            .catch((error) => {
+                                console.log('couldn\'t find user figurines \n error : ' + error)
+                                req.flash('errors', { msg: "couldn\'t find user figurines \n error : " + error });
+                                return res.render('dashboard', { mesasges: { errors: req.flash('errors') } });
+                            })
                     })
                     .catch((error) => {
-                        console.log('couldn\'t find user \n error : ' + error)
-                        req.flash('errors', { msg: "couldn\'t find user \n error : " + error });
+                        console.log('couldn\'t find user packets \n error : ' + error)
+                        req.flash('errors', { msg: "couldn\'t find user packets \n error : " + error });
                         return res.render('dashboard', { mesasges: { errors: req.flash('errors') } });
-                    })
-
-                
+                    })                
             })
             .catch((error) => {
                 console.log(error);
@@ -64,7 +116,6 @@ exports.postBuyPoints =  async (req, res) => {
 
 exports.getPacketPage = async (req, res) => {
     if(req.isAuthenticated()) {
-        
         return res.render('packetspurchase')
     } else {
         
@@ -132,25 +183,122 @@ exports.postBuyPackets = async (req, res) => {
 
 
 exports.openPacket = (req, res) => {
-    console.log(req.params.id)
+
     if(req.isAuthenticated()){
-        usersPackets.findByIdAndDelete( { _id: req.params.id } )
-        .then( () => {
-            /* All calls to the Marvel Comics API must pass your public key via an “apikey” parameter. 
-            In addition server-sdie applications must pass: timestamp in ts parameter and md5 digest of (ts+privateKey+publicKey) as hash parameter */
-            const ts = new Date()
-            console.log(ts)
-            const hash_data = `${process.env.MARVEL_PUBLIC_KEY}${process.env.MARVEL_PRIVATE_KEY}${ts}`;
-            const hash = crypto.createHash('md5').update(hash_data).digest('hex');
-            /* get a random value from series list*/
-            fetch('https://gateway.marvel.com:443/v1/public/series/**RANDOM**/characters', 
-                /* set parameters in request url apikey , ts, hash*/
-            )
+        usersPackets.findOneAndDelete( { _id: req.params.packet_id } )
+        .then((packet) => {
+            const packetFigAmounts = {
+                'basic': 5,
+                'rare': 10,
+                'legendary': 15
+            };
+            console.log(packet.type)
+            figsAmount = packetFigAmounts[packet.type] || 0
+            const figs = []
+            let fetchCount = 0;
+            
+            const fetchFigure = () => {
+                const random = Math.floor(Math.random() * (1563));
+                const ts = new Date().toLocaleString('en-GB', {
+                    year: 'numeric',
+                    month: '2-digit',
+                    day: '2-digit',
+                    hour: '2-digit',
+                    minute: '2-digit',
+                    second: '2-digit',
+                    hour12: false
+                    }).replace(/[/,: ]/g, '-');
+                const hash_data = `${ts}${process.env.MARVEL_PRIVATE_KEY}${process.env.MARVEL_PUBLIC_KEY}`;
+                const hash = crypto.createHash('md5').update(hash_data).digest('hex');
+                console.log( colors.fg.black + colors.bg.green + 'random value : \n' + random + colors.reset)
+                
+                fetch('https://gateway.marvel.com:443/v1/public/characters?limit=1&offset=' + random + '&apikey=de511cb926dc8e0b6caf71daa20b40be&ts=' + ts + '&hash=' + hash)
+                    .then((response) => response.json())
+                    .then((response_json) => {
+                        console.log(response_json)
+                        console.log(response_json.data.results[0])
+                        const new_fig = new usersFigurines({
+                            id_user: req.session.passport.user,
+                            id_figurine: response_json.data.results[0].id,
+                            name: response_json.data.results[0].name, 
+                            image_path: response_json.data.results[0].thumbnail.path,
+                            ext: response_json.data.results[0].thumbnail.ext || 'jpg',
+                            description: response_json.data.results[0].description,
+                            appearances: [response_json.data.results[0].comics.available,
+                                            response_json.data.results[0].series.available,  
+                                            response_json.data.results[0].stories.available,
+                                            response_json.data.results[0].events.available
+                                        ]
+                        });
+                        return new_fig.save();
+                    })
+                    .then((fig) => {
+                        console.log(fig)
+                        figs.push(fig)
+                        fetchCount++;
+                        if(fetchCount === figsAmount) {
+                            console.log('All figurines fetched')
+                            return res.send(figs)
+                        } else {
+                            fetchFigure();
+                        }
+                    })
+                    .catch((error) => {
+                        console.log('Error fetching or saving figure: ' + error)
+                        req.flash('errors', { msg: "Error fetching or saving figure: " + error });
+                        if(fetchCount === figsAmount) {
+                            return res.render('dashboard', { messages: { errors: req.flash('errors') } })
+                        } else {
+                            fetchFigure();
+                        }
+                    });
+            }
+    
+            fetchFigure(); // Start the fetching process
         })
-
-        
+        .catch((error) => {
+            console.log('couldn\'t find and delete packet. \n error : ' + error)
+            req.flash('errors', { msg: "couldn\'t find and delete packet. \n error : " + error });
+            return res.render('dashboard', { messages: { errors: req.flash('errors') } })
+        })
     }
+    
 
+}
+
+
+exports.getCharacter = (req, res) => {
+
+    if(req.isAuthenticated()) {
+        /* const ts = new Date().toLocaleString('en-GB', {
+            year: 'numeric',
+            month: '2-digit',
+            day: '2-digit',
+            hour: '2-digit',
+            minute: '2-digit',
+            second: '2-digit',
+            hour12: false
+            }).replace(/[/,: ]/g, '-');
+        const hash_data = `${ts}${process.env.MARVEL_PRIVATE_KEY}${process.env.MARVEL_PUBLIC_KEY}`;
+        const hash = crypto.createHash('md5').update(hash_data).digest('hex');
+        console.log(req.params.fig_id)
+        const url = `https://gateway.marvel.com:443/v1/public/characters/${req.params.fig_id}?apikey=de511cb926dc8e0b6caf71daa20b40be&ts=${ts}&hash=${hash}`
+        console.log(url)
+
+        fetch(url) 
+        .then((response) => response.json()))
+        */
+        usersFigurines.findOne({ id_figurine: req.params.fig_id, id_user: req.session.passport.user})
+            .then((figurine) =>  {
+                    console.log(figurine)
+                    res.send(figurine)
+            })
+            .catch((error) => {
+            console.log('Error fetching API: ' + error)
+            req.flash('errors', { msg: "Error fetching API: " + error });
+            return
+            })
+    }
 }
 
 exports.getProfileEdit = (req, res) => {

@@ -13,10 +13,6 @@ const userFigurineSchema = new mongoose.Schema({
         type: Number,
         required: true
       },
-      id_serie: {
-        type: Number,
-        required: true
-      },
       name: {
         type: String,
         required: true
@@ -28,7 +24,15 @@ const userFigurineSchema = new mongoose.Schema({
       ext: {
         type: String,
         required: true
-    }
+      },
+      description: {
+        type: String,
+        required: true
+      },
+      appearances: {
+        type: Array,
+        required: true
+      }
 });
 
 

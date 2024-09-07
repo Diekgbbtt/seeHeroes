@@ -131,7 +131,6 @@
             margin-top: 5px;
             width: auto;
             height: auto;
-
         }
 
         .row-2 .col-1 .picture {
@@ -146,6 +145,7 @@
             border: 2px solid #b11616;
             margin-right: 20px
         }
+
         .row-2 .col-1 .picture i {
             font-size: 100px; 
             color: #b11616;
@@ -164,6 +164,17 @@
             font-weight: bold;
         }
 
+        .row-2 .col-1 .data .edit-button a{
+            display: inline-block; 
+            padding: 10px 20px; 
+            background-color: #b11616; 
+            color: white; 
+            text-decoration: none; 
+            border-radius: 25px; 
+            border: 2px solid #8b0000; 
+            font-weight: bold
+        }
+
         .button-logout {
         display: flex;
         justify-content: center;
@@ -179,8 +190,10 @@
             text-decoration: none;
         }
 
-        #buttonOpenBuyForm:hover {
+        #buttonOpenBuyForm:hover div {
             text-decoration: none;
+            transform: scale(1.02);
+            box-shadow: 0 0 10px rgba(146, 88, 8, 0.5);
             cursor: pointer;
         }
 
@@ -198,6 +211,13 @@
         .row-2 .col-2 .container-mrvcard {
             margin-right: 10px;
             height: 30%;
+        }
+
+        .row-2 .col-2 .container-mrvcard .text-container-mrvcard {
+            height:auto; 
+            display: flex; 
+            flex-direction: column; 
+            justify-content: center;
         }
 
         #modalPoints {
@@ -268,6 +288,9 @@
         .row-2 .col-2 p {
             padding: 3px;
             font-weight: bold;
+        }
+        .row-2 .col-2 .button-buypoints {
+            margin-top: 20px;
         }
 
 		.row-2 .col-3 {
@@ -348,88 +371,579 @@
         height:auto;
         }
 
+        #packetBuyButton:hover div {
+            background-color: #ff0000;
+            transform: scale(1.02);
+            box-shadow: 0 0 10px rgba(146, 88, 8, 0.5);
+        }
+
+        #modalPacket {
+            display: none; 
+            position: fixed; 
+            top: 0; 
+            left: 0; 
+            width: 100%; 
+            height:100%; 
+            background-color: rgba(0,0,0,0.7); 
+            z-index: 1000; 
+            justify-content: center; 
+            align-items: center;
+        }
+        
+        #modalPacketsContent {
+            background-color: #b11616; 
+            border: 3px solid #8b0000; 
+            border-radius: 15px; 
+            width: 100%; 
+            max-width: 800px;
+            height: auto;
+            padding: 20px;
+        }
+
+        #figurines-container {
+            height:250px; 
+            display: flex;
+            justify-content: space-between; 
+            align-items: center; 
+            padding: 20px;
+            color: white;
+            overflow-x: auto;
+            white-space: nowrap;
+        }
+
+        .figurine-entry {
+            display: inline-flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            margin-right: 20px;
+        }
+
+        #figurines-container::-webkit-scrollbar {
+            height: 8px;
+        }
+
+        #figurines-container::-webkit-scrollbar-track {
+            background: #f1a92b;
+        }
+
+        #figurines-container::-webkit-scrollbar-thumb {
+            background-color: #b11616;
+            border-radius: 4px;
+        }
+
+        /* Styling the scrollbar for Firefox */
+        #figurines-container {
+            scrollbar-width: thin;
+            scrollbar-color: #b11616 #ffffff;
+        }
+
+        .figurine-entry p {
+            color: white;
+            align-items: center;
+        }
+
+        .figurine-entry img {
+            max-height: 80%; 
+            width: auto
+        }
+
+        #returnDashButtonFigurines:hover div {
+            background-color: #ff0000;
+            transform: scale(1.05);
+            box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+        }
+
+        .row-3 {
+            display: flex;
+            justify-content: center;
+            height: 75vh;
+            margin-bottom: 10px;
+        }
+
+        .row-3 .row-content {
+            height: auto;
+            width: 100%;
+            display: flex;
+            flex-direction: row;
+        }
+
+        .row-3 .row-content .album {
+            height: auto;
+            width: 50%;
+            display: flex;
+        }
+
+        .albumContainer {
+            display: flex; 
+            flex-direction: column;
+            height: 600px; 
+            width: 100%; 
+            margin: 30px 30px 30px; 
+            border: 4px solid #b11616; 
+            color: #b11616; 
+            border-radius: 10px;
+        }
+
+        .albumHeader {
+            height: 10%;
+            border-bottom: 3px solid #b11616;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .albumHeader p {
+            color: #b11616;
+            margin: 0;
+            font-weight: bold;
+            font-size: large;
+        }
+
+        .albumCentral {
+            height: 90%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .pageSlider {
+            margin: 10px 0;
+            display: flex;
+            justify-content: space-evenly;
+            width: 50%;
+            font-size: large;
+            font-weight: bold;
+        }
+
+        .userFigurines {
+            height: 90%;
+            width: 100%;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-evenly;
+            align-items: flex-start;
+            overflow-y: auto;
+        }
+
+        .figurine-entry {
+            width: 30%;
+            margin: 10px;
+            box-sizing: border-box;
+        }
+
+
+        .userFigurines::-webkit-scrollbar {
+            width: 12px;
+        }
+
+        .userFigurines::-webkit-scrollbar-track {
+            background-color: #f1a92b;
+        }
+
+        .userFigurines::-webkit-scrollbar-thumb {
+            background-color: #b11616;
+            border-radius: 6px;
+            border: 3px solid #f1a92b;
+        }
+
+        #prevPage, #nextPage {
+            cursor: pointer;
+        }
+
+        #prevPage.disabled, #nextPage.disabled {
+            opacity: 0.5;
+            cursor: auto;
+        }
+
+
+        .row-3 .row-content .character {
+            height: auto;
+            width: 35%;
+            display: flex;
+            
+        }
+
+        .characterContainer {
+            display: none;
+            flex-direction: column;
+            justify-content: flex-start;
+            align-items: center;
+            height: auto;
+            width: 100%;
+            max-height: 600px;
+            margin-top: 30px;
+            padding: 0px 10px;
+            border: 4px solid #b11616; 
+            color: #b11616; 
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .charTitle, .charImage, .charDesc, .charAppearances {
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 10px;
+
+        }
+
+        .charTitle {
+            height: 10%;
+            width: 100%;
+            border-bottom: 4px solid #b11616
+        }
+
+        .charTitle p {
+        color: #b11616;
+        font-size: 18px;
+        font-weight: bold;
+        align-items: center;
+        }
+
+        .charImage {
+            height: 30%;
+            width: 100%;
+            margin-top: 30px;
+        }
+
+        .charImage img {
+            border-radius: 15px;
+            height: auto;
+        }
+        .charInfo { /* Adjust this value as needed */
+        margin-top: 50px;
+        }
+
+        .charDesc {
+            height: 40%;
+        }
+
+        .charDesc p {
+            color: #b11616;
+            font-style: italic;
+        }
+
+        .charAppearances {
+            margin-top: 10px;
+            height: 10%;
+        }
+
+        .charAppearances p {
+            color: #b11616;
+        }
+        
+        .row-4 {
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+            height: 30vh;
+            margin-bottom: 50px;
+        }
+
+        .row-4 .row-content {
+            height: auto;
+            width: 100%;
+            display: flex;
+            flex-direction: row;
+        }
+
+        .row-4 .row-content .doubles {
+            border-radius: 10px;
+            height: auto;
+            width: 50%;
+            display: flex;
+        }
+
+        .doublesContainer {
+            display: flex; 
+            flex-direction: column;
+            height: 260px; 
+            width: 100%; 
+            margin: 0px 30px 30px ; 
+            border: 4px solid #b11616; 
+            color: #b11616; 
+            border-radius: 10px;
+        }
+
+        .doublesHeader {
+            height: 20%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border-bottom: 4px solid #b11616;
+        }
+    
+        .doublesHeader p {
+            color: #b11616;
+            font-weight: bold;
+            margin: 0;
+        }
+    
+        .doubleMain {
+            height: 80%;
+            display: flex;
+            flex-wrap: nowrap;
+            justify-content: flex-start;
+            align-items: flex-start;
+            overflow-x: auto;
+            overflow-y: hidden;
+        }
+
+        .figurine-entry-double {
+            display: inline-flex;
+            flex-direction: column;
+            align-items: center;
+            margin: 0px 10px;
+            white-space: normal;
+        }
+    
+        .figurine-entry-double p {
+            display: none;
+            color:#b11616;
+            margin-bottom: 5px;
+        }
+    
+        .figurine-entry-double img {
+            width: 100px; /* Adjust as needed */
+            height: auto;
+            border-radius: 10px;
+            margin-top: 20px;
+        }
+
+        .doubleMain::-webkit-scrollbar {
+            scrollbar-width: thin;
+        }
+
+        .doubleMain::-webkit-scrollbar-track {
+            background-color: #f1a92b;
+        }
+
+        .doubleMain::-webkit-scrollbar-thumb {
+            background-color: #b11616;
+            border-radius: 6px;
+            border: 3px solid #f1a92b;
+        }
+
+        .figurine-entry img, .figurine-entry-double img {
+            transition: all 0.3s ease;
+        }
+
+        .figurine-entry img:hover {
+            transform: scale(1.1);
+            box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+        }
+
+        .figurine-entry-double img:hover {
+            transform: scale(1.1);
+            box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+        }
+
+        .figurine-entry-double #hoverBox {
+            display: none;
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
+
+
+
+
+
+
+
+
 
 
         @media (max-width: 856px) {
-    .row-1 {
-        display: none;
-    }
 
-    .mobile-menu {
-        display: block;
-    }
+            .page-container {
+                height: auto;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+            }
 
-    .mobile-menu-icon {
-        font-size: 24px;
-        cursor: pointer;
-        padding: 10px;
-    }
+            .row-1 {
+                display: none;
+            }
 
-    .mobile-menu-content {
-        display: none;
-        background-color: #b11616;
-        color: #ffffff;
-        padding: 10px;
-    }
+            .mobile-menu {
+                display: block;
+                width: 100%;
+            }
 
-    .mobile-menu-content.show {
-        display: block;
-        gap: 10px
-    }
-    
-    .mobile-menu-content .mobile-menu-row {
-        border-bottom: 1px solid #ffffff;
-        padding: 5px
-    }
+            .mobile-menu-icon {
+                display: flex;
+                flex-direction: row;
+                font-size: 24px;
+                cursor: pointer;
+                padding: 10px;
+            }
 
-    .mobile-menu-content .mobile-menu-row a {
-        color: #ffffff;
-    }
+            .mobile-menu-content {
+                display: none;
+                width: 100%;
+                background-color: #b11616;
+                color: #ffffff;
+                padding: 10px;
+            }
 
-    .row-2 {
-        flex-direction: column;
-        align-items: center;
-        width: 100vw;
-    }
+            .mobile-menu-content.show {
+                display: block;
+                gap: 10px
+            }
+            
+            .mobile-menu-content .mobile-menu-row {
+                border-bottom: 1px solid #ffffff;
+                padding: 5px
+            }
 
-    .row-2 .row-content {
-        flex-direction: column;
-        width: 100%;
-    }
+            .mobile-menu-content .mobile-menu-row a {
+                color: #ffffff;
+            }
+
+            .row-2 {
+                height: 100vh;
+            }
+
+            .row-2, .row-3 {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                width: 100vw;
+            }
+
+            .row-2 .row-content,
+            .row-3 .row-content {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                width: 100%; /* Add margin between row containers */
+            }
+        
+            .row-2 .col-1,
+            .row-2 .col-2,
+            .row-2 .col-3 
+            .row-3 .albumContainer {
+                width: 100%;
+            }
+
+            .row-2 .col-1 {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .row-2 .col-1 .picture {
+                width: 80%;
+                margin-right: 0;
+                margin-bottom: 20px;
+            }
+
+            .row-2 .col-1 .data {
+                width: 100%;
+                align-items: center;
+            }
+
+            .row-2 .col-2 {
+                height: 100%;
+                display: flex;
+                flex-direction: row;
+                align-items: center;
+                margin-top: 20px;
+
+            }
+
+            .row-2 .col-2 .container-mrvcard {
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                width: 40%;
+                height: 150px;
+            }
 
 
-    .row-2 .col-1 {
-        flex-direction: column;
-        align-items: center;
-    }
+            .packet-box {
+                width: 100%;
+            }
 
-    .row-2 .col-1 .picture {
-        width: 80%;
-        margin-right: 0;
-        margin-bottom: 20px;
-    }
+            .row-2 .col-2 .button-buypoints {
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                height: 100%;
+                margin-top: 0px
+            }
 
-    .row-2 .col-1 .data {
-        width: 100%;
-        align-items: center;
-    }
 
-    .row-2 .col-2 {
-        margin-left: 0;
-    }
+            .row-3 {
+                height: 75vh;
+                display: flex;
+                flex-direction: column;
+                justify-content: flex-start;
+                align-items: center;
+                width: 100vw;
+            }
 
-    .row-2 .col-2 .container-mrvcard {
-        width: 100%;
-        margin-right: 0;
-    }
+            .row-3 .row-content .album {
+                width: 100%;
+            }
 
-    .row-2 .col-3 {
-        margin-left: 0;
-    }
+            .row-3 .row-content .album .albumContainer {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                width: 100%;
 
-    .packet-box {
-        width: 100%;
-    }
+            }
+
+            .albumHeader {
+                width: 100%;
+                border-bottom: 3px solid #b11616;
+            }
+
+            .row-2 .col-3 {
+			width: 80%;
+            margin-top: 30px
+		    }
+
+            #modalPacketsContent {
+                width: 80%
+            }
+
+            .row-3 .row-content .character {
+            height: 500px;
+            width: 80%;
+            display: flex;
+            }
+
+            .characterContainer {
+                height: 500px;
+                margin-top: 0;
+            }
+
+            .row-4 {
+                width: 100%;
+            }
+
+            .row-4 .row-content {
+                width: 100%;
+                justify-content: center;  
+            }
+
+            .row-4 .row-content .doubles {
+                width: 90%;
+            }
+            .doublesContainer {
+                margin: 0;
+            }
+
+
+            
+
+
+            
 }
 
 
@@ -491,11 +1005,10 @@
 
 		<div class="row row-2" >
 			<div class="row-content">
-
 				<div class="col col-1 profile">
                     <div class="block block-1">
                         <div class="block picture" >
-                            <i class="fas fa-user"></i>
+                            <i class="fas fa-user user-icon"></i>
                         </div>
                         <a href="/account/logout" class="button-logout"><i class="fas fa-sign-out-alt"></i></a>	
                     </div>
@@ -505,14 +1018,14 @@
                         <p><%= user_profile.email %></p>
                         <br>
                         <div class="edit-button">
-                            <a href="/dashboard/edit" style="display: inline-block; padding: 10px 20px; background-color: #b11616; color: white; text-decoration: none; border-radius: 25px; border: 2px solid #8b0000; font-weight: bold;">Edit Profile</a>
+                            <a href="/dashboard/edit">Edit Profile</a>
                         </div>
                     </div>
 				</div>
 				
 				<div class="col col-2 mrvcard">
 					<div class="container-mrvcard">
-                        <div class="text-container-mrvcard" style="height:auto; display: flex; flex-direction: column; justify-content: center;">
+                        <div class="text-container-mrvcard" >
                             <h3 style="text-align: left; margin: 0;"> <%= user_profile.username %>'s Marvel Card</h3>
                             <br>
                             <h3 style="text-align: left; margin: 0;">Points: <%= user_profile.points %></h3>
@@ -520,8 +1033,12 @@
                             <p style="text-align: left; margin: 0;">Date Created: <%= user_profile.createdAt %></p>                       
                         </div>
                     </div>
-                    <div class="button-buypoints" style="margin-top: 20px;">
-                        <a onclick="openBuyForm()" id="buttonOpenBuyForm" style="padding: 10px 20px; background-color: #b11616; color: white; text-decoration: none; border-radius: 25px; font-weight: bold; border: 2px solid #8b0000;">Buy Points</a>
+                    <div class="button-buypoints"">
+                        <a onclick="openBuyForm()" id="buttonOpenBuyForm" style="text-decoration: none; color: white">
+                            <div style="padding: 10px 20px; background-color: #b11616; color: white; text-decoration: none; border-radius: 25px; font-weight: bold; border: 2px solid #8b0000;">
+                                <span>Buy Points</span>
+                            </div>
+                        </a>
                     </div>
                         <div id="modalPoints">
                             <div id="modalPointsContent">
@@ -553,12 +1070,12 @@
                             <div class="packet-header">
                                 <p style="font-weight: bold;">Your Packets</p>
                             </div>
-                            <div class="packet-main" style="overflow-x: auto;">
+                            <div class="packet-main">
                                 <ul class="packet-list" style=" list-style-type: none; padding: 0; display: flex; justify-content: space-around; align-items: center; height: 50px">
                                     <% user_packets.forEach(function(packet) { %>
                                     <li style="margin-right: 40px; margin-left: 10px">
                                         <a id="button-openpacket" onclick="openPacket(this)" style="cursor: pointer;">
-                                            <svg width="70" height="100" viewBox="0 0 70 100" data-key="<%= packet.id %>">
+                                            <svg width="70" height="100" viewBox="0 0 70 100" data-key="<%= packet._id %>">
                                                 <defs>
                                                     <pattern id="stripes" patternUnits="userSpaceOnUse" width="10" height="10">
                                                         <rect width="10" height="5" fill="#b11616"/>
@@ -573,41 +1090,13 @@
                                 </ul>							
                             </div>
                             <div class="packet-footer" style="display:flex; justify-content: center; padding: 20px;">
-                                <a style="text-decoration: none; color: white" href="/account/dashboard/buypackets" style="margin: 0; color: white;">
+                                <a id="packetBuyButton" style="text-decoration: none; color: white" href="/account/dashboard/buypackets" style="margin: 0; color: white;">
                                     <div style="width:200px; background-color: #b11616; border: 2px solid #8b0000; border-radius: 25px; padding: 10px;">
                                         <span>Buy packets</span>
                                     </div>
                                 </a>
                             </div>
 						</div>
-                        <div id="modalPacket" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.7); z-index: 1000; justify-content: center; align-items: center;">
-                            <div id="modalPacketsContent" style="background-color: #b11616; border: 3px solid #8b0000; border-radius: 15px; width: 80%; max-width: 800px; height: 60%;">
-                                <div style="height: 50px; display: flex; justify-content: center; align-items: center; border-bottom: 1px solid #8b0000;">
-                                    <p style="margin: 0; color: white; font-weight: bold;">Figurines</p>
-                                </div>
-                                <div style="height: calc(100% - 100px); display: flex; justify-content: space-evenly; align-items: center; padding: 20px 0;">
-                                    <img src="/path/to/image1.jpg" style="max-height: 80%; width: auto;">
-                                    <img src="/path/to/image2.jpg" style="max-height: 80%; width: auto;">
-                                    <img src="/path/to/image3.jpg" style="max-height: 80%; width: auto;">
-                                    <img src="/path/to/image4.jpg" style="max-height: 80%; width: auto;">
-                                    <img src="/path/to/image5.jpg" style="max-height: 80%; width: auto;">
-                                </div>
-                                <div style="height: 50px; display: flex; justify-content: center; align-items: center; border-top: 1px solid #8b0000;">
-                                    <a href="/account/dashboard" style="text-decoration: none; color: white;">
-                                        <div>
-                                            <p style="margin: 0;">Return to Dashboard</p>
-                                        </div>
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <script>
-                        document.getElementById('button-openpacket').addEventListener('click', function() {
-                        document.getElementById('modalPacket').style.display = 'flex';
-                        });
-                        </script>
-                        
                     </div>
 				</div>
 			</div>
@@ -617,26 +1106,133 @@
 		</div>
 		<div class="row row-3">
 			<div class="row-content">
-				<div class="col col-1 ">
-				
-				</div>
-				<div class="col col-2 ">
-					
+				<div class="col col-1 album">
+                    <!-- album -->
+                    <div class="albumContainer">
+                        <div class="albumHeader">
+                            <p class="albumTitle">Album</p>
+                        </div>
+                        
+                        <div class="albumCentral">
+                            <div class="pageSlider">
+                                <span id="prevPage">←</span>
+                                <span id="pageNum"></span>
+                                <span id="nextPage">→</span>
+                            </div>
+                            <div class="userFigurines" value="<%= user_figurines %>">
+                                <!-- This container will be filled dynamically on dashboard load -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+				<div class="col col-2 character">
+					<div class="characterContainer">
+                        <div class="charTitle">
+                            <p></p>
+                        </div>
+                        <div class="charImage">
+                            <img src="" alt="Character Image">
+                        </div>
+                        <div class="charInfo">
+                            <div class="charDesc">
+                                <p></p>
+                            </div>
+                            <div class="charAppearances">
+                                <p></p>
+                            </div>
+                        </div>
+                    </div>
 				</div>
 			</div>
 		</div>
 
 		<div class="row row-4">
 			<div class="row-content">
-				<div class="col col-1 ">
-
+				<div class="col col-1 doubles">
+                <!-- container for double figurines -->
+                    <div class="doublesContainer">
+                        <div class="doublesHeader">
+                            <p>Doubles Figurines</p>
+                        </div>
+                        <div class="doubleMain">
+                            <% user_doublefigurines.forEach(function(figurine) { %>
+                            <div class="figurine-entry-double">
+                                <div style="position: relative;">
+                                    <% if(figurine.image_path.endsWith('image_not_available')) { %>
+                                        <div id="noImagePlaceholder" style="margin-top: 20px; width: 100px; height: 150px; border-radius: 10px; border: 2px solid #8b0000; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; font-size: 10px; line-height: 1.2;">
+                                            <span style="font-size: medium; font-weight: bold"><%= figurine.name %></span>
+                                            <span>Image</span>
+                                            <span>Not</span>
+                                            <span>Available</span>
+                                        </div>
+                                    <% } else { %>
+                                        <img src="<%= figurine.image_path %>/portrait_small.<%= figurine.ext %>" alt="Figurine Image"
+                                        onerror="this.parentNode.innerHTML = `<div style='margin-top: 20px; width: 100px; height: 150px; border: 2px solid #8b0000; border-radius: 10px; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; font-size: 10px; line-height: 1.2;''>
+                                            <span style='font-size: medium; font-weight: bold'><%= figurine.name %></span><span>Image</span><span>Not</span><span>Available</span></div>`">
+                                    <% } %>
+                                </div>
+                            </div>
+                            <!-- Repeat the figurine-entry div for each figurine -->
+                            <% }); %>
+                        </div>
+                    </div>
 				</div>
+
 				<div class="col col-2 ">
 				
 				</div>
 			</div>
 		</div>
 	</div>
+
+
+
+    <div id="modalPacket" style="display: none;">
+        <div id="modalPacketsContent">
+            <div id="loadingContent" style="display: flex; justify-content: center; align-items: center; height: 100%;">
+                <p style="margin-right: 10px; color: white;">Opening packet</p>
+                <i class="fas fa-spinner fa-spin" style="color: white; font-size: 24px;"></i>
+            </div>
+            <div id="figurinesContent" style="display: none;">
+                <div style="height: 30px; display: flex; justify-content: center; align-items: center; border-bottom: 1px solid #ffffff;">
+                    <p style="margin: 0; color: white; font-weight: bold;">Figurines Found</p>
+                </div>
+                <div id="figurines-container">
+                <!--
+                <div class="figurine entry">
+                    <span></span>
+                    <img classstyle="max-height: 80%; width: auto;">
+                </div>
+                <div class="figurine entry">
+                    <span></span>
+                    <img style="max-height: 80%; width: auto;">
+                </div>
+                <div class="figurine entry">
+                    <span></span>
+                    <img style="max-height: 80%; width: auto;">
+                </div>
+                <div class="figurine entry">
+                    <span></span>
+                    <img style="max-height: 80%; width: auto;">
+                </div>
+                <div class="figurine entry">
+                    <span></span>
+                    <img style="max-height: 80%; width: auto;">
+                </div>
+                 -->
+                </div>
+                <div style="height: 80px; display: flex; justify-content: center; align-items: center; border-top: 1px solid #ffffff;">
+                    <a id="returnDashButtonFigurines" href="/account/dashboard" style="text-decoration: none; color: white; width: 40%; text-align: center;">
+                        <div style="background-color: #b11616; border: 2px solid #8b0000; border-radius: 25px; padding: 10px; transition: all 0.3s ease;">
+                            <p style="margin: 0;">Return to Dashboard</p>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    
 
     <script>
         function openBuyForm() {
@@ -677,21 +1273,221 @@
                         });
             });
         }
-
-
-        function openPacket(a_container) {
-            const packet_id = this.children[0].getAttribute('data-key');
-
-            fetch('/account/dashboard/packets/' + packet_id)
-                .then((response) => {
-                    /* server returns data that's used to render the opening packet box*/
-
-
-                })
-
-
-        }
     </script>
+    <script>
+    function openPacket(a_container) {
+        const packet_id = a_container.children[0].getAttribute('data-key');
+        const Extractedfigurines = document.getElementById('figurines-container');
+        const modalPacket = document.getElementById('modalPacket');
+        const loadingContent = document.getElementById('loadingContent');
+        const figurinesContent = document.getElementById('figurinesContent');
+
+        modalPacket.style.display = 'flex';
+        loadingContent.style.display = 'flex';
+        figurinesContent.style.display = 'none';
+
+        fetch('/account/dashboard/packets/' + packet_id)
+            .then((figurines_data) => figurines_data.json())
+            .then((figurines_data_json) => {
+                console.log(figurines_data_json);
+                let figs_count = 0;
+
+                const displayFigs = () => {
+                    console.log(figurines_data_json[figs_count]);
+                    const figurine_entry = document.createElement('div');
+                    figurine_entry.className = 'figurine-entry'; 
+                    const fig_title = document.createElement('p');
+                    fig_title.innerHTML = figurines_data_json[figs_count].name;
+                    const fig_image = document.createElement('img');
+                    fig_image.src = figurines_data_json[figs_count].image_path + '/portrait_medium.' + figurines_data_json[figs_count].ext;
+                    fig_image.onerror = function() {
+                    this.onerror = null;
+                    this.src = `http://i.annihil.us/u/prod/marvel/i/mg/b/40/image_not_available/portrait_medium.jpg`;
+                    };
+                    fig_image.style.setProperty('border-radius', '10px');
+                    Extractedfigurines.appendChild(figurine_entry);
+                    figurine_entry.appendChild(fig_title);
+                    figurine_entry.appendChild(fig_image);
+                    figs_count++;
+                    if(figs_count == figurines_data_json.length) {
+                        loadingContent.style.display = 'none';
+                        figurinesContent.style.display = 'block';
+                        return;
+                    } else {
+                        displayFigs();
+                    }
+                }
+                displayFigs();
+            })
+            .catch((error) => {
+                Extractedfigurines.innerHTML = 'Unable to fetch packet data';
+                loadingContent.style.display = 'none';
+                figurinesContent.style.display = 'block';
+            });
+    }
+    </script>
+    <script>
+        const userFigurines = <%- JSON.stringify(user_figurines); %> // document.querySelector('.userFigurines').getAttribute('value')
+        /***
+        JSON.stringify performs the opposite operation of JSON.parse. 
+        It converts JavaScript objects or arrays into a JSON string. 
+        This process is called serialization.
+        The <%- %> EJS tags are used in dashboard.ejs:1222 to output unescaped HTML. 
+        In this case, it's necessary because JSON.stringify() produces a string 
+        that may contain characters that would be escaped by default EJS output tags (<%= %>).
+        ***/
+        
+        console.log(userFigurines);
+        const figurinesPerPage = 24; 
+        const totalPages = Math.ceil(userFigurines.length / figurinesPerPage);
+        let currentPage = 1;
+        
+    
+        function renderPage(pageNumber) {
+            const container = document.querySelector('.userFigurines');
+            container.innerHTML = '';
+            const startIndex = (pageNumber - 1) * figurinesPerPage;
+            const endIndex = startIndex + figurinesPerPage;
+            const pageFigurines = userFigurines.slice(startIndex, endIndex);
+            
+            pageFigurines.forEach(figurine => {
+                container.appendChild(createFigurineElement(figurine));
+            });
+            
+            updateNavigationButtons();
+        }
+
+        function createFigurineElement(figurine) {
+            const container = document.createElement('a');
+            container.id = "buttonDisplayCharacter";
+            container.onclick = function() { displayChar(this); };
+            container.style.cssText = "cursor: pointer; margin-left: 50px";
+
+            const figurineEntry = document.createElement('div');
+            figurineEntry.className = "figurine-entry";
+            figurineEntry.setAttribute('figurineId', figurine.id_figurine);
+            figurineEntry.style.cssText = "width: 30%; margin: 10px; box-sizing: border-box;";
+
+            if (figurine.image_path.endsWith('image_not_available')) {
+                const noImageDiv = document.createElement('div');
+                noImageDiv.style.cssText = "width: 100px; height: 150px; border-radius: 10px; border: 2px solid #8b0000; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; font-size: 10px; line-height: 1.2;";
+                noImageDiv.innerHTML = `<span style="font-size: medium; font-weight: bold">${figurine.name}</span><span>Image</span><span>Not</span><span>Available</span>`;
+                figurineEntry.appendChild(noImageDiv);
+            } else {
+                const img = document.createElement('img');
+                img.style.borderRadius = "10px";
+                img.src = `${figurine.image_path}/portrait_medium.${figurine.ext || 'jpg'}`;
+                img.onerror = function() {
+                    this.onerror = null;
+                    this.parentNode.innerHTML = `<div style="width: 100px; height: 150px; border: 2px solid #8b0000; border-radius: 10px; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; font-size: 10px; line-height: 1.2;"><span style="font-size: medium; font-weight: bold">${figurine.name}</span><span>Image</span><span>Not</span><span>Available</span></div>`;
+                };
+                figurineEntry.appendChild(img);
+            }
+
+            container.appendChild(figurineEntry);
+            return container;
+        }
+        
+        function updateNavigationButtons() {
+            const prevButton = document.getElementById('prevPage');
+            const nextButton = document.getElementById('nextPage');
+            const pageNum = document.getElementById('pageNum')
+            pageNum.innerHTML = 'Page ' + currentPage;
+
+            prevButton.classList.toggle('disabled', currentPage === 1);
+            nextButton.classList.toggle('disabled', currentPage === totalPages);
+        }
+        
+        document.getElementById('prevPage').addEventListener('click', () => {
+            if (currentPage > 1) {
+                currentPage--;
+                renderPage(currentPage);
+            }
+        });
+        
+        document.getElementById('nextPage').addEventListener('click', () => {
+            if (currentPage < totalPages) {
+                currentPage++;
+                renderPage(currentPage);
+            }
+        });
+        
+        // Initial render
+        renderPage(1);
+    </script>
+    <script>
+    function displayChar(a_container) {
+        const figId = a_container.children[0].getAttribute('figurineId');
+        const charContainer = document.querySelector('.characterContainer');
+        const charTitle = document.querySelector('.charTitle p');
+        const charImage = document.querySelector('.charImage img');
+        const charDesc = document.querySelector('.charDesc p');
+        const charAppearances = document.querySelector('.charAppearances p');
+
+
+
+        fetch(`/account/dashboard/fig/${figId}`)
+            .then((figurine) => figurine.json())
+                .then((figurine_json) => {
+                charTitle.textContent = figurine_json.name;
+                charImage.src = `${figurine_json.image_path}/landscape_xlarge.${figurine_json.ext}`;
+                charImage.onerror = function() {
+                    this.onerror = null;
+                    this.src = `http://i.annihil.us/u/prod/marvel/i/mg/b/40/image_not_available/landscape_xlarge.jpg`;
+                };
+                charDesc.textContent = figurine_json.description || 'No description available.';
+
+                charAppearances.innerHTML = `${figurine_json.name} appears in: \n ${figurine_json.appearances[0]} comics \n ${figurine_json.appearances[1]} series \n ${figurine_json.appearances[2]} stories \n ${figurine_json.appearances[3]} events`;
+                
+                charContainer.style.display = 'flex';
+                adjustLayout()
+                return
+            })
+            .catch(error => console.error('Couldn\'t retrieve figurine from db, Error:', error));
+    }
+
+    function adjustLayout() {
+        const windowWidth = window.innerWidth;
+        const charContainer = document.querySelector('.characterContainer');
+        const row3 = document.querySelector('.row-3');
+
+        if (windowWidth <= 856 && charContainer.style.display === 'flex') {
+            row3.style.height = '135vh';
+        } else {
+            row3.style.height = '75vh';
+        }
+    }
+
+    window.addEventListener('resize', adjustLayout);
+
+
+    
+    /*
+        .then(response => response.json())
+        .then(data => {
+            const character = data.data.results[0];
+            charTitle.textContent = character.name;
+            charImage.src = `${character.thumbnail.path}/landscape_xlarge.${character.thumbnail.extension}`;
+            charDesc.textContent = character.description || 'No description available.';
+            
+            const comicsLink = `<a href="${character.comics.collectionURI}">comics</a>`;
+            const seriesLink = `<a href="${character.series.collectionURI}">series</a>`;
+            const storiesLink = `<a href="${character.stories.collectionURI}">stories</a>`;
+            
+            charAppearances.innerHTML = `${character.name} appears in: 
+                ${character.comics.available} comics, 
+                ${character.series.available} series, 
+                ${character.stories.available} stories`;
+
+            charContainer.style.display = 'flex';
+            return
+        })
+        .catch(error => console.error('Error:', error));
+        */
+
+
+    </script>
+
 </body>
 
 </html>

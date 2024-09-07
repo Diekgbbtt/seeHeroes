@@ -1,29 +1,78 @@
 
 const mongoose = require('mongoose');
-const bcrypt = require('@node-rs/bcrypt');
-const { listIndexes } = require('./users');
 
-
-const marketplaceOfferSchema = new mongoose.Schema({
-
-    id_user: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'users',
-        required: true
+const offerItemSchema = new mongoose.Schema({
+    figurines: {
+        type: [{
+            figurine_id: {
+                type: mongoose.Schema.Types.ObjectId,
+                required: true,
+                ref: 'UsersFigurines'
+            },
+            figurine_name: {
+                type: String,
+                required: true
+            },
+            figurine_image_path: {
+                type: String,
+                required: true
+            },
+            figurine_ext: {
+                type: String,
+                required: true
+            }
+        }],
+        default: []    
     },
-    ids_userFigurines: {
-        type: Array,
-        required: true,
-        ref: 'UsersFigurines'
-    },
-    ids_figurine_get: {
-        type: Array,
-        required: true
-    },
-    id_serie: {
-        type: Number,
-        required: true
+    
+    points: {
+      type: Number,
+      default: 0
     }
-    /* there could be more figurines in the exchange belonging to different comics, tehse go in
-     a separate section 'mixed'*/
-});
+  });
+  
+  const marketplaceOfferSchema = new mongoose.Schema({
+    username: {
+      type: String,
+      ref: 'username',
+      required: true
+    },
+    requesting: offerItemSchema,
+    offering: offerItemSchema
+  });
+
+  module.exports = mongoose.model('marketplaceOffers', marketplaceOfferSchema);
+
+
+
+// const marketplaceOfferSchema = new mongoose.Schema({
+
+//     id_user: {
+//         type: mongoose.Schema.Types.ObjectId,
+//         ref: 'users',
+//         required: true
+//     },
+//     ids_userFigurines: {
+//         type: Array,
+//         required: true,
+//         ref: 'UsersFigurines'
+//     },
+//     ids_figurine_get: {
+//         type: Array,
+//         required: true
+//     },
+//     user_points: {
+//         type: Number,
+//         required: true,
+//         default: 0
+//     },
+//     user_points_get: {
+//         type: Number,
+//         required: true,
+//         default: 0
+//     }
+// });
+
+
+
+  

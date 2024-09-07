@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Marketplace</title>
+    <link href="https://fonts.googleapis.com/css?family=Permanent+Marker" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+			background-color: #f1a92b;
+			color: #b11616;
+			font-family: Arial, "Helvetica Neue", Helvetica, sans-serif
+        }
+        .header {
+            height: 20%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            margin-bottom: 20px;
+        }
+        .header h1 {
+            font-family: 'Permanent Marker', Impact, Charcoal, sans-serif;
+            font-size: 36px;
+            color: #b11616;
+            margin: 0;
+        }
+        .favicon {
+            position: absolute;
+            top: 10px;
+            right: 20px;
+            font-size: 36px;
+            color: #b11616;
+            text-decoration: none;
+        }
+    
+        .main-content {
+            height: 100vh;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .offers-container {
+            width: 90%;
+            height: 80%;
+            overflow-y: auto;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-around;
+            align-content: flex-start;
+        }
+        .offerContainer {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            width: auto;
+            height: auto;
+            margin: 10px;
+            border: 4px solid #b11616;
+            border-radius: 10px;
+            padding: 0px  10px;
+            box-sizing: border-box;
+        }
+
+        .offerHeader {
+            width: 60%;
+            height: 10%;
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+            align-items: center;
+            border: 4px solid #b11616;
+            border-radius: 0px 0px 20px 20px;
+        }
+
+        .offerHeader p {
+            margin: 0;
+            font-size: 16px;
+            font-weight: bold;
+            color: #b11616;
+            text-align: center;
+        }
+        .offerCentral {
+            width: 100%;
+            height: 80%;
+            display: flex;
+            flex-direction: row;
+            justify-content: flex-start;
+            align-items: center;
+            padding: 0px 10px;
+            margin-bottom: 10px;
+        }
+
+        .offerRequestingElements, .offerOfferingElements {
+            width: 45%;
+            height: 100%;
+            display: flex;
+            flex-direction: row;
+            justify-content: flex-start;
+            align-items: center;
+        }
+
+        .offerExchangeSymbol {
+            width: 10%;
+            height: 100%;
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+            align-items: center;
+            padding: 10px;
+        }
+
+        .requestingFigurine, .offeringFigurine {
+            width: 120px; /* useing portrait medium 100x150 */
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            align-items: center;
+        }
+
+        .requestingFigurineTitle, .offeringFigurineTitle {
+            width: 100%;
+            height: 20%;
+            color: #b11616;
+            text-align: center;
+        }
+
+        .requestingFigurineImg, .offeringFigurineImg {
+            width: 100%;
+            height: 80%;
+            border-radius: 10px;
+            margin: 5px
+        }
+
+        .offerExchangeSymbol i {
+            font-size: 36px;
+            color: #b11616;
+            text-align: center;
+        }
+
+        .offerFooter {
+            width: 100%;
+            height: 10%;
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .exchangeButton{
+            text-decoration: none; 
+            color: white;
+            width: 45%;
+            height: 100%;
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+            cursor: pointer;
+            border-radius: 10px;
+        }
+
+        .exchangeButtonInternal {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+            align-items: center;
+            color: #ffffff;
+            background-color: #b11616;
+            border: 2px solid #8b0000;
+            border-radius: 10px;
+            padding: 15px 15px;
+            box-sizing: border-box;
+            transition: all 0.3s ease;
+        }
+
+        .exchangeButton:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 10px #8b0000;
+        }
+
+
+        .pagination {
+            margin-top: 20px;
+        }
+        .create-offer-btn {
+            margin-top: 20px;
+            padding: 10px 20px;
+            background-color: #b11616;
+            border: 2px solid #8b0000;
+            color: white;
+            border-radius: 25px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>Marketplace</h1>
+        <a href="/account/dashboard" class="favicon">
+            <i class="fas fa fa-user-circle"></i>
+        </a>
+    </div>
+    <div class="main-content">
+        <div class="offers-container">
+            <!-- Offer elements will be dynamically added here -->
+        </div>
+        <div class="pagination-controls">
+            <label for="elementsPerPage">Elements per page:</label>
+            <input type="number" id="elementsPerPage" min="10" max="100" value="10">
+        </div>
+        <div class="pagination">
+            <div class="pageSlider">
+                <span id="prevPage">←</span>
+                <span id="pageNum"></span>
+                <span id="nextPage">→</span>
+            </div>
+        </div>
+        <button class="create-offer-btn">Create Exchange Offer</button>
+    </div>
+
+    <script>
+        // JavaScript to dynamically create offer elements and handle pagination
+        const all_offers = <%- JSON.stringify(offers); %> ;
+        console.log(all_offers);
+        const elementsPerPageInput = document.getElementById('elementsPerPage');
+        let currentPage = 1;
+        const offersPerPage = parseInt(elementsPerPageInput.value);
+        const totalPages = Math.ceil(all_offers.length / offersPerPage);
+
+        // monitor elemtnts per page input change
+        elementsPerPageInput.addEventListener('change', function() {
+            const newElementsPerPage = parseInt(this.value);
+                renderPage(currentPage, offersPerPage);
+        });
+        // monitor prev page change
+        document.getElementById('prevPage').addEventListener('click', () => {
+            if (currentPage > 1) {
+                currentPage--;
+                renderPage(currentPage, offersPerPage);
+            }
+        });
+        
+        // monitor next page change
+        document.getElementById('nextPage').addEventListener('click', () => {
+            if (currentPage < totalPages) {
+                currentPage++;
+                renderPage(currentPage, offersPerPage);
+            }
+        });
+
+
+
+        function renderPage(pageNumber, elementsPerPage) {
+            const offersContainer = document.querySelector('.offers-container');
+            const startIndex = (currentPage - 1) * offersPerPage;
+            const endIndex = startIndex + offersPerPage;
+            const offersToDisplay = all_offers.slice(startIndex, endIndex);
+
+            offersContainer.innerHTML = '';
+
+            offersToDisplay.forEach(offer => {
+                offersContainer.appendChild(createOfferElement(offer));
+            });
+
+            updateNavigationButtons();
+        }
+
+        function createOfferElement(offer) {
+            const offerContainer = document.createElement('div');
+            offerContainer.className = 'offerContainer';
+            const offerHeader = document.createElement('div');
+            offerHeader.className = 'offerHeader';
+            const offerUser = document.createElement('p');
+            offerUser.textContent = offer.username;
+            offerHeader.appendChild(offerUser);
+            const offerCentral = document.createElement('div');
+            offerCentral.className = 'offerCentral';
+            const offerRequestingElements = document.createElement('div');
+            offerRequestingElements.className = 'offerRequestingElements';
+            const offerOfferingElements = document.createElement('div');
+            offerOfferingElements.className = 'offerOfferingElements';
+            const offerExchnageSymbol = document.createElement('div');
+            offerExchnageSymbol.className = 'offerExchangeSymbol';
+            const symbolIcon = document.createElement('i');
+            symbolIcon.className = 'fa-duotone fa-solid fa-arrow-right-arrow-left'; // Using Font Awesome exchange icon
+            symbolIcon.style.width = '100%';
+            symbolIcon.style.height = 'auto';
+            offerExchnageSymbol.appendChild(symbolIcon);
+            const offerFooter = document.createElement('div');
+            offerFooter.className = 'offerFooter';
+            const exchangeButton = document.createElement('a');
+            exchangeButton.className = 'exchangeButton';
+            exchangeButton.onclick = "exchange(this)";
+            const exchangeButtonInternal= document.createElement('div');
+            exchangeButtonInternal.className = 'exchangeButtonInternal';
+            const exchangeButtonText = document.createElement('span')
+            exchangeButtonText.textContent = 'Exchange';
+            exchangeButtonInternal.appendChild(exchangeButtonText);
+            exchangeButton.appendChild(exchangeButtonInternal);
+            offerFooter.appendChild(exchangeButton);
+
+
+            if(offer.requesting.points > 0) {
+                const requestingPointsContainer = document.createElement('div');
+                requestingPointsContainer.className = 'requestingPoints';
+                requestingPointsContainer.style.cssText = 'width: 120px; height: 100%; display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 10px;';
+
+                const pointsCircle = document.createElement('div');
+                pointsCircle.className = 'pointsCircle';
+                pointsCircle.style.cssText = 'border-radius: 50%; border: 2px solid #b11616; display: flex; justify-content: center; align-items: center; padding: 20px;';
+
+                const pointsValue = document.createElement('span');
+                pointsValue.textContent = offer.requesting.points;
+                pointsValue.style.cssText = 'font-size: 24px; color: #b11616;';
+
+                pointsCircle.appendChild(pointsValue);
+                requestingPointsContainer.appendChild(pointsCircle);
+                offerRequestingElements.appendChild(requestingPointsContainer);
+            }  else {
+                offer.requesting.figurines.forEach(figurine => {
+                    if(figurine.figurine_image_path.endsWith('image_not_available')) {
+                        const noImageTitle = document.createElement('p');
+                        noImageTitle.className = 'requestingFigurineTitle';
+                        noImageTitle.style.margin = '35px 0 0 0 '
+                        noImageTitle.textContent = figurine.figurine_name;
+                        const noImageDiv = document.createElement('div');
+                        noImageDiv.style.cssText = "width: 110px; height: 175px; border-radius: 10px; border: 4px solid #b11616; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; font-size: 10px; line-height: 1.2; margin-bottom: 25px;";
+                        noImageDiv.innerHTML = `<span style="font-size: medium; font-weight: bold">${figurine.figurine_name}</span><span>Image</span><span>Not</span><span>Available</span>`;
+                        offerRequestingElements.style.setProperty('flex-direction', 'column');
+
+                        offerRequestingElements.appendChild(noImageTitle);
+                        offerRequestingElements.appendChild(noImageDiv);
+                    }  else {
+                    const figurineElement = document.createElement('div');
+                    figurineElement.class = 'requestingFigurine';
+                    const figurineTitle = document.createElement('p');
+                    figurineTitle.className = 'requestingFigurineTitle';
+                    figurineTitle.textContent = figurine.figurine_name;
+                    const figurineImg = document.createElement('img');
+                    figurineImg.className = 'requestingFigurineImg';
+                    figurineImg.src = figurine.figurine_image_path + '/portrait_medium.' + figurine.figurine_ext;
+                    figurineImg.onerror = function() {
+                        this.onerror = null;
+                        this.parentNode.innerHTML = `<div style="width: 100px; height: 150px; border: 2px solid #8b0000; border-radius: 10px; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; font-size: 10px; line-height: 1.2;"><span style="font-size: medium; font-weight: bold">${figurine.figurine_name}</span><span>Image</span><span>Not</span><span>Available</span></div>`;
+                    };
+                    figurineElement.appendChild(figurineTitle);
+                    figurineElement.appendChild(figurineImg);
+                    offerRequestingElements.appendChild(figurineElement);
+                    }
+
+                });
+            }
+
+            if(offer.offering.points > 0) {
+                const offeringPointsContainer = document.createElement('div');
+                offeringPointsContainer.className = 'offeringPoints';
+                offeringPointsContainer.style.cssText = 'width: 120px; height: 100%; display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 10px;';
+
+                const pointsCircle = document.createElement('div');
+                pointsCircle.className = 'pointsCircle';
+                pointsCircle.style.cssText = 'border-radius: 50%; border: 2px solid #b11616; display: flex; justify-content: center; align-items: center; padding: 20px;';
+
+                const pointsValue = document.createElement('span');
+                pointsValue.textContent = offer.offering.points;
+                pointsValue.style.cssText = 'font-size: 24px; color: #b11616;';
+
+                pointsCircle.appendChild(pointsValue);
+                offeringPointsContainer.appendChild(pointsCircle);
+                offerOfferingElements.appendChild(offeringPointsContainer);
+            } else {
+            offer.offering.figurines.forEach(figurine => {
+                if(figurine.figurine_image_path.endsWith('image_not_available')) {
+                    const noImageTitle = document.createElement('p');
+                    noImageTitle.className = 'offeringFigurineTitle';
+                    noImageTitle.style.margin = '35px 0 0 0 '
+                    noImageTitle.textContent = figurine.figurine_name;
+                    const noImageDiv = document.createElement('div');
+                    noImageDiv.style.cssText = "width: 110px; height: 180px; border-radius: 10px; border: 4px solid #b11616; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; font-size: 10px; line-height: 1.2; margin-bottom: 25px;";
+                    noImageDiv.innerHTML = `<span style="font-size: medium; font-weight: bold">${figurine.figurine_name}</span><span>Image</span><span>Not</span><span>Available</span>`;
+                    offerOfferingElements.style.setProperty('flex-direction', 'column');
+                    
+                    offerOfferingElements.appendChild(noImageTitle);
+                    offerOfferingElements.appendChild(noImageDiv);
+                }  else {
+                const figurineElement = document.createElement('div');
+                figurineElement.class = 'offeringFigurine';
+                const figurineTitle = document.createElement('p');
+                figurineTitle.className = 'offeringFigurineTitle';
+                figurineTitle.textContent = figurine.figurine_name;
+                const figurineImg = document.createElement('img');
+                figurineImg.className = 'offeringFigurineImg';
+                figurineImg.src = figurine.figurine_image_path + '/portrait_medium.' + figurine.figurine_ext;
+                figurineImg.onerror = function() {
+                    this.onerror = null;
+                    this.parentNode.innerHTML = `<div style="width: 100px; height: 150px; border: 2px solid #8b0000; border-radius: 10px; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; font-size: 10px; line-height: 1.2;"><span style="font-size: medium; font-weight: bold">${figurine.figurine_name}</span><span>Image</span><span>Not</span><span>Available</span></div>`;
+                };
+                figurineElement.appendChild(figurineTitle);
+                figurineElement.appendChild(figurineImg);
+                offerOfferingElements.appendChild(figurineElement);
+                }
+
+            });
+
+        }
+        offerCentral.appendChild(offerRequestingElements);
+        offerCentral.appendChild(offerExchnageSymbol);
+        offerCentral.appendChild(offerOfferingElements);
+        offerContainer.appendChild(offerHeader);
+        offerContainer.appendChild(offerCentral);
+        offerContainer.appendChild(offerFooter);
+
+
+        return offerContainer;
+
+        }
+
+        function updateNavigationButtons() {
+            const prevButton = document.getElementById('prevPage');
+            const nextButton = document.getElementById('nextPage');
+            const pageNum = document.getElementById('pageNum')
+            pageNum.innerHTML = 'Page ' + currentPage;
+
+            prevButton.classList.toggle('disabled', currentPage === 1);
+            nextButton.classList.toggle('disabled', currentPage === totalPages);
+        }
+
+        renderPage(currentPage, offersPerPage);
+        /*
+        function createOfferElement(offerData) {
+            const offerElement = document.createElement('div');
+            offerElement.className = 'offer';
+            offerElement.textContent = `Offer ${offerData.id}`;
+            return offerElement;
+        }
+
+        function loadOffers(page) {
+            const offersContainer = document.getElementById('offersContainer');
+            offersContainer.innerHTML = '';
+
+            // Simulating fetching data from a server
+            const startIndex = (page - 1) * offersPerPage;
+            const endIndex = startIndex + offersPerPage;
+
+            for (let i = startIndex; i < endIndex; i++) {
+                const offerData = { id: i + 1 };
+                const offerElement = createOfferElement(offerData);
+                offersContainer.appendChild(offerElement);
+            }
+            updateNavigationButtons()
+        }
+        */
+
+    </script>
+</body>
+</html>
