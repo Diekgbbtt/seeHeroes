@@ -46,7 +46,7 @@
         }
 
         .offers-container {
-            width: 90%;
+            width: 100%;
             height: 80%;
             overflow-y: auto;
             display: flex;
@@ -69,7 +69,7 @@
         }
 
         .offerHeader {
-            width: 60%;
+            width: 150px;
             height: 10%;
             display: flex;
             flex-direction: row;
@@ -86,34 +86,101 @@
             color: #b11616;
             text-align: center;
         }
-        .offerCentral {
+
+        /* .offerNames {
             width: 100%;
-            height: 80%;
+            height: 10%;
             display: flex;
             flex-direction: row;
             justify-content: flex-start;
             align-items: center;
             padding: 0px 10px;
-            margin-bottom: 10px;
+        } */
+
+        .offerCentral {
+            width: 100%;
+            height: 90%;
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+            align-items: center;
+            padding: 0px 10px; 
+            gap: 10px;
         }
 
-        .offerRequestingElements, .offerOfferingElements {
-            width: 45%;
+        .offerRequesting, .offerOffering {
+            width: auto;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            align-items: center;
+            margin-top: 10px;
+        }
+
+        .offerRequestingNames, .offerOfferingNames {
+            width: 100%;
             height: 100%;
             display: flex;
             flex-direction: row;
             justify-content: flex-start;
             align-items: center;
+            gap: 10px;
         }
 
-        .offerExchangeSymbol {
+        .offerRequestingNames span, .offerOfferingNames span {
+            font-size: 16px;
+            font-weight: bold;
+            color: #b11616;
+            text-align: center;
+        }
+
+        .offeringFigurinePlus {
+            font-size: 16px; 
+            color: #b11616; 
+            font-weight: bold
+        }
+
+        .offerSymbol {
             width: 10%;
             height: 100%;
             display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            align-items: center;
+        }
+
+        .offerSymbol .offerExchangeSymbolNames {
+            width: 100%;
+            height: 35%;
+            display: flex;
             flex-direction: row;
             justify-content: center;
-            align-items: center;
-            padding: 10px;
+            align-items: center; 
+        }
+
+        .offerSymbol .offerExchangeSymbolNames i {
+            font-size: 16px;
+            color: #b11616;
+            text-align: center;
+            font-weight: bold;
+        }
+
+        .offerExchangeSymbol p {
+            margin: 0;
+            font-size: 16px;
+            font-weight: bold;
+            color: #b11616;
+            text-align: center;
+        }
+
+        .offerRequestingElements, .offerOfferingElements {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: row;
+            justify-content: flex-start;
+            align-items: center; 
         }
 
         .requestingFigurine, .offeringFigurine {
@@ -125,11 +192,14 @@
             align-items: center;
         }
 
-        .requestingFigurineTitle, .offeringFigurineTitle {
+        .offerExchangeSymbol {
             width: 100%;
-            height: 20%;
-            color: #b11616;
-            text-align: center;
+            height: 100%;
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+            align-items: center;
+            padding: 10px;
         }
 
         .requestingFigurineImg, .offeringFigurineImg {
@@ -158,7 +228,7 @@
         .exchangeButton{
             text-decoration: none; 
             color: white;
-            width: 45%;
+            width: 180px;
             height: 100%;
             display: flex;
             flex-direction: row;
@@ -283,19 +353,39 @@
             const offerUser = document.createElement('p');
             offerUser.textContent = offer.username;
             offerHeader.appendChild(offerUser);
+            // const offerNames = document.createElement('div');
+            // offerNames.className = 'offerNames';
             const offerCentral = document.createElement('div');
             offerCentral.className = 'offerCentral';
+            const offerRequesting = document.createElement('div');
+            offerRequesting.className = 'offerRequesting';
+            const offerSymbol = document.createElement('div');
+            offerSymbol.className = 'offerSymbol';
+            const offerOffering = document.createElement('div');
+            offerOffering.className = 'offerOffering';
+            const offerRequestingNames = document.createElement('div');
+            offerRequestingNames.className = 'offerRequestingNames';
             const offerRequestingElements = document.createElement('div');
             offerRequestingElements.className = 'offerRequestingElements';
-            const offerOfferingElements = document.createElement('div');
-            offerOfferingElements.className = 'offerOfferingElements';
-            const offerExchnageSymbol = document.createElement('div');
-            offerExchnageSymbol.className = 'offerExchangeSymbol';
+            const offerExchangeSymbolNames = document.createElement('div');
+            offerExchangeSymbolNames.className = 'offerExchangeSymbolNames';
+            const symbolIconNames = document.createElement('i');
+            symbolIconNames.className = 'fa-duotone fa-solid fa-arrow-right-arrow-left'; // Using Font Awesome exchange icon
+            symbolIconNames.style.width = '100%';
+            symbolIconNames.style.height = 'auto';
+            offerExchangeSymbolNames.appendChild(symbolIconNames);
+            const offerExchangeSymbol = document.createElement('div');
+            offerExchangeSymbol.className = 'offerExchangeSymbol';
             const symbolIcon = document.createElement('i');
             symbolIcon.className = 'fa-duotone fa-solid fa-arrow-right-arrow-left'; // Using Font Awesome exchange icon
             symbolIcon.style.width = '100%';
             symbolIcon.style.height = 'auto';
-            offerExchnageSymbol.appendChild(symbolIcon);
+            offerExchangeSymbol.appendChild(symbolIcon);
+            const offerOfferingNames = document.createElement('div');
+            offerOfferingNames.className = 'offerOfferingNames';
+            const offerOfferingElements = document.createElement('div');
+            offerOfferingElements.className = 'offerOfferingElements';
+
             const offerFooter = document.createElement('div');
             offerFooter.className = 'offerFooter';
             const exchangeButton = document.createElement('a');
@@ -328,34 +418,41 @@
                 offerRequestingElements.appendChild(requestingPointsContainer);
             }  else {
                 offer.requesting.figurines.forEach(figurine => {
-                    if(figurine.figurine_image_path.endsWith('image_not_available')) {
-                        const noImageTitle = document.createElement('p');
-                        noImageTitle.className = 'requestingFigurineTitle';
-                        noImageTitle.style.margin = '35px 0 0 0 '
-                        noImageTitle.textContent = figurine.figurine_name;
-                        const noImageDiv = document.createElement('div');
-                        noImageDiv.style.cssText = "width: 110px; height: 175px; border-radius: 10px; border: 4px solid #b11616; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; font-size: 10px; line-height: 1.2; margin-bottom: 25px;";
-                        noImageDiv.innerHTML = `<span style="font-size: medium; font-weight: bold">${figurine.figurine_name}</span><span>Image</span><span>Not</span><span>Available</span>`;
-                        offerRequestingElements.style.setProperty('flex-direction', 'column');
+                    const figurineName = document.createElement('span');
+                    figurineName.textContent = figurine.figurine_name;
 
-                        offerRequestingElements.appendChild(noImageTitle);
+                    if(figurine.figurine_image_path.endsWith('image_not_available')) {
+                        const noImageDiv = document.createElement('div');
+                        noImageDiv.style.cssText = "width: 115px; height: 152px; border-radius: 10px; border: 4px solid #b11616; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; font-size: 10px; line-height: 1.2; margin-bottom: 28px;";
+                        noImageDiv.innerHTML = `<span style="font-size: medium; font-weight: bold">${figurine.figurine_name}</span><span>Image</span><span>Not</span><span>Available</span>`;
                         offerRequestingElements.appendChild(noImageDiv);
+                        if(offer.requesting.figurines.indexOf(figurine) > 0){
+                            noImageDiv.style.setProperty('margin-left', '20px');
+                            const figurinePlus = document.createElement('span');
+                            figurinePlus.textContent = '+';
+                            offerRequestingNames.appendChild(figurinePlus);
+                        }
+                        offerRequestingNames.appendChild(figurineName);
                     }  else {
-                    const figurineElement = document.createElement('div');
-                    figurineElement.class = 'requestingFigurine';
-                    const figurineTitle = document.createElement('p');
-                    figurineTitle.className = 'requestingFigurineTitle';
-                    figurineTitle.textContent = figurine.figurine_name;
-                    const figurineImg = document.createElement('img');
-                    figurineImg.className = 'requestingFigurineImg';
-                    figurineImg.src = figurine.figurine_image_path + '/portrait_medium.' + figurine.figurine_ext;
-                    figurineImg.onerror = function() {
-                        this.onerror = null;
-                        this.parentNode.innerHTML = `<div style="width: 100px; height: 150px; border: 2px solid #8b0000; border-radius: 10px; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; font-size: 10px; line-height: 1.2;"><span style="font-size: medium; font-weight: bold">${figurine.figurine_name}</span><span>Image</span><span>Not</span><span>Available</span></div>`;
-                    };
-                    figurineElement.appendChild(figurineTitle);
-                    figurineElement.appendChild(figurineImg);
-                    offerRequestingElements.appendChild(figurineElement);
+                        const figurineElement = document.createElement('div');
+                        figurineElement.class = 'requestingFigurine';
+                        figurineElement.style.cssText = ' width: 120px; height: 100%; display: flex; flex-direction: column; justify-content: flex-start; align-items: center; display: flex; flex-direction: column; justify-content: flex-start; align-items: center;';
+                        const figurineImg = document.createElement('img');
+                        figurineImg.className = 'requestingFigurineImg';
+                        figurineImg.src = figurine.figurine_image_path + '/portrait_medium.' + figurine.figurine_ext;
+                        figurineImg.onerror = function() {
+                            this.onerror = null;
+                            this.parentNode.innerHTML = `<div style="width: 100px; height: 150px; border: 2px solid #8b0000; border-radius: 10px; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; font-size: 10px; line-height: 1.2;"><span style="font-size: medium; font-weight: bold">${figurine.figurine_name}</span><span>Image</span><span>Not</span><span>Available</span></div>`;
+                        };
+                        figurineElement.appendChild(figurineImg);
+                        offerRequestingElements.appendChild(figurineElement);
+                        if(offer.requesting.figurines.indexOf(figurine) > 0){
+                            figurineElement.style.setProperty('margin-left', '20px');
+                            const figurinePlus = document.createElement('span');
+                            figurinePlus.textContent = '+';
+                            offerRequestingNames.appendChild(figurinePlus);
+                        }
+                        offerRequestingNames.appendChild(figurineName);
                     }
 
                 });
@@ -378,47 +475,60 @@
                 offeringPointsContainer.appendChild(pointsCircle);
                 offerOfferingElements.appendChild(offeringPointsContainer);
             } else {
-            offer.offering.figurines.forEach(figurine => {
-                if(figurine.figurine_image_path.endsWith('image_not_available')) {
-                    const noImageTitle = document.createElement('p');
-                    noImageTitle.className = 'offeringFigurineTitle';
-                    noImageTitle.style.margin = '35px 0 0 0 '
-                    noImageTitle.textContent = figurine.figurine_name;
-                    const noImageDiv = document.createElement('div');
-                    noImageDiv.style.cssText = "width: 110px; height: 180px; border-radius: 10px; border: 4px solid #b11616; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; font-size: 10px; line-height: 1.2; margin-bottom: 25px;";
-                    noImageDiv.innerHTML = `<span style="font-size: medium; font-weight: bold">${figurine.figurine_name}</span><span>Image</span><span>Not</span><span>Available</span>`;
-                    offerOfferingElements.style.setProperty('flex-direction', 'column');
-                    
-                    offerOfferingElements.appendChild(noImageTitle);
-                    offerOfferingElements.appendChild(noImageDiv);
-                }  else {
-                const figurineElement = document.createElement('div');
-                figurineElement.class = 'offeringFigurine';
-                const figurineTitle = document.createElement('p');
-                figurineTitle.className = 'offeringFigurineTitle';
-                figurineTitle.textContent = figurine.figurine_name;
-                const figurineImg = document.createElement('img');
-                figurineImg.className = 'offeringFigurineImg';
-                figurineImg.src = figurine.figurine_image_path + '/portrait_medium.' + figurine.figurine_ext;
-                figurineImg.onerror = function() {
-                    this.onerror = null;
-                    this.parentNode.innerHTML = `<div style="width: 100px; height: 150px; border: 2px solid #8b0000; border-radius: 10px; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; font-size: 10px; line-height: 1.2;"><span style="font-size: medium; font-weight: bold">${figurine.figurine_name}</span><span>Image</span><span>Not</span><span>Available</span></div>`;
-                };
-                figurineElement.appendChild(figurineTitle);
-                figurineElement.appendChild(figurineImg);
-                offerOfferingElements.appendChild(figurineElement);
-                }
+                offer.offering.figurines.forEach(figurine => {
+                    const figurineName = document.createElement('span');
+                    figurineName.textContent = figurine.figurine_name;
+                    offerOfferingNames.appendChild(figurineName);
+                    if(figurine.figurine_image_path.endsWith('image_not_available')) {
+                        const noImageDiv = document.createElement('div');
+                        noImageDiv.style.cssText = "width: 115px; height: 152px; border-radius: 10px; border: 4px solid #b11616; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; font-size: 10px; line-height: 1.2; margin-bottom: 28px;";
+                        noImageDiv.innerHTML = `<span style="font-size: medium; font-weight: bold">${figurine.figurine_name}</span><span>Image</span><span>Not</span><span>Available</span>`;
+                        offerOfferingElements.appendChild(noImageDiv);
+                        if(offer.offering.figurines.indexOf(figurine) > 0){
+                            noImageDiv.style.setProperty('margin-left', '20px');
+                            const figurinePlus = document.createElement('span');
+                            figurinePlus.textContent = '+';
+                            offerRequestingNames.appendChild(figurinePlus);
+                        }
+                    }  else {
+                        const figurineElement = document.createElement('div');
+                        figurineElement.class = 'offeringFigurine';
+                        figurineElement.style.cssText = ' width: 120px; height: 100%; display: flex; flex-direction: column; justify-content: flex-start; align-items: center; display: flex; flex-direction: column; justify-content: flex-start; align-items: center;';
+                        if(offer.offering.figurines.indexOf(figurine) > 0){
+                            figurineElement.style.setProperty('margin-left', '20px');
+                            const figurinePlus = document.createElement('span');
+                            figurinePlus.textContent = '+';
+                            figurinePlus.className = 'offeringFigurinePlus';
+                            offerRequestingNames.appendChild(figurinePlus);
+                        }
+                        const figurineImg = document.createElement('img');
+                        figurineImg.className = 'offeringFigurineImg';
+                        figurineImg.src = figurine.figurine_image_path + '/portrait_medium.' + figurine.figurine_ext;
+                        figurineImg.onerror = function() {
+                            this.onerror = null;
+                            this.parentNode.innerHTML = `<div style="width: 100px; height: 150px; border: 2px solid #8b0000; border-radius: 10px; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; font-size: 10px; line-height: 1.2;"><span style="font-size: medium; font-weight: bold">${figurine.figurine_name}</span><span>Image</span><span>Not</span><span>Available</span></div>`;
+                        };
+                        figurineElement.appendChild(figurineImg);
+                        offerOfferingElements.appendChild(figurineElement);
+                        }
 
-            });
+                });
 
-        }
-        offerCentral.appendChild(offerRequestingElements);
-        offerCentral.appendChild(offerExchnageSymbol);
-        offerCentral.appendChild(offerOfferingElements);
+            }
+        offerRequesting.appendChild(offerRequestingNames);
+        offerRequesting.appendChild(offerRequestingElements);
+        offerSymbol.appendChild(offerExchangeSymbolNames);
+        offerSymbol.appendChild(offerExchangeSymbol);
+        offerOffering.appendChild(offerOfferingNames);
+        offerOffering.appendChild(offerOfferingElements);
+
+        offerCentral.appendChild(offerRequesting);
+        offerCentral.appendChild(offerSymbol);
+        offerCentral.appendChild(offerOffering);
+
         offerContainer.appendChild(offerHeader);
         offerContainer.appendChild(offerCentral);
         offerContainer.appendChild(offerFooter);
-
 
         return offerContainer;
 
