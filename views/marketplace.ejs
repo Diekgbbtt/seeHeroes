@@ -507,8 +507,29 @@
         .doubleFigurineSelling i {
             color: white;
             text-align: center;
-        }   
+        }
+
+        .doubleFigurineNameText.disabled {
+            opacity: 0.5;
+            cursor: auto;
+        }
         
+        .doubleFigurineImage.disabled{
+            opacity: 0.5;
+            cursor: auto;
+        }
+
+        .doubleFigurineBuying.disabled{
+            opacity: 0.5;
+            cursor: auto;
+        }
+        
+        .doubleFigurineSelling.disabled{
+            opacity: 0.5;
+            cursor: auto;
+        }
+
+
         .exchangedItems {
             width: 100%;
             height: 50%;
@@ -727,6 +748,7 @@
                 const doubleFigurineName = document.createElement('div');
                 doubleFigurineName.className = 'doubleFigurineName';
                 const doubleFigurineNameText = document.createElement('p');
+                doubleFigurineNameText.className = 'doubleFigurineNameText';
                 doubleFigurineNameText.textContent = doubleFigurine.name;
                 const doubleFigurineImage = document.createElement('div');
                 doubleFigurineImage.className = 'doubleFigurineImage';
@@ -744,11 +766,6 @@
                 doubleFigurineImageImg.alt = 'double figurine image ' + doubleFigurine._id;
                 doubleFigurineImage.appendChild(doubleFigurineImageImg);
                 }
-                const doubleFigurineBuying = document.createElement('div');
-                doubleFigurineBuying.className = 'doubleFigurineBuying';
-                doubleFigurineBuying.setAttribute('onclick', 'addBuyingItem(this)');
-                const doubleFigurineBuyingText = document.createElement('i');
-                doubleFigurineBuyingText.textContent = 'BUY';
                 const doubleFigurineSelling = document.createElement('div');
                 doubleFigurineSelling.className = 'doubleFigurineSelling';
                 doubleFigurineSelling.setAttribute('onclick', 'addSellingItem(this)');
@@ -756,12 +773,10 @@
                 doubleFigurineSellingText.textContent = 'SELL';
 
                 doubleFigurineName.appendChild(doubleFigurineNameText);
-                doubleFigurineBuying.appendChild(doubleFigurineBuyingText);
                 doubleFigurineSelling.appendChild(doubleFigurineSellingText);
             
                 doubleFigurineElement.appendChild(doubleFigurineName);
                 doubleFigurineElement.appendChild(doubleFigurineImage);
-                doubleFigurineElement.appendChild(doubleFigurineBuying);
                 doubleFigurineElement.appendChild(doubleFigurineSelling);
 
                 figurinesList.appendChild(doubleFigurineElement);
@@ -784,24 +799,96 @@
 
         }
 
-        function addBuyingItem(target){
-            console.log('new buying item');
-            // console.log(event.target.parentNode);
-            // const buyingItemsList = document.querySelector('.exchangedItems').children[0].children[1];
-            // const buyingItem = document.createElement('div');
-            // buyingItem.className = 'buyingItem';
-            // buyingItem.innerHTML = `<div class="buyingItemName">${event.target.parentNode.children[0].textContent}</div><div class="buyingItemImage"><img src="${event.target.parentNode.children[1].children[0].src}" alt="buying item image"></div>`;
-            // buyingItemsList.appendChild(buyingItem);
-        }
+        // function addBuyingItem(target){
+        //     console.log('new buying item ' + target.parentNode.children[0].children[0].textContent);
+        //     console.log(target.parentNode.children[1].children[0].src);
+        //     console.log(target.parentNode.children[1])
+        //     console.log(target.parentNode.children[1].children[0])
+            
+        //     target.parentNode.children[0].children[0].classList.toggle('disabled');
+        //     target.parentNode.children[1].classList.toggle('disabled');
+        //     target.parentNode.children[2].classList.toggle('disabled');
+        //     target.parentNode.children[3].classList.toggle('disabled');
+        //     target.removeAttribute('onclick');
+        //     target.parentNode.children[3].removeAttribute('onclick');
+
+        //     const buyingFigurinesList = document.querySelector('.buyingItemsList');
+        //     const buyingFigurine = document.createElement('div');
+        //     buyingFigurine.className = 'buyingItem';
+        //     const buyingFigurineName = document.createElement('div');
+        //     buyingFigurineName.className = 'doubleFigurineName';
+        //     const buyingFigurineNameText = document.createElement('p');
+        //     buyingFigurineNameText.textContent = `${target.parentNode.children[0].children[0].textContent}`;
+        //     const buyingFigurineImage = document.createElement('div');
+        //     buyingFigurineImage.className = 'doubleFigurineImage';
+        //     if(target.parentNode.children[1].children[0].textContent === 'Image') {
+        //         buyingFigurineImage.style.cssText = 'border: 4px solid #8b0000; border-radius: 10px; flex-direction: column;';
+        //         buyingFigurineImage.innerHTML = `<span>Image</span><span>Not</span><span>Available</span>`;
+        //     } else {
+        //     const buyingFigurineImageImg = document.createElement('img');
+        //     buyingFigurineImageImg.src = target.parentNode.children[1].children[0].getAttribute('src');
+        //     buyingFigurineImageImg.onerror = function() {
+        //                 this.onerror = null;
+        //                 this.parentNode.style.cssText = 'border: 4px solid #8b0000; border-radius: 10px; flex-direction: column;'
+        //                 this.parentNode.innerHTML = `<span>Image</span><span>Not</span><span>Available</span>`;
+        //             };
+        //     buyingFigurineImageImg.alt = 'double figurine image';
+        //     buyingFigurineImage.appendChild(buyingFigurineImageImg);
+        //     }
+
+            
+        //     // buyingItem.innerHTML = `<div class="buyingItemName">${event.target.parentNode.children[0].textContent}</div><div class="buyingItemImage"><img src="${event.target.parentNode.children[1].children[0].src}" alt="buying item image"></div>`;
+        //     buyingFigurineName.appendChild(buyingFigurineNameText);
+
+        //     buyingFigurine.appendChild(buyingFigurineName);
+        //     buyingFigurine.appendChild(buyingFigurineImage);
+
+        //     buyingFigurinesList.appendChild(buyingFigurine);
+        // }
 
         function addSellingItem(target){
-            console.log('new selling item');
-            // console.log(event.target.parentNode);
-            // const buyingItemsList = document.querySelector('.exchangedItems').children[0].children[1];
-            // const buyingItem = document.createElement('div');
-            // buyingItem.className = 'buyingItem';
-            // buyingItem.innerHTML = `<div class="buyingItemName">${event.target.parentNode.children[0].textContent}</div><div class="buyingItemImage"><img src="${event.target.parentNode.children[1].children[0].src}" alt="buying item image"></div>`;
-            // buyingItemsList.appendChild(buyingItem);
+            console.log('new selling item ' + target.parentNode.children[0].children[0].textContent);
+            console.log(target.parentNode.children[1].children[0].src);
+            console.log(target.parentNode.children[1])
+            console.log(target.parentNode.children[1].children[0])
+            
+            target.parentNode.children[0].children[0].classList.toggle('disabled');
+            target.parentNode.children[1].classList.toggle('disabled');
+            target.parentNode.children[2].classList.toggle('disabled');
+            target.removeAttribute('onclick');
+
+            const sellingFigurinesList = document.querySelector('.sellingItemsList');
+            const sellingFigurine = document.createElement('div');
+            sellingFigurine.className = 'sellingItem';
+            const sellingFigurineName = document.createElement('div');
+            sellingFigurineName.className = 'doubleFigurineName';
+            const sellingFigurineNameText = document.createElement('p');
+            sellingFigurineNameText.textContent = `${target.parentNode.children[0].children[0].textContent}`;
+            const sellingFigurineImage = document.createElement('div');
+            sellingFigurineImage.className = 'doubleFigurineImage';
+            if(target.parentNode.children[1].children[0].textContent === 'Image') {
+                sellingFigurineImage.style.cssText = 'border: 4px solid #8b0000; border-radius: 10px; flex-direction: column;';
+                sellingFigurineImage.innerHTML = `<span>Image</span><span>Not</span><span>Available</span>`;
+            } else {
+            const sellingFigurineImageImg = document.createElement('img');
+            sellingFigurineImageImg.src = target.parentNode.children[1].children[0].getAttribute('src');
+            sellingFigurineImageImg.onerror = function() {
+                        this.onerror = null;
+                        this.parentNode.style.cssText = 'border: 4px solid #8b0000; border-radius: 10px; flex-direction: column;'
+                        this.parentNode.innerHTML = `<span>Image</span><span>Not</span><span>Available</span>`;
+                    };
+            sellingFigurineImageImg.alt = 'double figurine image';
+            sellingFigurineImage.appendChild(sellingFigurineImageImg);
+            }
+
+            
+            // sellingItem.innerHTML = `<div class="sellingItemName">${event.target.parentNode.children[0].textContent}</div><div class="sellingItemImage"><img src="${event.target.parentNode.children[1].children[0].src}" alt="selling item image"></div>`;
+            sellingFigurineName.appendChild(sellingFigurineNameText);
+
+            sellingFigurine.appendChild(sellingFigurineName);
+            sellingFigurine.appendChild(sellingFigurineImage);
+
+            sellingFigurinesList.appendChild(sellingFigurine);
         }
 
 
