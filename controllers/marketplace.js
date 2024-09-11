@@ -2,6 +2,40 @@
 const marketplaceOffers = require('../models/marketplaceOffers');
 const usersFigurines = require('../models/usersFigurines');
 const users = require('../models/users');
+const crypto = require('crypto');
+
+
+const colors = {
+    reset: "\x1b[0m",
+    bright: "\x1b[1m",
+    dim: "\x1b[2m",
+    underscore: "\x1b[4m",
+    blink: "\x1b[5m",
+    reverse: "\x1b[7m",
+    hidden: "\x1b[8m",
+    
+    fg: {
+      black: "\x1b[30m",
+      red: "\x1b[31m",
+      green: "\x1b[32m",
+      yellow: "\x1b[33m",
+      blue: "\x1b[34m",
+      magenta: "\x1b[35m",
+      cyan: "\x1b[36m",
+      white: "\x1b[37m"
+    },
+    bg: {
+      black: "\x1b[40m",
+      red: "\x1b[41m",
+      green: "\x1b[42m",
+      yellow: "\x1b[43m",
+      blue: "\x1b[44m",
+      magenta: "\x1b[45m",
+      cyan: "\x1b[46m",
+      white: "\x1b[47m"
+    }
+  };
+
 
 
 function filterDobuleFigurines(userFigurines) {
@@ -39,7 +73,6 @@ exports.getMarketplace = (req, res) => {
                         usersFigurines.find( { id_user: user_profile.id } )
                         .then((user_figurines) => {
                             const user_doublefigurines = filterDobuleFigurines(user_figurines);
-                            console.log(user_doublefigurines)
                             res.render('marketplace', {offers: offers, user_doublefigurines: user_doublefigurines, user_points: user_profile.points});
                         })
                         .catch((error) => {
@@ -71,6 +104,56 @@ exports.Exchange = (req, res) => {
    
 }
 
+exports.getPertinentHeroes = (req, res) => {
+
+    if(req.isAuthenticated()) { 
+        const ts = new Date().toLocaleString('en-GB', {
+            year: 'numeric',
+            month: '2-digit',
+            day: '2-digit',
+            hour: '2-digit',
+            minute: '2-digit',
+            second: '2-digit',
+            hour12: false
+            }).replace(/[/,: ]/g, '-');
+        const hash_data = `${ts}${process.env.MARVEL_PRIVATE_KEY}${process.env.MARVEL_PUBLIC_KEY}`;
+        const hash = crypto.createHash('md5').update(hash_data).digest('hex');
+
+        console.log(hash_data)
+        console.log(hash)
+        console.log(req.params.search_term)
+
+
+        fetch('https://gateway.marvel.com:443/v1/public/characters?nameStartsWith=' + req.params.search_term + '&apikey=de511cb926dc8e0b6caf71daa20b40be&ts=' + ts + '&hash=' + hash)
+            .then((response) => response.json())
+            /* if more instructions the .json() are wapped in the promise construct the first one to complete(return?) 
+            will be the one considered by the following then()
+            This happens because pertinentHeroes.json() returns a new promise, but you're not returning or awaiting it within the function. 
+            As a result, the console.log(pertinentHeroes) will show the raw response object, not the parsed JSON data.
+            */
+            .then((response_json) => { 
+                if(response_json.data.results.length > 0) {
+                    const pertinentHeroesName = []
+                    response_json.data.results.forEach((hero) => {
+                        console.log(hero.name)
+                        pertinentHeroesName.push(hero.name)
+                    })
+                    // const PersistentHeroesNameDict = {
+                    //     "pertinentHeroesName": pertinentHeroesName
+                    // }
+                    console.log(pertinentHeroesName)
+                    return res.send(pertinentHeroesName);
+                }
+                else {
+                    return [];
+                }
+            })
+
+
+    } else {
+        console.log('not authenticated')
+    }
+}
 exports.postNewOffer = (req, res) => {
    
 }

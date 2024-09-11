@@ -5,6 +5,7 @@ const router = express.Router();
 router.get('/', marketController.getMarketplace);
 router.get('/exchange/:exchange_offer_id/', marketController.Exchange);
 router.post('/newoffer/confirm', marketController.postNewOffer);
+router.get('/newoffer/search/:search_term', marketController.getPertinentHeroes);
 router.get('/:filter_name/:filter_value', marketController.getFilteredMarketplace);
 
 module.exports = router;

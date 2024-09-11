@@ -266,7 +266,6 @@
             z-index: 1;
         }
 
-
         .offerExchangeSymbol {
             width: 100%;
             height: 100%;
@@ -391,49 +390,89 @@
             justify-content: center;
             align-items: center;
         }
+
         .modalNewOfferContent {
             padding: 10px 0px;
             border-radius: 10px;
-            max-width: 4000px;
+            max-height: 4000px;
             width: 700px;
             height: auto;
             background-color: #b1161e;
             border: 4px solid #8b0000;
             color: white;
+            padding: 0px 10px
         }
-        .NewOfferHeader {
-            width: 100%;
-            height: 10%;
-            border-bottom: 3px solid #8b0000;
-            display: flex;
-            justify-content: center;
-            align-items: center;
 
-        }
-        .NewOfferHeader p {
-            font-size: 20px;
-            font-weight: bold;
-            margin: 0;
-            padding-bottom: 10px
-        }
         .NewOfferMain {
-            width: 100%;
-            height: 80%;
             display: flex;
             flex-direction: column;
-            border: 2px solid #0eb03c;
+            height: 100%;
+            width: 100%;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .figurinesChoiche {
+            width: 100%;
+            height: 20%;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            align-items: center;
+            border-bottom: 3px solid #8b0000;
+            border: 3px solid #b8bb18;
+            padding-bottom: 20px
+        }
+
+        .figurinesChoiche p {
+            font-size: 14px;
+            font-weight: bold;
+            margin: 0;
+            padding-bottom: 20px
+        }
+
+        .figurinesChoiche input {
+            background-color: #b11616;
+            border: 2px solid #8b0000;
+            border-radius: 10px;
+            padding: 5px 20px;
+            color: white;
+            text-decoration: none;
+            outline: none;
+        }
+
+        .figurinesChoiche input::placeholder {
+            color: #8b0000;
+        }
+
+        #suggestions {
+            border: 2px solid #8b0000;
+            display: none;
+            position: absolute;
+            background: #b11616;
+            width: 180px;
+            height:auto;
+            max-height: 350px;
+            color: #8b0000;
+            overflow-y: auto;
+            bottom: 10px;
+        }
+        .suggestion-item {
+            padding: 5px;
+            cursor: pointer;
+        }
+        .suggestion-item:hover {
+            background-color: #f0f0f0;
         }
 
         .figurinesList {
             border-bottom: 3px solid #8b0000;
-            width: auto;
+            width: 100%;
             height: 50%;
             display: flex;
             flex-direction: row;
             gap: 20px;
-            padding: 10px;
             overflow-x: auto;
-
         }
 
         .figurinesList::-webkit-scrollbar {
@@ -529,21 +568,34 @@
             cursor: auto;
         }
 
-
         .exchangedItems {
             width: 100%;
-            height: 50%;
-            padding: 10px;
+            height: auto;
+            padding: 0px 10px;
             box-sizing: border-box;
             display: flex;
-            border: 2px solid #160eb0;
         }
+
+        .exhangeSeprator {
+            border: 2px solid #8b0000;
+        }
+
         .buyingItems, .sellingItems {
             width: 50%;
             height: 100%;
             padding: 10px;
             box-sizing: border-box;
+
         }
+
+        .sellingItem, .buyingItem {
+            width: 100px;
+            height: 150px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
         .buyingItems header, .sellingItems header {
             width: 100%;
             height: 25%;
@@ -589,7 +641,6 @@
         }
         header p {
             font-size: 16px;
-
             font-weight: bold;
             margin: 0;
         }
@@ -599,7 +650,7 @@
 
         .buyingItemsList, .sellingItemsList {
             width: 100%;
-            height: 75%;
+            height: 60%;
             display: flex;
             flex-direction: row;
             gap: 20px;
@@ -607,7 +658,7 @@
             padding: 10px;
         }
         .buyingItemsList::-webkit-scrollbar, .sellingItemsList::-webkit-scrollbar {
-            width: 8px;
+            height: 8px;
         }
         .buyingItemsList::-webkit-scrollbar-track, .sellingItemsList::-webkit-scrollbar-track {
             background: #b11616;
@@ -617,8 +668,6 @@
             border-radius: 10px;
         }
 
-
-
         .NewOfferFooter {
             width: 100%;
             height: 20%;
@@ -626,10 +675,12 @@
             justify-content: center;
             align-items: center;
         }
+
         .NewOfferFooter a {
             width: 30%;
             text-decoration: none;
         }
+
         .NewOfferFooter div {
             background-color: #b11616;
             border: 2px solid #8b0000;
@@ -639,8 +690,6 @@
             color: white;
             cursor: pointer;
         }
-
-
 
     </style>
 </head>
@@ -685,10 +734,12 @@
     </div>
     <div class="modalNewOffer">
         <div class="modalNewOfferContent">
-            <div class="NewOfferHeader">
-                <p>Create Offer</p>
-            </div>
             <div class="NewOfferMain">
+                <div class="figurinesChoiche">
+                    <p>Figurine choiche</p>
+                    <input type="text" id="search-input" placeholder="&#128269; Enter figurine name">
+                    <div id="suggestions"></div>
+                </div>
                 <div class="figurinesList">
                     <!-- Dynamically filled by JS script -->
                 </div>
@@ -707,6 +758,7 @@
                         <!-- Dynamically filled by JS script -->
                         </div>
                     </div>
+                    <div class="exhangeSeprator"></div>
                     <div class="sellingItems">
                         <header>
                             <i class="fa-solid fa-arrow-right"></i>
@@ -733,165 +785,64 @@
         </div>
     </div>
 
+
     <script>
+        const searchInput = document.getElementById('search-input');
+        const suggestionsDiv = document.getElementById('suggestions');
+        let debounceTimer;
 
-        function createOffer() {
-        
-            const userDoublesFigurines = <%- JSON.stringify(user_doublefigurines); %> ;
-            console.log(userDoublesFigurines);
-            const figurinesList = document.querySelector('.figurinesList');
-            const exchangedItems = document.querySelector('.exchangedItems');
+        searchInput.addEventListener('input', function() {
+            clearTimeout(debounceTimer);
+            /* 
+            The existing timer (if any) is cleared using clearTimeout(debounceTimer). 
+            This cancels any pending API calls from previous keystrokes.
+            */
+            const query = this.value;
 
-            userDoublesFigurines.forEach(doubleFigurine => {
-                const doubleFigurineElement = document.createElement('div');
-                doubleFigurineElement.className = 'doubleFigurine';
-                const doubleFigurineName = document.createElement('div');
-                doubleFigurineName.className = 'doubleFigurineName';
-                const doubleFigurineNameText = document.createElement('p');
-                doubleFigurineNameText.className = 'doubleFigurineNameText';
-                doubleFigurineNameText.textContent = doubleFigurine.name;
-                const doubleFigurineImage = document.createElement('div');
-                doubleFigurineImage.className = 'doubleFigurineImage';
-                if(doubleFigurine.image_path.endsWith('image_not_available')) {
-                    doubleFigurineImage.style.cssText = 'border: 4px solid #8b0000; border-radius: 10px; flex-direction: column;';
-                    doubleFigurineImage.innerHTML = `<span>Image</span><span>Not</span><span>Available</span>`;
-                } else {
-                const doubleFigurineImageImg = document.createElement('img');
-                doubleFigurineImageImg.src = doubleFigurine.image_path + '/portrait_medium.' + doubleFigurine.ext;
-                doubleFigurineImageImg.onerror = function() {
-                            this.onerror = null;
-                            this.parentNode.style.cssText = 'border: 4px solid #8b0000; border-radius: 10px; flex-direction: column;'
-                            this.parentNode.innerHTML = `<span>Image</span><span>Not</span><span>Available</span>`;
-                        };
-                doubleFigurineImageImg.alt = 'double figurine image ' + doubleFigurine._id;
-                doubleFigurineImage.appendChild(doubleFigurineImageImg);
-                }
-                const doubleFigurineSelling = document.createElement('div');
-                doubleFigurineSelling.className = 'doubleFigurineSelling';
-                doubleFigurineSelling.setAttribute('onclick', 'addSellingItem(this)');
-                const doubleFigurineSellingText = document.createElement('i');
-                doubleFigurineSellingText.textContent = 'SELL';
-
-                doubleFigurineName.appendChild(doubleFigurineNameText);
-                doubleFigurineSelling.appendChild(doubleFigurineSellingText);
-            
-                doubleFigurineElement.appendChild(doubleFigurineName);
-                doubleFigurineElement.appendChild(doubleFigurineImage);
-                doubleFigurineElement.appendChild(doubleFigurineSelling);
-
-                figurinesList.appendChild(doubleFigurineElement);
-            });
-
-            document.querySelector('.modalNewOffer').style.display = 'flex';
-
-            // document.querySelector('.doubleFigurineBuying').addEventListener('click', function() {
-            //     addBuyingItem(event.target)
-            //     // console.log('buying');
-            //     // console.log(event.target.parentNode);
-            //     // const buyingItemsList = exchangedItems.children[0].children[1];
-            // });
-
-            // document.querySelector('.doubleFigurineSelling').addEventListener('click', function() {
-            //     addSellingItem(event.target);
-            //     // console.log('selling');
-            // });
-            
-
-        }
-
-        // function addBuyingItem(target){
-        //     console.log('new buying item ' + target.parentNode.children[0].children[0].textContent);
-        //     console.log(target.parentNode.children[1].children[0].src);
-        //     console.log(target.parentNode.children[1])
-        //     console.log(target.parentNode.children[1].children[0])
-            
-        //     target.parentNode.children[0].children[0].classList.toggle('disabled');
-        //     target.parentNode.children[1].classList.toggle('disabled');
-        //     target.parentNode.children[2].classList.toggle('disabled');
-        //     target.parentNode.children[3].classList.toggle('disabled');
-        //     target.removeAttribute('onclick');
-        //     target.parentNode.children[3].removeAttribute('onclick');
-
-        //     const buyingFigurinesList = document.querySelector('.buyingItemsList');
-        //     const buyingFigurine = document.createElement('div');
-        //     buyingFigurine.className = 'buyingItem';
-        //     const buyingFigurineName = document.createElement('div');
-        //     buyingFigurineName.className = 'doubleFigurineName';
-        //     const buyingFigurineNameText = document.createElement('p');
-        //     buyingFigurineNameText.textContent = `${target.parentNode.children[0].children[0].textContent}`;
-        //     const buyingFigurineImage = document.createElement('div');
-        //     buyingFigurineImage.className = 'doubleFigurineImage';
-        //     if(target.parentNode.children[1].children[0].textContent === 'Image') {
-        //         buyingFigurineImage.style.cssText = 'border: 4px solid #8b0000; border-radius: 10px; flex-direction: column;';
-        //         buyingFigurineImage.innerHTML = `<span>Image</span><span>Not</span><span>Available</span>`;
-        //     } else {
-        //     const buyingFigurineImageImg = document.createElement('img');
-        //     buyingFigurineImageImg.src = target.parentNode.children[1].children[0].getAttribute('src');
-        //     buyingFigurineImageImg.onerror = function() {
-        //                 this.onerror = null;
-        //                 this.parentNode.style.cssText = 'border: 4px solid #8b0000; border-radius: 10px; flex-direction: column;'
-        //                 this.parentNode.innerHTML = `<span>Image</span><span>Not</span><span>Available</span>`;
-        //             };
-        //     buyingFigurineImageImg.alt = 'double figurine image';
-        //     buyingFigurineImage.appendChild(buyingFigurineImageImg);
-        //     }
-
-            
-        //     // buyingItem.innerHTML = `<div class="buyingItemName">${event.target.parentNode.children[0].textContent}</div><div class="buyingItemImage"><img src="${event.target.parentNode.children[1].children[0].src}" alt="buying item image"></div>`;
-        //     buyingFigurineName.appendChild(buyingFigurineNameText);
-
-        //     buyingFigurine.appendChild(buyingFigurineName);
-        //     buyingFigurine.appendChild(buyingFigurineImage);
-
-        //     buyingFigurinesList.appendChild(buyingFigurine);
-        // }
-
-        function addSellingItem(target){
-            console.log('new selling item ' + target.parentNode.children[0].children[0].textContent);
-            console.log(target.parentNode.children[1].children[0].src);
-            console.log(target.parentNode.children[1])
-            console.log(target.parentNode.children[1].children[0])
-            
-            target.parentNode.children[0].children[0].classList.toggle('disabled');
-            target.parentNode.children[1].classList.toggle('disabled');
-            target.parentNode.children[2].classList.toggle('disabled');
-            target.removeAttribute('onclick');
-
-            const sellingFigurinesList = document.querySelector('.sellingItemsList');
-            const sellingFigurine = document.createElement('div');
-            sellingFigurine.className = 'sellingItem';
-            const sellingFigurineName = document.createElement('div');
-            sellingFigurineName.className = 'doubleFigurineName';
-            const sellingFigurineNameText = document.createElement('p');
-            sellingFigurineNameText.textContent = `${target.parentNode.children[0].children[0].textContent}`;
-            const sellingFigurineImage = document.createElement('div');
-            sellingFigurineImage.className = 'doubleFigurineImage';
-            if(target.parentNode.children[1].children[0].textContent === 'Image') {
-                sellingFigurineImage.style.cssText = 'border: 4px solid #8b0000; border-radius: 10px; flex-direction: column;';
-                sellingFigurineImage.innerHTML = `<span>Image</span><span>Not</span><span>Available</span>`;
+            if (query.length > 2) {
+                debounceTimer = setTimeout(() => {
+                    fetch('/marketplace/newoffer/search/' + query)
+                        .then(pertinentHeroes => pertinentHeroes.json())
+                            .then(pertinentHeroes_json => {
+                                console.log(pertinentHeroes_json);
+                                updateSuggestions(pertinentHeroes_json) 
+                            })
+                            .catch(error => console.error('Error:', error));
+                }, 300);
             } else {
-            const sellingFigurineImageImg = document.createElement('img');
-            sellingFigurineImageImg.src = target.parentNode.children[1].children[0].getAttribute('src');
-            sellingFigurineImageImg.onerror = function() {
-                        this.onerror = null;
-                        this.parentNode.style.cssText = 'border: 4px solid #8b0000; border-radius: 10px; flex-direction: column;'
-                        this.parentNode.innerHTML = `<span>Image</span><span>Not</span><span>Available</span>`;
-                    };
-            sellingFigurineImageImg.alt = 'double figurine image';
-            sellingFigurineImage.appendChild(sellingFigurineImageImg);
+                suggestionsDiv.style.display = 'none';
             }
+        });
 
-            
-            // sellingItem.innerHTML = `<div class="sellingItemName">${event.target.parentNode.children[0].textContent}</div><div class="sellingItemImage"><img src="${event.target.parentNode.children[1].children[0].src}" alt="selling item image"></div>`;
-            sellingFigurineName.appendChild(sellingFigurineNameText);
+        function updateSuggestions(suggestions) {
+            suggestionsDiv.innerHTML = '';
 
-            sellingFigurine.appendChild(sellingFigurineName);
-            sellingFigurine.appendChild(sellingFigurineImage);
-
-            sellingFigurinesList.appendChild(sellingFigurine);
+            if (suggestions.length > 0) {
+                suggestions.forEach(item => {
+                    const div = document.createElement('div');
+                    div.className = 'suggestion-item';
+                    div.textContent = item;
+                    div.onclick = function() {
+                        searchInput.value = this.textContent;
+                        suggestionsDiv.style.display = 'none';
+                    };
+                    suggestionsDiv.appendChild(div);
+                });
+                suggestionsDiv.style.display = 'block';
+            } else {
+                suggestionsDiv.style.display = 'none';
+            }
         }
 
+        // Close suggestions when clicking outside
+        document.addEventListener('click', function(event) {
+            if (event.target !== searchInput && event.target !== suggestionsDiv) {
+                suggestionsDiv.style.display = 'none';
+            }
+        });
+    </script>
 
+    <script>
 
         // JavaScript to dynamically create offer elements and handle pagination
         const all_offers = <%- JSON.stringify(offers); %> ;
@@ -1152,32 +1103,152 @@
             nextButton.classList.toggle('disabled', currentPage === totalPages);
         }
 
-        renderPage(currentPage, offersPerPage);
-        /*
-        function createOfferElement(offerData) {
-            const offerElement = document.createElement('div');
-            offerElement.className = 'offer';
-            offerElement.textContent = `Offer ${offerData.id}`;
-            return offerElement;
-        }
 
-        function loadOffers(page) {
-            const offersContainer = document.getElementById('offersContainer');
-            offersContainer.innerHTML = '';
 
-            // Simulating fetching data from a server
-            const startIndex = (page - 1) * offersPerPage;
-            const endIndex = startIndex + offersPerPage;
 
-            for (let i = startIndex; i < endIndex; i++) {
-                const offerData = { id: i + 1 };
-                const offerElement = createOfferElement(offerData);
-                offersContainer.appendChild(offerElement);
+        function createOffer() {
+        
+        const userDoublesFigurines = <%- JSON.stringify(user_doublefigurines); %> ;
+        console.log(userDoublesFigurines);
+        const figurinesList = document.querySelector('.figurinesList');
+        const exchangedItems = document.querySelector('.exchangedItems');
+
+        userDoublesFigurines.forEach(doubleFigurine => {
+            const doubleFigurineElement = document.createElement('div');
+            doubleFigurineElement.className = 'doubleFigurine';
+            const doubleFigurineName = document.createElement('div');
+            doubleFigurineName.className = 'doubleFigurineName';
+            const doubleFigurineNameText = document.createElement('p');
+            doubleFigurineNameText.className = 'doubleFigurineNameText';
+            doubleFigurineNameText.textContent = doubleFigurine.name;
+            const doubleFigurineImage = document.createElement('div');
+            doubleFigurineImage.className = 'doubleFigurineImage';
+            if(doubleFigurine.image_path.endsWith('image_not_available')) {
+                doubleFigurineImage.style.cssText = 'border: 4px solid #8b0000; border-radius: 10px; flex-direction: column;';
+                doubleFigurineImage.innerHTML = `<span>Image</span><span>Not</span><span>Available</span>`;
+            } else {
+            const doubleFigurineImageImg = document.createElement('img');
+            doubleFigurineImageImg.src = doubleFigurine.image_path + '/portrait_medium.' + doubleFigurine.ext;
+            doubleFigurineImageImg.onerror = function() {
+                        this.onerror = null;
+                        this.parentNode.style.cssText = 'border: 4px solid #8b0000; border-radius: 10px; flex-direction: column;'
+                        this.parentNode.innerHTML = `<span>Image</span><span>Not</span><span>Available</span>`;
+                    };
+            doubleFigurineImageImg.alt = 'double figurine image ' + doubleFigurine._id;
+            doubleFigurineImage.appendChild(doubleFigurineImageImg);
             }
-            updateNavigationButtons()
-        }
-        */
+            const doubleFigurineSelling = document.createElement('div');
+            doubleFigurineSelling.className = 'doubleFigurineSelling';
+            doubleFigurineSelling.setAttribute('onclick', 'addSellingItem(this)');
+            const doubleFigurineSellingText = document.createElement('i');
+            doubleFigurineSellingText.textContent = 'SELL';
 
+            doubleFigurineName.appendChild(doubleFigurineNameText);
+            doubleFigurineSelling.appendChild(doubleFigurineSellingText);
+        
+            doubleFigurineElement.appendChild(doubleFigurineName);
+            doubleFigurineElement.appendChild(doubleFigurineImage);
+            doubleFigurineElement.appendChild(doubleFigurineSelling);
+
+            figurinesList.appendChild(doubleFigurineElement);
+        });
+
+        document.querySelector('.modalNewOffer').style.display = 'flex';
+        
+
+    }
+
+    // function addBuyingItem(target){
+    //     console.log('new buying item ' + target.parentNode.children[0].children[0].textContent);
+    //     console.log(target.parentNode.children[1].children[0].src);
+    //     console.log(target.parentNode.children[1])
+    //     console.log(target.parentNode.children[1].children[0])
+        
+    //     target.parentNode.children[0].children[0].classList.toggle('disabled');
+    //     target.parentNode.children[1].classList.toggle('disabled');
+    //     target.parentNode.children[2].classList.toggle('disabled');
+    //     target.parentNode.children[3].classList.toggle('disabled');
+    //     target.removeAttribute('onclick');
+    //     target.parentNode.children[3].removeAttribute('onclick');
+
+    //     const buyingFigurinesList = document.querySelector('.buyingItemsList');
+    //     const buyingFigurine = document.createElement('div');
+    //     buyingFigurine.className = 'buyingItem';
+    //     const buyingFigurineName = document.createElement('div');
+    //     buyingFigurineName.className = 'doubleFigurineName';
+    //     const buyingFigurineNameText = document.createElement('p');
+    //     buyingFigurineNameText.textContent = `${target.parentNode.children[0].children[0].textContent}`;
+    //     const buyingFigurineImage = document.createElement('div');
+    //     buyingFigurineImage.className = 'doubleFigurineImage';
+    //     if(target.parentNode.children[1].children[0].textContent === 'Image') {
+    //         buyingFigurineImage.style.cssText = 'border: 4px solid #8b0000; border-radius: 10px; flex-direction: column;';
+    //         buyingFigurineImage.innerHTML = `<span>Image</span><span>Not</span><span>Available</span>`;
+    //     } else {
+    //     const buyingFigurineImageImg = document.createElement('img');
+    //     buyingFigurineImageImg.src = target.parentNode.children[1].children[0].getAttribute('src');
+    //     buyingFigurineImageImg.onerror = function() {
+    //                 this.onerror = null;
+    //                 this.parentNode.style.cssText = 'border: 4px solid #8b0000; border-radius: 10px; flex-direction: column;'
+    //                 this.parentNode.innerHTML = `<span>Image</span><span>Not</span><span>Available</span>`;
+    //             };
+    //     buyingFigurineImageImg.alt = 'double figurine image';
+    //     buyingFigurineImage.appendChild(buyingFigurineImageImg);
+    //     }
+
+        
+    //     // buyingItem.innerHTML = `<div class="buyingItemName">${event.target.parentNode.children[0].textContent}</div><div class="buyingItemImage"><img src="${event.target.parentNode.children[1].children[0].src}" alt="buying item image"></div>`;
+    //     buyingFigurineName.appendChild(buyingFigurineNameText);
+
+    //     buyingFigurine.appendChild(buyingFigurineName);
+    //     buyingFigurine.appendChild(buyingFigurineImage);
+
+    //     buyingFigurinesList.appendChild(buyingFigurine);
+    // }
+
+    function addSellingItem(target){
+        console.log('new selling item ' + target.parentNode.children[0].children[0].textContent);
+        console.log(target.parentNode.children[1].children[0].src);
+        console.log(target.parentNode.children[1])
+        console.log(target.parentNode.children[1].children[0])
+        
+        target.parentNode.children[0].children[0].classList.toggle('disabled');
+        target.parentNode.children[1].classList.toggle('disabled');
+        target.parentNode.children[2].classList.toggle('disabled');
+        target.removeAttribute('onclick');
+
+        const sellingFigurinesList = document.querySelector('.sellingItemsList');
+        const sellingFigurine = document.createElement('div');
+        sellingFigurine.className = 'sellingItem';
+        // maybe to add in an element attribute for reference later `${target.parentNode.children[0].children[0].textContent}`;
+        const sellingFigurineImage = document.createElement('div');
+        sellingFigurineImage.className = 'doubleFigurineImage';
+        if(target.parentNode.children[1].children[0].textContent === 'Image') {
+            sellingFigurineImage.style.cssText = 'border: 4px solid #8b0000; border-radius: 10px; flex-direction: column;';
+            sellingFigurineImage.innerHTML = `<span>Image</span><span>Not</span><span>Available</span>`;
+        } else {
+        const sellingFigurineImageImg = document.createElement('img');
+        sellingFigurineImageImg.src = target.parentNode.children[1].children[0].getAttribute('src');
+        sellingFigurineImageImg.onerror = function() {
+                    this.onerror = null;
+                    this.parentNode.style.cssText = 'border: 4px solid #8b0000; border-radius: 10px; flex-direction: column;'
+                    this.parentNode.innerHTML = `<span>Image</span><span>Not</span><span>Available</span>`;
+                };
+        sellingFigurineImageImg.alt = 'double figurine image';
+        sellingFigurineImage.appendChild(sellingFigurineImageImg);
+        }
+
+        
+        // sellingItem.innerHTML = `<div class="sellingItemName">${event.target.parentNode.children[0].textContent}</div><div class="sellingItemImage"><img src="${event.target.parentNode.children[1].children[0].src}" alt="selling item image"></div>`;
+        // sellingFigurineName.appendChild(sellingFigurineNameText);
+
+        // sellingFigurine.appendChild(sellingFigurineName);
+        sellingFigurine.appendChild(sellingFigurineImage);
+
+        sellingFigurinesList.appendChild(sellingFigurine);
+    }
+
+
+    renderPage(currentPage, offersPerPage);
     </script>
 </body>
 </html>
