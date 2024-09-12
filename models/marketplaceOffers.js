@@ -6,7 +6,6 @@ const offerItemSchema = new mongoose.Schema({
         type: [{
             figurine_id: {
                 type: mongoose.Schema.Types.ObjectId,
-                required: true,
                 ref: 'UsersFigurines'
             },
             figurine_name: {

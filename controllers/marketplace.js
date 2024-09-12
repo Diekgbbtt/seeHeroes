@@ -133,16 +133,20 @@ exports.getPertinentHeroes = (req, res) => {
             */
             .then((response_json) => { 
                 if(response_json.data.results.length > 0) {
-                    const pertinentHeroesName = []
+                    const pertinentHeroes = []
                     response_json.data.results.forEach((hero) => {
                         console.log(hero.name)
-                        pertinentHeroesName.push(hero.name)
+                        const pertinentHero = {}
+                        pertinentHero.name = hero.name
+                        pertinentHero.id = hero.id
+                        pertinentHero.image_path = hero.thumbnail.path
+                        pertinentHeroes.push(pertinentHero)
                     })
                     // const PersistentHeroesNameDict = {
                     //     "pertinentHeroesName": pertinentHeroesName
                     // }
-                    console.log(pertinentHeroesName)
-                    return res.send(pertinentHeroesName);
+                    console.log(pertinentHeroes)
+                    return res.send(pertinentHeroes);
                 }
                 else {
                     return [];
