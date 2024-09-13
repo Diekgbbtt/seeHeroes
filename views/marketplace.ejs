@@ -1482,7 +1482,18 @@
 
     function exchange(target) {
 
-        fetch('/marketplace/exchange/' + )
+        fetch('/marketplace/exchange/' + target.parentNode.parentNode.getAttribute('data-key'))
+            .then((response) => response.json())
+                .then((data) => {
+                    if(data.success) {
+                        console.log('success')
+                        console.log(data)
+                        window.location.href = '/marketplace';
+                    } else {
+                        console.log('error creating exchange \n ' + data.errorMessage)
+                    }
+                })
+
     }
 
 

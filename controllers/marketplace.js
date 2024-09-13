@@ -154,6 +154,54 @@ exports.getMarketplace = (req, res) => {
 }
 
 exports.Exchange = (req, res) => {
+
+    if(req.isAuthenticated()) { 
+        const exchange_offer_id = req.params.exchange_offer_id;
+        marketplaceOffers.findById(exchange_offer_id)
+            .then((offer) => {
+                usersFigurines.find( { id_user: req.session.passport.user } )
+                    .then((user_figurines) => {
+                        if(offer.requesting.points > 0) {
+                            if(checkUserHasBuyingPoints(offer.offering.figurines, user_figurines)) {
+                                res.json({success: false, errorMessage: 'you don\'t have enough points to accept this exchange'});
+                            }
+                            users.findOneAndUpdate({offer.requesting.points})
+                        }
+                        if(offer.requesting.figurines.lenght > 0) {
+                            if(checkUserHasBuyingOfferFigurine(offer.requesting.figurines, user_figurines)) {
+                                res.json({success: false, errorMessage: 'you don\'t have the figurines requested in the exchange offer'});
+                            }
+                            offer.requesting.figurines.forEach(offerBuyingFigurine => {
+                                usersFigurines.findOneAndUpdate({})
+
+                            }) 
+                        }
+                        if(offer.selling.points > 0) {
+                            users.findOneAndUpdate({offer.requesting.points})
+                        }
+                        if(offer.selling.figurines.lenght > 0) {
+                            offer.selling.figurines.forEach(offerBuyingFigurine => {
+                                usersFigurines.findOneAndUpdate({})
+                            })
+                        }
+
+                        marketplaceOffers.findByIdAndDelete(exchange_offer_id)
+
+
+                    })
+                    .catch((error) => {
+                        console.log('couldn\'t get user figurines \n error : ' + error)
+                        req.flarrors', { msg: "couldn\'t get user figurines \n error : " + error });
+                        return res.render('marketplace', { messages: { errors: req.flash('errors') } });
+                    });
+
+                    })sh('e
+                    .catch((error) => {
+                        console.log('couldn\'t get user profile \n error : ' + error)
+                        req.flash('errors', { msg: "couldn\'t
+            })
+    }
+
    
 }
 
