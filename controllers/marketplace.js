@@ -86,14 +86,15 @@ function checkDoubleOffer(user_offers, user_new_offer) {
         offer.requesting.figurines.forEach(offerFigurine => {
             user_new_offer.buying.figurines.forEach(newOfferFigurine => {
                 if(offerFigurine.figurine_id !== newOfferFigurine.figurine_id) {
-                    checkRequesting = false;
+                    // checkRequesting = false;
+                    // counter, if different 
                 }
             });
         });
         offer.offering.figurines.forEach(offerFigurine => {
             user_new_offer.selling.figurines.forEach(newOfferFigurine => {
                 if(offerFigurine.figurine_id !== newOfferFigurine.figurine_id) {
-                    checkOffering = false;
+                    // checkOffering = false;
                 }
             });
         });
