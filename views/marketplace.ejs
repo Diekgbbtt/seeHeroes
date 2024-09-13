@@ -928,7 +928,6 @@
             renderPage(currentPage, offersPerPage);
         }
     });
-    exchangeItems.selling
     const exchangeItems = {};
     exchangeItems.buying = {};
     exchangeItems.selling = {};
@@ -1473,20 +1472,23 @@
 
     function confirmNewOffer() {
 
-        fech('/newoffer/confirm', {
-            method: POST,
+        fetch('/marketplace/newoffer/confirm', {
+            method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify(exchangeItems)
         })
-
-        ''
-
-
-
-
-        
+        .then((response) => response.json())
+            .then((data) => {
+                if(data.success) {
+                    console.log('success')
+                    console.log(data)
+                    window.location.href = '/marketplace';
+                } else {
+                    console.log('error')
+                }
+            })
     }
 
 

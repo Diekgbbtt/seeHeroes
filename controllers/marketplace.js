@@ -131,11 +131,6 @@ exports.getPertinentHeroes = (req, res) => {
         const hash_data = `${ts}${process.env.MARVEL_PRIVATE_KEY}${process.env.MARVEL_PUBLIC_KEY}`;
         const hash = crypto.createHash('md5').update(hash_data).digest('hex');
 
-        console.log(hash_data)
-        console.log(hash)
-        console.log(req.params.search_term)
-
-
         fetch('https://gateway.marvel.com:443/v1/public/characters?nameStartsWith=' + req.params.search_term + '&apikey=de511cb926dc8e0b6caf71daa20b40be&ts=' + ts + '&hash=' + hash)
             .then((response) => response.json())
             /* if more instructions the .json() are wapped in the promise construct the first one to complete(return?) 
@@ -147,7 +142,6 @@ exports.getPertinentHeroes = (req, res) => {
                 if(response_json.data.results.length > 0) {
                     const pertinentHeroes = []
                     response_json.data.results.forEach((hero) => {
-                        console.log(hero.name)
                         const pertinentHero = {}
                         pertinentHero.name = hero.name
                         pertinentHero.id = hero.id
@@ -157,7 +151,6 @@ exports.getPertinentHeroes = (req, res) => {
                     // const PersistentHeroesNameDict = {
                     //     "pertinentHeroesName": pertinentHeroesName
                     // }
-                    console.log(pertinentHeroes)
                     return res.send(pertinentHeroes);
                 }
                 else {
@@ -170,14 +163,16 @@ exports.getPertinentHeroes = (req, res) => {
         console.log('not authenticated')
     }
 }
-exports.postNewOffer = (req, res) => {ù
+exports.postNewOffer = (req, res) => {
     if(req.isAuthenticated()) {
             users.findById(req.session.passport.user)
                 .then((user_profile) => {
                     usersFigurines.find( { id_user: user_profile.id } )
                     .then((user_figurines) => {
                         const user_doublefigurines = filterDobuleFigurines(user_figurines);
-                        if(checkSellingFigurines(req.body.exchageItems.selling.figurines, user_doublefigurines)) {
+                        console.log(colors.fg.blue + req.body + colors.reset)
+                        console.log(colors.fg.green +user_doublefigurines + colors.reset)
+                        if(checkSellingFigurines(req.body.selling.figurines, user_doublefigurines)) {
                             const marketplaceOffer = new marketplaceOffers({
                                 username: user_profile.username,
                                 requesting: {
@@ -189,21 +184,22 @@ exports.postNewOffer = (req, res) => {ù
                                     points: req.body.selling.points
                                 }
                             })
+                            console.log(colors.fg.red + marketplaceOffer + colors.reset)
                             marketplaceOffer.save()
                             res.statusCode = 200;
                             res.json({ success: true, messages: [] })
                         } else {
-                            console.log('user is selling not doulbe figurines')
+                            console.log('user isn\'t selling double figurines')
                             // return res.send()
                         }
                     })
                     .catch((error) => {
-
+                        console.log('couldn\'t load user figurines \n error : ' + error)
                     })
                 
                 })
                 .catch((error) => {
-                    
+                    console.log('couldn\'t find the user \n error : ' + error)
                 })
 
     }
