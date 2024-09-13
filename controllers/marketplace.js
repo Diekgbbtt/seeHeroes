@@ -82,16 +82,51 @@ function checkAlreadySellingFigurines(offerSellingFigurines, user_offers) {
 }
 
 function checkUserHasBuyingOfferFigurine(offerRequestingFigurines, userFigurines) {
-    let check = true;
-    offerRequestingFigurines.forEach(requestingFigurine => {
-        userFigurines.forEach(figurine => {
-            if(requestingFigurine.figurine_id === figurine.id_figurine) {
-                check = false;
-            }
-        });
-    });
-    return check;
+    let check = 0;
+    if(offerRequestingFigurines.length > 0) {
+        if(userFigurines.length > 0) {
+            offerRequestingFigurines.forEach(requestingFigurine => {
+                userFigurines.forEach(figurine => {
+                    if(requestingFigurine.figurine_name === figurine.name) {
+                        check++;
+                        return true;
+                    }
+                });
+            });
+        } else {
+            return false;
+        }
+    } else {
+        return true; // offer has no requesting figurine, only points if there are no userFigurines will be handled later
+    }
+    return (check === offerRequestingFigurines.length);
 }
+
+function exchangeData(offer, user_figurines, id_user) {
+
+    users.findOne({username: offer.username })
+        .then((offer_user) => {
+            offer.requesting.figurine.forEach((requestingFigurine) => {
+                usersFigurines.findOneAndUpdate(
+                    {id_figurine: requestingFigurine.figurine_id, id_user: id_user },
+                    { $set: {id_user: offer_user._id} },
+                    {new: false}
+                )
+            })
+
+
+        })
+
+
+
+
+
+    
+
+
+
+
+};
 
 // function checkDoubleOffer(user_offers, user_new_offer) {
 //     let checkRequesting = true;
@@ -179,7 +214,7 @@ exports.Exchange = (req, res) => {
                             if(offer.requesting.points > user_profile.points) {
                                 res.json({success: false, errorMessage: 'you don\'t have enough points to accept this exchange'});
                             }
-                            if(checkUserHasBuyingOfferFigurine(offer.requesting.figurines, user_figurines)) {
+                            if(!checkUserHasBuyingOfferFigurine(offer.requesting.figurines, user_figurines)) {
                                 res.json({success: false, errorMessage: 'you don\'t have the figurines requested in the exchange offer'});
                             }
                             
