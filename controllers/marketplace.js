@@ -102,30 +102,61 @@ function checkUserHasBuyingOfferFigurine(offerRequestingFigurines, userFigurines
     return (check === offerRequestingFigurines.length);
 }
 
-function exchangeData(offer, user_figurines, id_user) {
-
+function exchangeData(offer, id_user) {
+    let check = true;
     users.findOne({username: offer.username })
         .then((offer_user) => {
-            offer.requesting.figurine.forEach((requestingFigurine) => {
-                usersFigurines.findOneAndUpdate(
-                    {id_figurine: requestingFigurine.figurine_id, id_user: id_user },
-                    { $set: {id_user: offer_user._id} },
+            if(offer.requesting.figurines.length > 0) {
+                offer.requesting.figurines.forEach((requestingFigurine) => {
+                    usersFigurines.findOneAndUpdate(
+                        {id_figurine: requestingFigurine.figurine_id, id_user: id_user},
+                        { $set: {id_user: offer_user._id} },
+                        {new: false}
+                    )
+                })
+            }
+            // check if current user has active exchange offers for the figurine he is selling(requestingFigurine)
+            if(offer.requesting.points > 0) {
+                users.findByIdAndUpdate(
+                    id_user,
+                    { $inc: {points: -offer.requesting.points} },
                     {new: false}
                 )
-            })
-
+                users.findByIdAndUpdate(
+                    offer_user._id,
+                    { $inc: {points: offer.requesting.points} },
+                    {new: false}
+                )
+            }
+            if(offer.selling.figurines.length > 0) {
+                offer.selling.figurines.forEach((sellingFigurine) => {
+                    usersFigurines.findByIdAndUpdate(
+                        sellingFigurine.figurine_id,
+                        { $set: {id_user: id_user} },
+                        {new: false}
+                    )
+                })
+            }
+            // check if current user has active exchange offers for the figurine he is selling(requestingFigurine)
+            if(offer.selling.points > 0) {
+                users.findByIdAndUpdate(
+                    id_user,
+                    { $inc: {points: offer.requesting.points} },
+                    {new: false}
+                )
+                users.findByIdAndUpdate(
+                    offer_user._id,
+                    { $inc: {points: -offer.requesting.points} },
+                    {new: false}
+                )
+            }
 
         })
+        .catch((error) => {
+            check = false;
+        })
 
-
-
-
-
-    
-
-
-
-
+    return check;
 };
 
 // function checkDoubleOffer(user_offers, user_new_offer) {
@@ -211,17 +242,21 @@ exports.Exchange = (req, res) => {
                 .then((user_profile) => {
                     usersFigurines.find( { id_user: id_user } )
                         .then((user_figurines) => {
+                            console.log(colors.fg.blue + user_figurines + '\n\n\n')
+                            console.log(colors.fg.magenta + offer + '\n\n\n')
                             if(offer.requesting.points > user_profile.points) {
                                 res.json({success: false, errorMessage: 'you don\'t have enough points to accept this exchange'});
                             }
                             if(!checkUserHasBuyingOfferFigurine(offer.requesting.figurines, user_figurines)) {
                                 res.json({success: false, errorMessage: 'you don\'t have the figurines requested in the exchange offer'});
                             }
-                            
-                            exchangeData(offer, user_figurines, id_user);
-                            marketplaceOffers.findByIdAndDelete(exchange_offer_id)
-
-
+                            if(exchangeData(offer, id_user)) {
+                                marketplaceOffers.findByIdAndDelete(exchange_offer_id)
+                                res.statusCode = 200;
+                                res.json({success: true, errorMessage: ''});
+                            } else {
+                                res.json({success: false, errorMessage: 'error exchanging data'});
+                            }
                         })
                         .catch((error) => {
                             console.log('couldn\'t get user figurines \n error : ' + error)

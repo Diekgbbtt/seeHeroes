@@ -988,7 +988,7 @@
             offerFooter.className = 'offerFooter';
             const exchangeButton = document.createElement('a');
             exchangeButton.className = 'exchangeButton';
-            exchangeButton.onclick = "exchange(this)";
+            exchangeButton.setAttribute('onclick', 'exchange(this)');
             const exchangeButtonInternal= document.createElement('div');
             exchangeButtonInternal.className = 'exchangeButtonInternal';
             const exchangeButtonText = document.createElement('span')
