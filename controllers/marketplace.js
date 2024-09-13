@@ -52,6 +52,18 @@ function filterDobuleFigurines(userFigurines) {
     return userDoubleFigurines;
 }
 
+function checkSellingFigurines(sellingFigurines, userDoubleFigurines) {
+    let check = true;
+    sellingFigurines.forEach(figurine => {
+        userDoubleFigurines.forEach(figurine_double => {
+            if(figurine.user_figurine_id === figurine_double._id) {
+                check = false;
+            }
+        });
+    });
+    return check;
+}
+
 exports.getMarketplace = (req, res) => {
     /* rendering marketplace with values in db */
 
@@ -158,7 +170,44 @@ exports.getPertinentHeroes = (req, res) => {
         console.log('not authenticated')
     }
 }
-exports.postNewOffer = (req, res) => {
+exports.postNewOffer = (req, res) => {ù
+    if(req.isAuthenticated()) {
+            users.findById(req.session.passport.user)
+                .then((user_profile) => {
+                    usersFigurines.find( { id_user: user_profile.id } )
+                    .then((user_figurines) => {
+                        const user_doublefigurines = filterDobuleFigurines(user_figurines);
+                        if(checkSellingFigurines(req.body.exchageItems.selling.figurines, user_doublefigurines)) {
+                            const marketplaceOffer = new marketplaceOffers({
+                                username: user_profile.username,
+                                requesting: {
+                                    figurines: {
+                                        type: eger
+                                    },
+                                    points: req.body.exchageItems.selling.points
+                                },
+                                offering: {
+                                    figurines: {
+                                        type: eger
+                                    },
+                                    points: req.body.exchageItems.selling.points
+                                }
+                            })
+                        } else {
+                            console.log('user is selling not doulbe figurines')
+                            return res.send()
+                        }
+                    })
+                    .catch((error) => {
+
+                    })
+                
+                })
+                .catch((error) => {
+                    
+                })
+
+    }
    
 }
 

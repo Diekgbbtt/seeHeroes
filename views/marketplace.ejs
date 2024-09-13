@@ -1432,8 +1432,12 @@
     function removeExhangeItem(target) {
 
         if(target.parentNode.classList.contains('requestingPoints')){
+            if(target.parentNode.parentNode.classList.contains('buyingItemsList')) {
+                exchangeItems.buying.points = 0;
+            } else {
+                exchangeItems.selling.points = 0;
+            }
             target.parentNode.remove();
-            exchangeItems.buying.points = 0;
         } else if(target.parentNode.classList.contains('buyingItem')) {
             const buyingFigurine = JSON.parse(sessionStorage.getItem(target.parentNode.getAttribute('hero-name')))
             for (const [index, item] of exchangeItems.buying.figurines.entries()) {
@@ -1468,6 +1472,20 @@
     }
 
     function confirmNewOffer() {
+
+        fech('/newoffer/confirm', {
+            method: POST,
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(exchangeItems)
+        })
+
+        ''
+
+
+
+
         
     }
 
