@@ -331,8 +331,9 @@
             align-items: center;
             margin-left: 20px;
         }
-        
-        .elementsPerPage {
+    
+        #elementsPerPage:focus {
+            outline: none;
             text-decoration: none;
         }
 
@@ -1470,6 +1471,7 @@
                 if(data.success) {
                     console.log('success')
                     console.log(data)
+                    sessionStorage.clear();
                     window.location.href = '/marketplace';
                 } else {
                     console.log('error')
