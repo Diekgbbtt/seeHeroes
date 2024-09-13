@@ -81,6 +81,18 @@ function checkAlreadySellingFigurines(offerSellingFigurines, user_offers) {
     return check;
 }
 
+function checkUserHasBuyingOfferFigurine(offerRequestingFigurines, userFigurines) {
+    let check = true;
+    offerRequestingFigurines.forEach(requestingFigurine => {
+        userFigurines.forEach(figurine => {
+            if(requestingFigurine.figurine_id === figurine.id_figurine) {
+                check = false;
+            }
+        });
+    });
+    return check;
+}
+
 // function checkDoubleOffer(user_offers, user_new_offer) {
 //     let checkRequesting = true;
 //     let checkOffering = true;
@@ -157,48 +169,42 @@ exports.Exchange = (req, res) => {
 
     if(req.isAuthenticated()) { 
         const exchange_offer_id = req.params.exchange_offer_id;
+        const id_user = req.session.passport.user;
         marketplaceOffers.findById(exchange_offer_id)
             .then((offer) => {
-                usersFigurines.find( { id_user: req.session.passport.user } )
-                    .then((user_figurines) => {
-                        if(offer.requesting.points > 0) {
-                            if(checkUserHasBuyingPoints(offer.offering.figurines, user_figurines)) {
+                users.findById(id_user)
+                .then((user_profile) => {
+                    usersFigurines.find( { id_user: id_user } )
+                        .then((user_figurines) => {
+                            if(offer.requesting.points > user_profile.points) {
                                 res.json({success: false, errorMessage: 'you don\'t have enough points to accept this exchange'});
                             }
-                            users.findOneAndUpdate({offer.requesting.points})
-                        }
-                        if(offer.requesting.figurines.lenght > 0) {
                             if(checkUserHasBuyingOfferFigurine(offer.requesting.figurines, user_figurines)) {
                                 res.json({success: false, errorMessage: 'you don\'t have the figurines requested in the exchange offer'});
                             }
-                            offer.requesting.figurines.forEach(offerBuyingFigurine => {
-                                usersFigurines.findOneAndUpdate({})
-
-                            }) 
-                        }
-                        if(offer.selling.points > 0) {
-                            users.findOneAndUpdate({offer.requesting.points})
-                        }
-                        if(offer.selling.figurines.lenght > 0) {
-                            offer.selling.figurines.forEach(offerBuyingFigurine => {
-                                usersFigurines.findOneAndUpdate({})
-                            })
-                        }
-
-                        marketplaceOffers.findByIdAndDelete(exchange_offer_id)
+                            
+                            exchangeData(offer, user_figurines, id_user);
+                            marketplaceOffers.findByIdAndDelete(exchange_offer_id)
 
 
-                    })
-                    .catch((error) => {
-                        console.log('couldn\'t get user figurines \n error : ' + error)
-                        req.flarrors', { msg: "couldn\'t get user figurines \n error : " + error });
-                        return res.render('marketplace', { messages: { errors: req.flash('errors') } });
-                    });
+                        })
+                        .catch((error) => {
+                            console.log('couldn\'t get user figurines \n error : ' + error)
+                            req.flash('errors', { msg: "couldn\'t get user figurines \n error : " + error });
+                            return res.render('marketplace', { messages: { errors: req.flash('errors') } });
+                        });
 
-                    })sh('e
-                    .catch((error) => {
-                        console.log('couldn\'t get user profile \n error : ' + error)
-                        req.flash('errors', { msg: "couldn\'t
+                })
+                .catch((error) => {
+                    console.log('couldn\'t get user profile \n error : ' + error)
+                    req.flash('errors', { msg: "couldn\'t get user profile \n error :" + error })
+                    return res.render('marketplace', { messages: { errors: req.flash('errors') } });
+                })
+            })
+            .catch((error) => {
+                console.log('couldn\'t get offer \n error : ' + error)
+                req.flash('errors', { msg: "couldn\'t get offer \n error : " + error });
+                return res.render('marketplace', { messages: { errors: req.flash('errors') } });
             })
     }
 
