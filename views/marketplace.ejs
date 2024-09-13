@@ -1028,46 +1028,47 @@
                 requestingPointsContainer.appendChild(pointsCircle);
                 offerRequestingNames.appendChild(pointsNumber);
                 offerRequestingElements.appendChild(requestingPointsContainer);
+            }  else {
+                offer.requesting.figurines.forEach(figurine => {
+                    const figurineName = document.createElement('span');
+                    figurineName.textContent = figurine.figurine_name;
+
+                    if(figurine.figurine_image_path.endsWith('image_not_available')) {
+                        const noImageDiv = document.createElement('div');
+                        noImageDiv.style.cssText = "width: 115px; height: 152px; border-radius: 10px; border: 4px solid #b11616; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; font-size: 10px; line-height: 1.2; margin-bottom: 28px;";
+                        noImageDiv.innerHTML = `<span style="font-size: medium; font-weight: bold">${figurine.figurine_name}</span><span>Image</span><span>Not</span><span>Available</span>`;
+                        offerRequestingElements.appendChild(noImageDiv);
+                        if(offer.requesting.figurines.indexOf(figurine) > 0){
+                            noImageDiv.style.setProperty('margin-left', '20px');
+                            const figurinePlus = document.createElement('span');
+                            figurinePlus.textContent = '+';
+                            offerRequestingNames.appendChild(figurinePlus);
+                        }
+                        offerRequestingNames.appendChild(figurineName);
+                    }  else {
+                        const figurineElement = document.createElement('div');
+                        figurineElement.class = 'requestingFigurine';
+                        figurineElement.style.cssText = 'width: 120px; height: 100%; display: flex; flex-direction: column; justify-content: flex-start; align-items: center; display: flex; flex-direction: column; justify-content: flex-start; align-items: center;';
+                        const figurineImg = document.createElement('img');
+                        figurineImg.className = 'requestingFigurineImg';
+                        figurineImg.src = figurine.figurine_image_path + '/portrait_medium.' + figurine.figurine_ext;
+                        figurineImg.onerror = function() {
+                            this.onerror = null;
+                            this.parentNode.innerHTML = `<div style="width: 100px; height: 150px; border: 2px solid #8b0000; border-radius: 10px; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; font-size: 10px; line-height: 1.2;"><span style="font-size: medium; font-weight: bold">${figurine.figurine_name}</span><span>Image</span><span>Not</span><span>Available</span></div>`;
+                        };
+                        if(offer.requesting.figurines.indexOf(figurine) > 0){
+                            figurineElement.style.setProperty('margin-left', '20px');
+                            const figurinePlus = document.createElement('span');
+                            figurinePlus.textContent = '+';
+                            offerRequestingNames.appendChild(figurinePlus);
+                        }
+                        offerRequestingNames.appendChild(figurineName);
+                        figurineElement.appendChild(figurineImg);
+                        offerRequestingElements.appendChild(figurineElement);
+                    }
+
+                });
             }
-            offer.requesting.figurines.forEach(figurine => {
-                const figurineName = document.createElement('span');
-                figurineName.textContent = figurine.figurine_name;
-
-                if(figurine.figurine_image_path.endsWith('image_not_available')) {
-                    const noImageDiv = document.createElement('div');
-                    noImageDiv.style.cssText = "width: 115px; height: 152px; border-radius: 10px; border: 4px solid #b11616; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; font-size: 10px; line-height: 1.2; margin-bottom: 28px;";
-                    noImageDiv.innerHTML = `<span style="font-size: medium; font-weight: bold">${figurine.figurine_name}</span><span>Image</span><span>Not</span><span>Available</span>`;
-                    offerRequestingElements.appendChild(noImageDiv);
-                    if(offer.requesting.figurines.indexOf(figurine) > 0 || offerRequestingNames.children[0].classList.contains('pointsNumber') ){
-                        noImageDiv.style.setProperty('margin-left', '20px');
-                        const figurinePlus = document.createElement('span');
-                        figurinePlus.textContent = '+';
-                        offerRequestingNames.appendChild(figurinePlus);
-                    }
-                    offerRequestingNames.appendChild(figurineName);
-                }  else {
-                    const figurineElement = document.createElement('div');
-                    figurineElement.class = 'requestingFigurine';
-                    figurineElement.style.cssText = 'width: 120px; height: 100%; display: flex; flex-direction: column; justify-content: flex-start; align-items: center; display: flex; flex-direction: column; justify-content: flex-start; align-items: center;';
-                    const figurineImg = document.createElement('img');
-                    figurineImg.className = 'requestingFigurineImg';
-                    figurineImg.src = figurine.figurine_image_path + '/portrait_medium.' + figurine.figurine_ext;
-                    figurineImg.onerror = function() {
-                        this.onerror = null;
-                        this.parentNode.innerHTML = `<div style="width: 100px; height: 150px; border: 2px solid #8b0000; border-radius: 10px; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; font-size: 10px; line-height: 1.2;"><span style="font-size: medium; font-weight: bold">${figurine.figurine_name}</span><span>Image</span><span>Not</span><span>Available</span></div>`;
-                    };
-                    if(offer.requesting.figurines.indexOf(figurine) > 0){
-                        figurineElement.style.setProperty('margin-left', '20px');
-                        const figurinePlus = document.createElement('span');
-                        figurinePlus.textContent = '+';
-                        offerRequestingNames.appendChild(figurinePlus);
-                    }
-                    offerRequestingNames.appendChild(figurineName);
-                    figurineElement.appendChild(figurineImg);
-                    offerRequestingElements.appendChild(figurineElement);
-                }
-
-            });
 
             if(offer.offering.points > 0) {
                 const pointsNumber = document.createElement('span');
@@ -1092,7 +1093,7 @@
                 offeringPointsContainer.appendChild(pointsCircle);
                 offerOfferingNames.appendChild(pointsNumber);
                 offerOfferingElements.appendChild(offeringPointsContainer);
-            }
+            } else {
                 offer.offering.figurines.forEach(figurine => {
                     const figurineName = document.createElement('span');
                     figurineName.textContent = figurine.figurine_name;
@@ -1101,7 +1102,7 @@
                         noImageDiv.style.cssText = "width: 115px; height: 152px; border-radius: 10px; border: 4px solid #b11616; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; font-size: 10px; line-height: 1.2; margin-bottom: 28px;";
                         noImageDiv.innerHTML = `<span style="font-size: medium; font-weight: bold">${figurine.figurine_name}</span><span>Image</span><span>Not</span><span>Available</span>`;
                         offerOfferingElements.appendChild(noImageDiv);
-                        if(offer.offering.figurines.indexOf(figurine) > 0 || offerRequestingNames.children[0].classList.contains('pointsNumber')){
+                        if(offer.offering.figurines.indexOf(figurine) > 0){
                             noImageDiv.style.setProperty('margin-left', '20px');
                             const figurinePlus = document.createElement('span');
                             figurinePlus.textContent = '+';
@@ -1133,6 +1134,7 @@
 
                 });
 
+            }
         offerRequesting.appendChild(offerRequestingNames);
         offerRequesting.appendChild(offerRequestingElements);
         offerSymbol.appendChild(offerExchangeSymbolNames);
