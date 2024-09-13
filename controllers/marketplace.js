@@ -53,7 +53,7 @@ function filterDobuleFigurines(userFigurines) {
 }
 
 function checkAreSellingFigurinesDouble(sellingFigurines, userDoubleFigurines) {
-    let check = true;
+    check = true
     sellingFigurines.forEach(figurine => {
         userDoubleFigurines.forEach(figurine_double => {
             if(figurine.user_figurine_id === figurine_double._id) {
@@ -65,12 +65,41 @@ function checkAreSellingFigurinesDouble(sellingFigurines, userDoubleFigurines) {
 }
 
 
-function checkAlreadySellingFigurines(offerSellingFigurines, SellingFigurines) {
-
+function checkAlreadySellingFigurines(offerSellingFigurines, user_offers) {
+    let check = true;
+    offerSellingFigurines.forEach(sellingFigurine => {
+        user_offers.forEach(offer => {
+            offer.offering.figurines.forEach(offerFigurine => {
+                if(sellingFigurine.figurine_id === offerFigurine.figurine_id) {
+                    check = false;
+                }
+            });
+        });
+    });
+    return check;
 }
 
 function checkDoubleOffer(user_offers, user_new_offer) {
+    let checkRequesting = true;
+    let checkOffering = true;
+    user_offers.forEach(offer => {
+        offer.requesting.figurines.forEach(offerFigurine => {
+            user_new_offer.buying.figurines.forEach(newOfferFigurine => {
+                if(offerFigurine.figurine_id !== newOfferFigurine.figurine_id) {
+                    checkRequesting = false;
+                }
+            });
+        });
+        offer.offering.figurines.forEach(offerFigurine => {
+            user_new_offer.selling.figurines.forEach(newOfferFigurine => {
+                if(offerFigurine.figurine_id !== newOfferFigurine.figurine_id) {
+                    checkOffering = false;
+                }
+            });
+        });
 
+    });
+    return !(checkRequesting || checkOffering);
 }
 
 exports.getMarketplace = (req, res) => {
@@ -173,63 +202,73 @@ exports.getPertinentHeroes = (req, res) => {
     }
 }
 exports.postNewOffer = (req, res) => {
-    if(req.isAuthenticated()) {
-            users.findById(req.session.passport.user)
-                .then((user_profile) => {
-                    usersFigurines.find( { id_user: user_profile.id } )
-                    .then((user_figurines) => {
-                        const user_doublefigurines = filterDobuleFigurines(user_figurines);
-                        console.log(colors.fg.blue + req.body + colors.reset)
-                        // check user isn't  creating an offer equal to another of his own
-                        marketplaceOffers.find({username: user_profile.username})
-                        .then((user_offers) => {
-                            if(checkDoubleOffer(user_offers, req.body)) {
-                                if(checkAlreadySellingFigurines(req.body.selling.figurines, user_offers)) {
-                                    if(checkAreSellingFigurinesDouble(req.body.selling.figurines, user_doublefigurines)) {
-                                        const marketplaceOffer = new marketplaceOffers({
-                                            username: user_profile.username,
-                                            requesting: {
-                                                figurines: [],
-                                                points: req.body.buying.points
-                                            },
-                                            offering: {
-                                                figurines: [],
-                                                points: req.body.selling.points
-                                            }
-                                        })
-                                        req.body.buying.figurines.forEach((figurine) => {
-                                            marketplaceOffer.requesting.figurines.push(figurine)
-                                        })
-                                        req.body.selling.figurines.forEach((figurine) => {
-                                            marketplaceOffer.offering.figurines.push(figurine)
-                                        })
-                                        console.log(colors.fg.red + marketplaceOffer + colors.reset)
-                                        marketplaceOffer.save()
-                                        res.statusCode = 200;
-                                        res.json({ success: true, messages: [] })
-                                    } else {
-                                        console.log('user isn\'t selling double figurines')
-                                        // return res.send()
-                                    }
-                                }
-                            }                        
-                        })
-                        .catch((error) => {
-                            console.log('couldn\'t find user offers \n error : ' + error)
-                        })
-                    })
-                    .catch((error) => {
-                        console.log('couldn\'t load user figurines \n error : ' + error)
-                    })
-                
+    if (req.isAuthenticated()) {
+      users.findById(req.session.passport.user)
+        .then((user_profile) => {
+          usersFigurines.find({
+              id_user: user_profile.id
+            })
+            .then((user_figurines) => {
+              const user_doublefigurines = filterDobuleFigurines(user_figurines);
+              console.log(colors.fg.blue + req.body + colors.reset)
+              // check user isn't  creating an offer equal to another of his own
+              marketplaceOffers.find({
+                  username: user_profile.username
                 })
-                .catch((error) => {
-                    console.log('couldn\'t find the user \n error : ' + error)
+                .then((user_offers) => {
+                  if (checkDoubleOffer(user_offers, req.body)) {
+                    if (checkAlreadySellingFigurines(req.body.selling.figurines, user_offers)) {
+                      if (checkAreSellingFigurinesDouble(req.body.selling.figurines, user_doublefigurines)) {
+                        const marketplaceOffer = new marketplaceOffers({
+                          username: user_profile.username,
+                          requesting: {
+                            figurines: [],
+                            points: req.body.buying.points
+                          },
+                          offering: {
+                            figurines: [],
+                            points: req.body.selling.points
+                          }
+                        })
+                        req.body.buying.figurines.forEach((figurine) => {
+                          marketplaceOffer.requesting.figurines.push(figurine)
+                        })
+                        req.body.selling.figurines.forEach((figurine) => {
+                          marketplaceOffer.offering.figurines.push(figurine)
+                        })
+                        console.log(colors.fg.red + marketplaceOffer + colors.reset)
+                        marketplaceOffer.save()
+                        res.statusCode = 200;
+                        res.json({
+                          success: true,
+                          messages: []
+                        })
+                      } else {
+                        console.log('user isn\'t selling double figurines')
+                        // return res.send()
+                      }
+                    } else {
+                      console.log('user is already selling this figurine')
+                    }
+                  } else {
+                    console.log('user already has an identical offer')
+                  }
                 })
-
+            })
+            .catch((error) => {
+              console.log('couldn\'t find user offers \n error : ' + error)
+            })
+        })
+        .catch((error) => {
+          console.log('couldn\'t load user figurines \n error : ' + error)
+        })
+        .catch((error) => {
+          console.log('couldn\'t find the user \n error : ' + error)
+        })
+  
     }
-   
-}
+  
+  }
 
 exports.getFilteredMarketplace = (req, res) => {
    
