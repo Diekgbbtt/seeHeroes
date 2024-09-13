@@ -111,44 +111,56 @@ function exchangeData(offer, id_user) {
                     usersFigurines.findOneAndUpdate(
                         {id_figurine: requestingFigurine.figurine_id, id_user: id_user},
                         { $set: {id_user: offer_user._id} },
-                        {new: false}
+                        {new: true}
                     )
                 })
             }
             // check if current user has active exchange offers for the figurine he is selling(requestingFigurine)
             if(offer.requesting.points > 0) {
-                users.findByIdAndUpdate(
-                    id_user,
+                users.findOneAndUpdate(
+                    {_id: id_user},
                     { $inc: {points: -offer.requesting.points} },
-                    {new: false}
+                    {new: true}
                 )
-                users.findByIdAndUpdate(
-                    offer_user._id,
+                .then((updated_user) => {
+                    console.log(colors.fg.green + "current user " + updated_user.username + " has " + updated_user.points + " points" + colors.reset)
+                })
+                users.findOneAndUpdate(
+                    {_id: offer_user._id},
                     { $inc: {points: offer.requesting.points} },
-                    {new: false}
+                    {new: true}
                 )
+                .then((updated_user) => {
+                    console.log(colors.fg.yellow + "offer user " + updated_user.username + " has " + updated_user.points + " points" + colors.reset)
+                })
             }
             if(offer.selling.figurines.length > 0) {
                 offer.selling.figurines.forEach((sellingFigurine) => {
-                    usersFigurines.findByIdAndUpdate(
-                        sellingFigurine.figurine_id,
+                    usersFigurines.findOneAndUpdate(
+                        {id_figurine: sellingFigurine.figurine_id},
                         { $set: {id_user: id_user} },
-                        {new: false}
+                        {new: true}
                     )
                 })
             }
             // check if current user has active exchange offers for the figurine he is selling(requestingFigurine)
             if(offer.selling.points > 0) {
-                users.findByIdAndUpdate(
-                    id_user,
+                users.findOneAndUpdate(
+                    {_id: id_user},
                     { $inc: {points: offer.requesting.points} },
-                    {new: false}
+                    {new: true}
                 )
-                users.findByIdAndUpdate(
-                    offer_user._id,
+                .then((updated_user) => {
+                    console.log(colors.fg.green + "current user " + updated_user.username + " has " + updated_user.points + " points" + colors.reset)
+                })
+                users.findOneAndUpdate(
+                    {_id: offer_user._id},
                     { $inc: {points: -offer.requesting.points} },
-                    {new: false}
+                    {new: true}
                 )
+                .then((updated_user) => {
+                    console.log(colors.fg.yellow + "offer user " + updated_user.username + " has " + updated_user.points + " points" + colors.reset)
+                })
             }
 
         })
@@ -246,9 +258,11 @@ exports.Exchange = (req, res) => {
                             console.log(colors.fg.magenta + offer + '\n\n\n')
                             if(offer.requesting.points > user_profile.points) {
                                 res.json({success: false, errorMessage: 'you don\'t have enough points to accept this exchange'});
+                                return;
                             }
                             if(!checkUserHasBuyingOfferFigurine(offer.requesting.figurines, user_figurines)) {
                                 res.json({success: false, errorMessage: 'you don\'t have the figurines requested in the exchange offer'});
+                                return;
                             }
                             if(exchangeData(offer, id_user)) {
                                 marketplaceOffers.findOneAndDelete({_id: exchange_offer_id})
