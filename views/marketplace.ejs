@@ -930,8 +930,12 @@
     });
 
     const exchangeItems = {};
-    exchangeItems.buying = [];
-    exchangeItems.selling = [];
+    exchangeItems.buying = {};
+    exchangeItems.selling = {};
+    exchangeItems.buying.figurines = [];
+    exchangeItems.selling.figurines = [];
+    exchangeItems.buying.points = 0;
+    exchangeItems.selling.points = 0;
 
     function renderPage(pageNumber, elementsPerPage) {
         const offersContainer = document.querySelector('.offers-container');
@@ -1215,7 +1219,7 @@
 
     function addSellingItem(target){
         // check for hero buy and sell request
-        for(let buyingItem of exchangeItems.buying) {
+        for(let buyingItem of exchangeItems.buying.figurines) {
             if(buyingItem.name === target.parentNode.children[0].textContent) {
                 console.log(buyingItem.name)
                 console.log("you are already buying this hero")
@@ -1239,13 +1243,13 @@
         exchangeItemRemoveText.textContent = 'REMOVE';
         exchangeItemRemove.appendChild(exchangeItemRemoveText);
         let doubleHeroName = doubleHero.name
-        exchangeItems.selling.push({
+        exchangeItems.selling.figurines.push({
                 name: doubleHero.name,
                 image_path: doubleHero.image_path,
                 user_figurine_id: doubleHero.user_figurine_id
         })
         sellingFigurine.setAttribute('hero-name', doubleHeroName)
-        console.log(exchangeItems.selling)
+        console.log(exchangeItems.selling.figurines)
         // maybe to add in an element attribute for reference later `${target.parentNode.children[0].children[0].textContent}`;
         const sellingFigurineImage = document.createElement('div');
         sellingFigurineImage.className = 'doubleFigurineImage';
@@ -1279,18 +1283,26 @@
         target.parentNode.children[1].value = target.parentNode.children[1].value.replace(/[^0-9]/g, '');
 
         if(target.parentNode.children[1].value < 1) {
-            console.log("must add at least one point")
-        } else if(target.parentNode.children[1].value){
-
+                console.log("must add at least one point")
+        } else {
+            const points = parseInt(target.parentNode.children[1].value, 10);
             const itemsList = target.parentNode.parentNode.parentNode.children[1];
-
+            
             for (let child of itemsList.children) {
                 if (child.classList.contains('requestingPoints')) {
-                    child.children[0].children[0].children[0].textContent = parseInt(child.children[0].children[0].children[0].textContent, 10) + parseInt(target.parentNode.children[1].value, 10); 
+                    child.children[0].children[0].children[0].textContent = parseInt(child.children[0].children[0].children[0].textContent, 10) + points; 
                     return
                 }
             }
 
+            if(target.parentNode.parentNode.children[1].textContent === 'Buying') {
+                exchangeItems.buying.points += points;
+            } else if(target.parentNode.parentNode.children[1].textContent === 'Selling'){
+                exchangeItems.selling.points += points;
+            } else {
+                console.log("adding points context not identified")
+                return
+            }
             const requestingPointsContainer = document.createElement('div');
             requestingPointsContainer.className = 'requestingPoints';
 
@@ -1347,7 +1359,7 @@
 
     function addBuyingItem(itemName){
         // check for hero buy and sell request
-        for(let sellingItem of exchangeItems.selling) {
+        for(let sellingItem of exchangeItems.selling.figurines) {
             if(sellingItem.name === itemName) {
                 console.log(sellingItem.name)
                 console.log("you are already selling this hero")
@@ -1356,16 +1368,26 @@
         }
         
         // check for hero double buy request
-        for(let buyingItem of exchangeItems.buying) {
+        for(let buyingItem of exchangeItems.buying.figurines) {
             if(buyingItem.name === itemName) {
                 console.log(buyingItem.name)
                 console.log("you are already buying this hero")
                 return
             }
         }
-
         // check for hero already in doubles
-        
+        for( let key in sessionStorage) {
+            if(sessionStorage.hasOwnProperty(key)) {
+                if(key.startsWith('double_')) {
+                    if(JSON.parse(sessionStorage.getItem(key)).name === itemName) {
+                        console.log("you already have this hero in doubles, you can have maximum 2 figurines per hero")
+                        return
+                    }
+                }
+            }
+        }
+
+
         const hero = JSON.parse(sessionStorage.getItem(itemName))
         const buyingFigurinesList = document.querySelector('.buyingItemsList');
         const buyingFigurine = document.createElement('div');
@@ -1377,13 +1399,13 @@
         exchangeItemRemoveText.textContent = 'REMOVE';
         exchangeItemRemove.appendChild(exchangeItemRemoveText);
         let heroName = hero.name
-        exchangeItems.buying.push({
+        exchangeItems.buying.figurines.push({
                 name: heroName,
                 image_path: hero.image_path,
                 hero_id: hero.id
         })
         buyingFigurine.setAttribute('hero-name', heroName)
-        console.log(exchangeItems.buying)
+        console.log(exchangeItems.buying.figurines)
         const buyingFigurineImage = document.createElement('div');
         buyingFigurineImage.className = 'doubleFigurineImage';
         if(hero.image_path.endsWith('image_not_available')) {
@@ -1411,11 +1433,12 @@
 
         if(target.parentNode.classList.contains('requestingPoints')){
             target.parentNode.remove();
+            exchangeItems.buying.points = 0;
         } else if(target.parentNode.classList.contains('buyingItem')) {
             const buyingFigurine = JSON.parse(sessionStorage.getItem(target.parentNode.getAttribute('hero-name')))
-            for (const [index, item] of exchangeItems.buying.entries()) {
+            for (const [index, item] of exchangeItems.buying.figurines.entries()) {
                 if (item.hero_id === buyingFigurine.id) {
-                    exchangeItems.buying.splice(index, 1);
+                    exchangeItems.buying.figurines.splice(index, 1);
                     break;
                 }
             }
@@ -1432,9 +1455,9 @@
                 disabledFigName.parentNode.parentNode.children[2].setAttribute('onclick', 'addSellingItem(this)');
                 }
             })
-            for (const [index, item] of exchangeItems.selling.entries()) {
+            for (const [index, item] of exchangeItems.selling.figurines.entries()) {
                 if (item.user_figurine_id === sellingItem.user_figurine_id) {
-                    exchangeItems.selling.splice(index, 1);
+                    exchangeItems.selling.figurines.splice(index, 1);
                     break;
                 }
             }
