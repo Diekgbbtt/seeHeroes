@@ -222,20 +222,6 @@
             gap: 10px
         }
 
-
-        .offerRequestingNames .pointsNumber {
-            margin-bottom: 40px;
-            margin-left: 20px;
-            width: 100%;
-            text-align: end;
-        }
-
-        .offerOfferingNames .pointsNumber {
-            margin-bottom: 40px;
-            margin-left: 20px;
-            width: 100%;
-            text-align:start;
-        }
         .pointsCircle {
             border-radius: 50%; 
             border: 4px solid #8b0000; 
@@ -260,7 +246,8 @@
             font-size: 24px;
             font-weight: bold;
             color: #b11616; 
-            position: relative; 
+            position: relative;
+            width: 26px;
             z-index: 1;
             text-align: center;
         }
@@ -910,8 +897,9 @@
 
     // monitor elemtnts per page input change
     elementsPerPageInput.addEventListener('change', function() {
-        const newElementsPerPage = parseInt(this.value);
-            renderPage(currentPage, offersPerPage);
+        offersPerPage = parseInt(this.value)
+        totalPages = Math.ceil(all_offers.length / offersPerPage)
+        renderPage(currentPage, offersPerPage);
     });
     // monitor prev page change
     document.getElementById('prevPage').addEventListener('click', () => {
@@ -938,8 +926,8 @@
 
     function renderPage(pageNumber, elementsPerPage) {
         const offersContainer = document.querySelector('.offers-container');
-        const startIndex = (currentPage - 1) * offersPerPage;
-        const endIndex = startIndex + offersPerPage;
+        const startIndex = (pageNumber - 1) * elementsPerPage;
+        const endIndex = startIndex + elementsPerPage;
         const offersToDisplay = all_offers.slice(startIndex, endIndex);
 
         offersContainer.innerHTML = '';
@@ -947,7 +935,6 @@
         offersToDisplay.forEach(offer => {
             offersContainer.appendChild(createOfferElement(offer));
         });
-
         updateNavigationButtons();
     }
 
@@ -1009,7 +996,6 @@
             if(offer.requesting.points > 0) {
                 const pointsNumber = document.createElement('span');
                 pointsNumber.textContent = offer.requesting.points + ' points';
-                pointsNumber.className = 'pointsNumber';
 
                 const requestingPointsContainer = document.createElement('div');
                 requestingPointsContainer.className = 'requestingPoints';
