@@ -171,18 +171,23 @@ exports.postNewOffer = (req, res) => {
                     .then((user_figurines) => {
                         const user_doublefigurines = filterDobuleFigurines(user_figurines);
                         console.log(colors.fg.blue + req.body + colors.reset)
-                        console.log(colors.fg.green +user_doublefigurines + colors.reset)
                         if(checkSellingFigurines(req.body.selling.figurines, user_doublefigurines)) {
                             const marketplaceOffer = new marketplaceOffers({
                                 username: user_profile.username,
                                 requesting: {
-                                    figurines: req.body.buying.figurines,
+                                    figurines: [],
                                     points: req.body.buying.points
                                 },
                                 offering: {
-                                    figurines: req.body.selling.figurines,
+                                    figurines: [],
                                     points: req.body.selling.points
                                 }
+                            })
+                            req.body.buying.figurines.forEach((figurine) => {
+                                marketplaceOffer.requesting.figurines.push(figurine)
+                            })
+                            req.body.selling.figurines.forEach((figurine) => {
+                                marketplaceOffer.offering.figurines.push(figurine)
                             })
                             console.log(colors.fg.red + marketplaceOffer + colors.reset)
                             marketplaceOffer.save()

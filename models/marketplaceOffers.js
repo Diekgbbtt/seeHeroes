@@ -5,7 +5,7 @@ const offerItemSchema = new mongoose.Schema({
     figurines: {
         type: [{
             figurine_id: {
-                type: mongoose.Schema.Types.ObjectId,
+                type: String,
                 ref: 'UsersFigurines'
             },
             figurine_name: {
@@ -18,7 +18,8 @@ const offerItemSchema = new mongoose.Schema({
             },
             figurine_ext: {
                 type: String,
-                required: true
+                required: false,
+                default: 'jpg'
             }
         }],
         default: []    
