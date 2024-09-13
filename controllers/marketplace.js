@@ -181,28 +181,20 @@ exports.postNewOffer = (req, res) => {ù
                             const marketplaceOffer = new marketplaceOffers({
                                 username: user_profile.username,
                                 requesting: {
-                                    figurines: {
-                                        type: req.body.buying.figurines
-                                    },
-                                    points: req.body.exchangeItems.buying.points
+                                    figurines: req.body.buying.figurines,
+                                    points: req.body.buying.points
                                 },
                                 offering: {
-                                    figurines: {
-                                        type: []
-                                    },
-                                    points: req.body.exchangeItems.selling.points
+                                    figurines: req.body.selling.figurines,
+                                    points: req.body.selling.points
                                 }
                             })
-                            req.body.exchangeItems.buying.figurines.forEach((figurine) => {
-                                marketplaceOffer.requesting.figurines.type.push(figurine)
-                            })
-                            req.body.exchangeItems.selling.figurines.forEach((figurine) => {
-                                marketplaceOffer.offering.figurines.type.push(figurine)
-                            }) 
-
+                            marketplaceOffer.save()
+                            res.statusCode = 200;
+                            res.json({ success: true, messages: [] })
                         } else {
                             console.log('user is selling not doulbe figurines')
-                            return res.send()
+                            // return res.send()
                         }
                     })
                     .catch((error) => {
