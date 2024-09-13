@@ -1363,6 +1363,9 @@
                 return
             }
         }
+
+        // check for hero already in doubles
+        
         const hero = JSON.parse(sessionStorage.getItem(itemName))
         const buyingFigurinesList = document.querySelector('.buyingItemsList');
         const buyingFigurine = document.createElement('div');
@@ -1422,10 +1425,12 @@
             const sellingItem = JSON.parse(sessionStorage.getItem('double_' + target.parentNode.getAttribute('hero-name')))
             const disabledDoubleFigurinesElementsName = document.querySelectorAll('.doubleFigurineNameText.disabled');
             disabledDoubleFigurinesElementsName.forEach(disabledFigName => {
-                if(disabledFigName.textContent === target.parentNode.getAttribute('hero-name'))
+                if(disabledFigName.textContent === target.parentNode.getAttribute('hero-name')) {
                 disabledFigName.classList.toggle('disabled');
                 disabledFigName.parentNode.parentNode.children[1].classList.toggle('disabled');
                 disabledFigName.parentNode.parentNode.children[2].classList.toggle('disabled');
+                disabledFigName.parentNode.parentNode.children[2].setAttribute('onclick', 'addSellingItem(this)');
+                }
             })
             for (const [index, item] of exchangeItems.selling.entries()) {
                 if (item.user_figurine_id === sellingItem.user_figurine_id) {
@@ -1437,9 +1442,6 @@
             } else {
             console.log('element not recognized')
             }
-
-
-
     }
 
     function confirmNewOffer() {
