@@ -251,9 +251,13 @@ exports.Exchange = (req, res) => {
                                 res.json({success: false, errorMessage: 'you don\'t have the figurines requested in the exchange offer'});
                             }
                             if(exchangeData(offer, id_user)) {
-                                marketplaceOffers.findByIdAndDelete(exchange_offer_id)
-                                res.statusCode = 200;
-                                res.json({success: true, errorMessage: ''});
+                                marketplaceOffers.findOneAndDelete({_id: exchange_offer_id})
+                                .then((deletedOffer) => {
+                                    console.log(colors.fg.cyan + 'deleted offer : ' + deletedOffer + '\n\n\n' +  colors.reset)
+                                    res.statusCode = 200;
+                                    res.json({success: true, errorMessage: ''});
+                                })
+
                             } else {
                                 res.json({success: false, errorMessage: 'error exchanging data'});
                             }
