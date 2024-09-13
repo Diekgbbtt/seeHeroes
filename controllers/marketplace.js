@@ -182,17 +182,24 @@ exports.postNewOffer = (req, res) => {ù
                                 username: user_profile.username,
                                 requesting: {
                                     figurines: {
-                                        type: eger
+                                        type: req.body.buying.figurines
                                     },
-                                    points: req.body.exchageItems.selling.points
+                                    points: req.body.exchangeItems.buying.points
                                 },
                                 offering: {
                                     figurines: {
-                                        type: eger
+                                        type: []
                                     },
-                                    points: req.body.exchageItems.selling.points
+                                    points: req.body.exchangeItems.selling.points
                                 }
                             })
+                            req.body.exchangeItems.buying.figurines.forEach((figurine) => {
+                                marketplaceOffer.requesting.figurines.type.push(figurine)
+                            })
+                            req.body.exchangeItems.selling.figurines.forEach((figurine) => {
+                                marketplaceOffer.offering.figurines.type.push(figurine)
+                            }) 
+
                         } else {
                             console.log('user is selling not doulbe figurines')
                             return res.send()
