@@ -945,6 +945,7 @@
     function createOfferElement(offer) {
             const offerContainer = document.createElement('div');
             offerContainer.className = 'offerContainer';
+            offerContainer.setAttribute('data-key', offer._id);
             const offerHeader = document.createElement('div');
             offerHeader.className = 'offerHeader';
             const offerUser = document.createElement('p');
