@@ -70,6 +70,8 @@ function checkAlreadySellingFigurines(offerSellingFigurines, user_offers) {
     offerSellingFigurines.forEach(sellingFigurine => {
         user_offers.forEach(offer => {
             offer.offering.figurines.forEach(offerFigurine => {
+                console.log(colors.fg.cyan + offerFigurine + colors.reset)
+                console.log(colors.fg.magenta + sellingFigurine + colors.reset)
                 if(sellingFigurine.figurine_id === offerFigurine.figurine_id) {
                     check = false;
                 }
@@ -79,29 +81,29 @@ function checkAlreadySellingFigurines(offerSellingFigurines, user_offers) {
     return check;
 }
 
-function checkDoubleOffer(user_offers, user_new_offer) {
-    let checkRequesting = true;
-    let checkOffering = true;
-    user_offers.forEach(offer => {
-        offer.requesting.figurines.forEach(offerFigurine => {
-            user_new_offer.buying.figurines.forEach(newOfferFigurine => {
-                if(offerFigurine.figurine_id !== newOfferFigurine.figurine_id) {
-                    // checkRequesting = false;
-                    // counter, if different 
-                }
-            });
-        });
-        offer.offering.figurines.forEach(offerFigurine => {
-            user_new_offer.selling.figurines.forEach(newOfferFigurine => {
-                if(offerFigurine.figurine_id !== newOfferFigurine.figurine_id) {
-                    // checkOffering = false;
-                }
-            });
-        });
+// function checkDoubleOffer(user_offers, user_new_offer) {
+//     let checkRequesting = true;
+//     let checkOffering = true;
+//     user_offers.forEach(offer => {
+//         offer.requesting.figurines.forEach(offerFigurine => {
+//             user_new_offer.buying.figurines.forEach(newOfferFigurine => {
+//                 if(offerFigurine.figurine_id !== newOfferFigurine.figurine_id) {
+//                     // checkRequesting = false;
+//                     // counter, if different 
+//                 }
+//             });
+//         });
+//         offer.offering.figurines.forEach(offerFigurine => {
+//             user_new_offer.selling.figurines.forEach(newOfferFigurine => {
+//                 if(offerFigurine.figurine_id !== newOfferFigurine.figurine_id) {
+//                     // checkOffering = false;
+//                 }
+//             });
+//         });
 
-    });
-    return !(checkRequesting || checkOffering);
-}
+//     });
+//     return !(checkRequesting || checkOffering);
+// }
 
 exports.getMarketplace = (req, res) => {
     /* rendering marketplace with values in db */
@@ -217,7 +219,6 @@ exports.postNewOffer = (req, res) => {
                   username: user_profile.username
                 })
                 .then((user_offers) => {
-                  if (checkDoubleOffer(user_offers, req.body)) {
                     if (checkAlreadySellingFigurines(req.body.selling.figurines, user_offers)) {
                       if (checkAreSellingFigurinesDouble(req.body.selling.figurines, user_doublefigurines)) {
                         const marketplaceOffer = new marketplaceOffers({
@@ -251,25 +252,20 @@ exports.postNewOffer = (req, res) => {
                     } else {
                       console.log('user is already selling this figurine')
                     }
-                  } else {
-                    console.log('user already has an identical offer')
-                  }
+                })
+                .catch((error) => {
+                console.log('couldn\'t find user offers \n error : ' + error)
                 })
             })
             .catch((error) => {
-              console.log('couldn\'t find user offers \n error : ' + error)
+            console.log('couldn\'t load user figurines \n error : ' + error)
             })
-        })
-        .catch((error) => {
-          console.log('couldn\'t load user figurines \n error : ' + error)
         })
         .catch((error) => {
           console.log('couldn\'t find the user \n error : ' + error)
         })
-  
     }
-  
-  }
+}
 
 exports.getFilteredMarketplace = (req, res) => {
    
