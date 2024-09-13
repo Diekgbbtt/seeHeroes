@@ -243,7 +243,7 @@
         }
 
         .innerPointsCircle span {
-            font-size: 24px;
+            font-size: 18px;
             font-weight: bold;
             color: #b11616; 
             position: relative;
@@ -331,7 +331,10 @@
             align-items: center;
             margin-left: 20px;
         }
-
+        
+        .elementsPerPage {
+            text-decoration: none;
+        }
 
         .pagination {
             display: flex;
@@ -892,8 +895,8 @@
     const all_offers = <%- JSON.stringify(offers); %> ;
     const elementsPerPageInput = document.getElementById('elementsPerPage');
     let currentPage = 1;
-    const offersPerPage = parseInt(elementsPerPageInput.value);
-    const totalPages = Math.ceil(all_offers.length / offersPerPage);
+    let offersPerPage = parseInt(elementsPerPageInput.value);
+    let totalPages = Math.ceil(all_offers.length / offersPerPage);
 
     // monitor elemtnts per page input change
     elementsPerPageInput.addEventListener('change', function() {
@@ -996,6 +999,7 @@
             if(offer.requesting.points > 0) {
                 const pointsNumber = document.createElement('span');
                 pointsNumber.textContent = offer.requesting.points + ' points';
+                pointsNumber.className = 'pointsNumber';
 
                 const requestingPointsContainer = document.createElement('div');
                 requestingPointsContainer.className = 'requestingPoints';
@@ -1014,7 +1018,7 @@
                 requestingPointsContainer.appendChild(pointsCircle);
                 offerRequestingNames.appendChild(pointsNumber);
                 offerRequestingElements.appendChild(requestingPointsContainer);
-            }  else {
+            }
                 offer.requesting.figurines.forEach(figurine => {
                     const figurineName = document.createElement('span');
                     figurineName.textContent = figurine.figurine_name;
@@ -1024,7 +1028,7 @@
                         noImageDiv.style.cssText = "width: 115px; height: 152px; border-radius: 10px; border: 4px solid #b11616; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; font-size: 10px; line-height: 1.2; margin-bottom: 28px;";
                         noImageDiv.innerHTML = `<span style="font-size: medium; font-weight: bold">${figurine.figurine_name}</span><span>Image</span><span>Not</span><span>Available</span>`;
                         offerRequestingElements.appendChild(noImageDiv);
-                        if(offer.requesting.figurines.indexOf(figurine) > 0){
+                        if(offer.requesting.figurines.indexOf(figurine) > 0 || offer.requesting.points > 0){
                             noImageDiv.style.setProperty('margin-left', '20px');
                             const figurinePlus = document.createElement('span');
                             figurinePlus.textContent = '+';
@@ -1042,7 +1046,7 @@
                             this.onerror = null;
                             this.parentNode.innerHTML = `<div style="width: 100px; height: 150px; border: 2px solid #8b0000; border-radius: 10px; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; font-size: 10px; line-height: 1.2;"><span style="font-size: medium; font-weight: bold">${figurine.figurine_name}</span><span>Image</span><span>Not</span><span>Available</span></div>`;
                         };
-                        if(offer.requesting.figurines.indexOf(figurine) > 0){
+                        if(offer.requesting.figurines.indexOf(figurine) > 0 || offer.requesting.points > 0){
                             figurineElement.style.setProperty('margin-left', '20px');
                             const figurinePlus = document.createElement('span');
                             figurinePlus.textContent = '+';
@@ -1054,7 +1058,6 @@
                     }
 
                 });
-            }
 
             if(offer.offering.points > 0) {
                 const pointsNumber = document.createElement('span');
@@ -1079,7 +1082,7 @@
                 offeringPointsContainer.appendChild(pointsCircle);
                 offerOfferingNames.appendChild(pointsNumber);
                 offerOfferingElements.appendChild(offeringPointsContainer);
-            } else {
+            }
                 offer.offering.figurines.forEach(figurine => {
                     const figurineName = document.createElement('span');
                     figurineName.textContent = figurine.figurine_name;
@@ -1088,7 +1091,7 @@
                         noImageDiv.style.cssText = "width: 115px; height: 152px; border-radius: 10px; border: 4px solid #b11616; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; font-size: 10px; line-height: 1.2; margin-bottom: 28px;";
                         noImageDiv.innerHTML = `<span style="font-size: medium; font-weight: bold">${figurine.figurine_name}</span><span>Image</span><span>Not</span><span>Available</span>`;
                         offerOfferingElements.appendChild(noImageDiv);
-                        if(offer.offering.figurines.indexOf(figurine) > 0){
+                        if(offer.offering.figurines.indexOf(figurine) > 0 || offer.offering.points > 0){
                             noImageDiv.style.setProperty('margin-left', '20px');
                             const figurinePlus = document.createElement('span');
                             figurinePlus.textContent = '+';
@@ -1106,7 +1109,7 @@
                             this.onerror = null;
                             this.parentNode.innerHTML = `<div style="width: 100px; height: 150px; border: 2px solid #8b0000; border-radius: 10px; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; font-size: 10px; line-height: 1.2;"><span style="font-size: medium; font-weight: bold">${figurine.figurine_name}</span><span>Image</span><span>Not</span><span>Available</span></div>`;
                         };
-                        if(offer.offering.figurines.indexOf(figurine) > 0){
+                        if(offer.offering.figurines.indexOf(figurine) > 0|| offer.offering.points > 0){
                             figurineElement.style.setProperty('margin-left', '20px');
                             const figurinePlus = document.createElement('span');
                             figurinePlus.textContent = '+';
@@ -1116,11 +1119,10 @@
                         offerOfferingNames.appendChild(figurineName);
                         figurineElement.appendChild(figurineImg);
                         offerOfferingElements.appendChild(figurineElement);
-                        }
+                    }
 
                 });
 
-            }
         offerRequesting.appendChild(offerRequestingNames);
         offerRequesting.appendChild(offerRequestingElements);
         offerSymbol.appendChild(offerExchangeSymbolNames);
