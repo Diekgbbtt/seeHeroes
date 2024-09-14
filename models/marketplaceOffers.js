@@ -22,7 +22,7 @@ const offerItemSchema = new mongoose.Schema({
                 default: 'jpg'
             }
         }],
-        default: []    
+        default:[]    
     },
     
     points: {

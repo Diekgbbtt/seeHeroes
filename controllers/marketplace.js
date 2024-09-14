@@ -54,12 +54,9 @@ function filterDobuleFigurines(userFigurines) {
 
 function checkIsOfferComplete(offer) {
 
-    console.log(offer)
-    console.log(offer.buying.figurines.lenght)
-    console.log(offer.selling.figurines.lenght)
     let check = true
-    if((offer.buying.figurines.lenght === 0 && offer.buying.points === 0) || 
-        (offer.selling.figurines.lenght === 0 && offer.selling.points === 0)) {
+    if((offer.buying.figurines.length === 0 && offer.buying.points === 0) || 
+        (offer.selling.figurines.length === 0 && offer.selling.points === 0)) {
             check = false;
     }
     return check;
