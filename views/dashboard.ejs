@@ -234,7 +234,7 @@
 
         #modalPointsContent {
             background-color: white; 
-            padding: 20px; 
+            padding: 0px 20px 20px; 
             border-radius: 10px; 
             max-width: 4000px; 
             width: 500px;
@@ -248,14 +248,14 @@
         #closeBuyPointsForm {
             color: #b11616;
             width: 100%;
-            height: 30px;
-            border: 2px solid #f1a92b;
+            height: 15px;
+            padding-bottom: 5px;
         }
 
         #closeBuyPointsForm i {
             width: 30px;
-            height: 100%;
-            font-size: 28px; 
+            height: 60%;
+            font-size: 20px; 
             font-weight: bold;
             position: relative;
             display: flex;
@@ -1056,7 +1056,7 @@
                             <div id="modalPointsContent">
                                 <!-- <span onclick="document.getElementById('modalPoints').style.display='none'; document.getElementById('purchaseSubmitForm').reset(); document.getElementById('totalCost').innerHTML = 'Total Cost: 1 €'; " id="buttonOpenBuyForm" class="close" style="position: relative; color: #b11616; font-size: 36px; cursor: pointer; display: block; height: 30px">&times;</span> -->
                                     <a id="closeBuyPointsForm" >
-                                        <i class="fa-sharp fa-solid fa-xmark" onclick="document.getElementById('modalPoints').style.display='none'; document.getElementById('purchaseSubmitForm').reset(); document.getElementById('totalCost').innerHTML = 'Total Cost: 1 €'; " style="color: #b11616;">&times;</i>
+                                        <i onclick="document.getElementById('modalPoints').style.display='none'; document.getElementById('purchaseSubmitForm').reset(); document.getElementById('totalCost').innerHTML = 'Total Cost: 1 €'; " style="color: #b11616;">&times;</i>
                                     </a>
                                     <form id="purchaseSubmitForm" style="position: relative; padding-top: 30px;">
                                     <select id="amount" name="amount" style="width: 100%; margin-bottom: 10px; background-color: white; color: #b11616; border: 2px solid #b11616; border-radius: 25px; padding: 5px;" onchange="updateTotalCost()">

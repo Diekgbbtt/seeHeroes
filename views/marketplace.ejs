@@ -413,14 +413,42 @@
             padding: 10px 0px;
         }
 
-        .figurinesChoiche p {
-            font-size: 18px;
-            font-weight: bold;
-            margin: 0;
-            padding: 10px 0px 20px 0px;
+        #closeNewofferMenu {
+            color: #ffffff;
+            width: 20px;
+            height: 15px;
+            padding-bottom: 5px;
+            display: flex;
+            justify-content: flex-end;
         }
 
-        .figurinesChoiche input {
+        #closeNewofferMenu i {
+            width: 20px;
+            height: 20px;
+            font-size: 24px; 
+            font-weight: bold;
+            position: relative;
+            display: flex;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+
+        #closeNewofferMenu i:hover,
+        #closeNewofferMenu i:focus {
+            cursor: pointer;
+            text-decoration: none;
+        }
+
+        .mainFigurinesChoiche {
+            width: 100%;
+            height: 80%;
+            display: flex;
+            justify-content: flex-start;
+            align-items: center;
+            gap: 250px
+        }
+
+        .mainFigurinesChoiche input {
             background-color: #b11616;
             border: 2px solid #8b0000;
             border-radius: 10px;
@@ -430,7 +458,7 @@
             outline: none;
         }
 
-        .figurinesChoiche input::placeholder {
+        .mainFigurinesChoiche input::placeholder {
             color: #8b0000;
         }
 
@@ -480,6 +508,7 @@
             flex-direction: row;
             gap: 20px;
             overflow-x: auto;
+            padding: 10px 0px
         }
 
         .figurinesList::-webkit-scrollbar {
@@ -504,7 +533,7 @@
         }
 
         .doubleFigurineName {
-            height: 10%;
+            height: 30px;
             max-width: 300px;
             display: flex;
             justify-content: center;
@@ -815,9 +844,13 @@
         <div class="modalNewOfferContent">
             <div class="NewOfferMain">
                 <div class="figurinesChoiche">
-                    <input type="text" id="search-input" placeholder="&#128269; Enter figurine name">
+                    <div class="mainFigurinesChoiche">
+                        <a id="closeNewofferMenu" >
+                            <i onclick="document.querySelector('.modalNewOffer').style.display='none'; sessionStorage.clear(); document.querySelector('.figurinesList').innerHTML = ''; document.querySelector('.exchangedItems').innerHTML = ''; document.getElementById('suggestions').innerHTML = '';" style="color: #ffffff;">&times;</i>
+                        </a>
+                        <input type="text" id="search-input" placeholder="&#128269; Enter figurine name">
+                    </div>
                     <div id="suggestions"></div>
-                    
                 </div>
                 <div class="figurinesList">
                     <!-- Dynamically filled by JS script -->
