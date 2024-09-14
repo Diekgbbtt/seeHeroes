@@ -113,6 +113,9 @@ function exchangeData(offer, id_user) {
                         { $set: {id_user: offer_user._id} },
                         {new: true}
                     )
+                    .then((updated_user_figurine) => {
+                        console.log(colors.fg.red + "updated user figurine " + updated_user_figurine._id + " to " + updated_user_figurine.id_user + colors.reset)
+                    })
                 })
             }
             // check if current user has active exchange offers for the figurine he is selling(requestingFigurine)
@@ -134,20 +137,23 @@ function exchangeData(offer, id_user) {
                     console.log(colors.fg.yellow + "offer user " + updated_user.username + " has " + updated_user.points + " points" + colors.reset)
                 })
             }
-            if(offer.selling.figurines.length > 0) {
-                offer.selling.figurines.forEach((sellingFigurine) => {
+            if(offer.offering.figurines.length > 0) {
+                offer.offering.figurines.forEach((sellingFigurine) => {
                     usersFigurines.findOneAndUpdate(
                         {id_figurine: sellingFigurine.figurine_id},
                         { $set: {id_user: id_user} },
                         {new: true}
                     )
+                    .then((updated_user_figurine) => {
+                        console.log(colors.fg.red + "updated user figurine " + updated_user_figurine._id + " to " + updated_user_figurine.id_user + colors.reset)
+                    })
                 })
             }
             // check if current user has active exchange offers for the figurine he is selling(requestingFigurine)
-            if(offer.selling.points > 0) {
+            if(offer.offering.points > 0) {
                 users.findOneAndUpdate(
                     {_id: id_user},
-                    { $inc: {points: offer.requesting.points} },
+                    { $inc: {points: offer.offering.points} },
                     {new: true}
                 )
                 .then((updated_user) => {
@@ -155,7 +161,7 @@ function exchangeData(offer, id_user) {
                 })
                 users.findOneAndUpdate(
                     {_id: offer_user._id},
-                    { $inc: {points: -offer.requesting.points} },
+                    { $inc: {points: -offer.offering.points} },
                     {new: true}
                 )
                 .then((updated_user) => {
