@@ -54,11 +54,15 @@ function filterDobuleFigurines(userFigurines) {
 
 function checkIsOfferComplete(offer) {
 
-    if(offer.requesting.hasOwnProperty('figurines') && offer.requesting.points === 0 || 
-        offer.offering.hasOwnProperty('figurines') && offer.offering.points === 0) {
-        return false;
+    console.log(offer)
+    console.log(offer.buying.figurines.lenght)
+    console.log(offer.selling.figurines.lenght)
+    let check = true
+    if((offer.buying.figurines.lenght === 0 && offer.buying.points === 0) || 
+        (offer.selling.figurines.lenght === 0 && offer.selling.points === 0)) {
+            check = false;
     }
-    return true;
+    return check;
 }
 
 function checkAreSellingFigurinesDouble(sellingFigurines, userDoubleFigurines) {
