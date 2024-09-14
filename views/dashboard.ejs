@@ -239,18 +239,24 @@
             max-width: 4000px; 
             width: 500px;
             height: auto;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
         }
 
-        .close {
+        #closeBuyPointsForm {
         color: #b11616;
-        z-index: 1;
-        float: right;
+        width: 100%;
+        height: 30px;
+        float: left;
         font-size: 28px;
         font-weight: bold;
+        border: 2px solid #f1a92b;
         }
 
-        .close:hover,
-        .close:focus {
+        #closeBuyPointsForm:hover,
+        #closeBuyPointsForm:focus {
             cursor: pointer;
             text-decoration: none;
         }
@@ -1040,9 +1046,10 @@
                             </div>
                         </a>
                     </div>
-                        <div id="modalPoints">
+                        <div id="modalPoints" style="padding: 0">
                             <div id="modalPointsContent">
-                                <span onclick="document.getElementById('modalPoints').style.display='none'; document.getElementById('purchaseSubmitForm').reset(); document.getElementById('totalCost').innerHTML = 'Total Cost: 1 €'; " id="buttonOpenBuyForm" class="close" style="position: relative; color: #b11616; font-size: 36px; cursor: pointer; display: block;">&times;</span>
+                                <!-- <span onclick="document.getElementById('modalPoints').style.display='none'; document.getElementById('purchaseSubmitForm').reset(); document.getElementById('totalCost').innerHTML = 'Total Cost: 1 €'; " id="buttonOpenBuyForm" class="close" style="position: relative; color: #b11616; font-size: 36px; cursor: pointer; display: block; height: 30px">&times;</span> -->
+                                <i class="fa-sharp fa-solid fa-xmark" id="closeBuyPointsForm" onclick="document.getElementById('modalPoints').style.display='none'; document.getElementById('purchaseSubmitForm').reset(); document.getElementById('totalCost').innerHTML = 'Total Cost: 1 €'; " style="color: #b11616;"></i>
                                 <form id="purchaseSubmitForm" style="position: relative; padding-top: 30px;">
                                     <select id="amount" name="amount" style="width: 100%; margin-bottom: 10px; background-color: white; color: #b11616; border: 2px solid #b11616; border-radius: 25px; padding: 5px;" onchange="updateTotalCost()">
                                         <% for (let i = 1; i <= 100; i++) { %>
