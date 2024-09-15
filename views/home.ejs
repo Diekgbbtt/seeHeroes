@@ -152,6 +152,30 @@
 				text-align: center;
 				width: 100%;
 			}
+			
+			.faq-section {
+				margin: 20px 0;
+				padding: 10px;
+				width: 100%;
+			}
+			.faq-header {
+				width: 100%;
+				display: flex;
+				align-items: center;
+				cursor: pointer;
+			}
+			.faq-header i {
+				margin-right: 10px;
+			}
+			.faq-item {
+				border-bottom: 3px solid #b11616;
+				padding: 10px 0;
+			}
+			.faq-item p {
+			   font-size: 16px;
+			   font-weight: bold;
+			
+			}
 
 			.row-5 {
 				display: flex; 
@@ -247,7 +271,7 @@
 							<a href="https://www.marvel.com/articles" target="_blank">Marvel World News</a>
 						</div>
 						<div class="parallelogram-3d-box faq"> 
-							<a href="/faq">FAQs</a>
+							<a href="#faq">FAQs</a>
 						</div>
 
 					</div>
@@ -289,7 +313,7 @@
 					</div>
 						<br>
 					<div class="mobile-menu-row mobile-row-4">
-						<a href="/faq"> FAQs </a>
+						<a href="/#faq"> FAQs </a>
 					</div>
 				</div>
 			</div>
@@ -351,8 +375,37 @@
 			</div>
 			<div style="height: 7em;"></div>
 			<div class="row row-6" style="width:100%; height: auto; display: flex; justify-content: center; align-items: center;">
-				
+				<div id="faq" class="faq-section">
+					<div class="faq-header">
+						<i class="fas fa-chevron-right" id="faq-toggle" onclick="toggleFAQ(this)"></i>
+						<h3>FAQ</h3>
+					</div>
+					<div class="faq-content" style="display: none;">
+						<div class="faq-item">
+							<p><strong>Q: What is See Heroes?</strong> A: See Heroes is a platform where you can collect and trade Marvel character figurines.</p>
+						</div>
+						<div class="faq-item">
+							<p><strong>Q: How do I start collecting?</strong> A: Sign up for an account and purchase your first packet of figurines!</p>
+						</div>
+						<div class="faq-item">
+							<p><strong>Q: Can I trade figurines with other users?</strong> A: Yes, you can trade figurines in our Marketplace section.</p>
+						</div>
+					</div>
+				</div>
 			</div>
+			<script>
+				function toggleFAQ(target) {
+						var content = document.querySelector('.faq-content');
+						var icon = target;
+						if (content.style.display === 'none') {
+							content.style.display = 'block';
+							icon.classList.replace('fa-chevron-right', 'fa-chevron-down');
+						} else {
+							content.style.display = 'none';
+							icon.classList.replace('fa-chevron-down', 'fa-chevron-right');
+						}
+					}
+				</script>
 			<div class="row row-5">
 				<div class="col col-1" style="flex: 1;">
 					<div class="block block-1 paragraph">
