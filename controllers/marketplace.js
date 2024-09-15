@@ -234,7 +234,7 @@ exports.getMarketplace = (req, res) => {
                             console.log(utils)
                             const {user_singlefigurines, user_doublefigurines} = utils.checkDoubleFigs(user_figurines); // filterDobuleFigurines(user_figurines);
                             console.log(user_doublefigurines)
-                            res.render('marketplace', {offers: offers, user_doublefigurines: user_doublefigurines, user_points: user_profile.points});
+                            res.render('marketplace', {offers: offers, user: req.session.passport.user, user_doublefigurines: user_doublefigurines || [], user_points: user_profile.points});
                         })
                         .catch((error) => {
                             console.log('couldn\'t get user figurines \n error : ' + error)
@@ -373,7 +373,7 @@ exports.postNewOffer = (req, res) => {
                 id_user: user_profile.id
                 })
                 .then((user_figurines) => {
-                const {user_singlefigurines, user_doublefigurines}  = module.exports.checkDoubleFigs(user_figurines);
+                const {user_singlefigurines, user_doublefigurines}  = utils.checkDoubleFigs(user_figurines);
                 console.log(colors.fg.blue + req.body + colors.reset)
                 // check user isn't  creating an offer equal to another of his own
                 marketplaceOffers.find({
