@@ -365,7 +365,7 @@ exports.openPacket = (req, res) => {
             return res.render('dashboard', { messages: { errors: req.flash('errors') } })
         })
     } else {
-        loginRedirect(req, res);
+        utils.loginRedirect(req, res);
     }
 }
 

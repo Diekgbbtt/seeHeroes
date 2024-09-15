@@ -12,9 +12,11 @@ function checkDoubleFigs(userFigurines) {
             if(figurine._id !== figurine_1._id && figurine.id_figurine === figurine_1.id_figurine) {
                 userFigurines.splice(userFigurines.indexOf(figurine_1), 1);
                 userDoubleFigurines.push(figurine_1);
+                console.log(userDoubleFigurines)
             }
         });
     });
+    
     return {userFigurines, userDoubleFigurines};
   }
 
