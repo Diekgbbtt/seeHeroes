@@ -77,8 +77,20 @@ const swaggerOptions = {
           }
         }
       }
+    },
+    securitySchemes: {
+      SessionAuth: {
+        type: 'apiKey',
+        in: 'cookie',
+        name: 'startercookie'
+      }
     }
   },
+  security: [
+    {
+      SessionAuth: []
+    }
+  ],
   apis: ['./controllers/account.js', './controllers/home.js', './controllers/dashboard.js'] // Path to the API docs
 };
 

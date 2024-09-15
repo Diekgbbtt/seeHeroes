@@ -10,7 +10,7 @@ const validator = require('validator');
 
 /**
  * @swagger
- *  /login:
+ *  /account/login:
  *      get:
  *        summary: load login page
  *        description: >
@@ -35,7 +35,7 @@ exports.getLogin = (req, res) => {
 
 /**
  * @swagger
- * /login:
+ * /account/login:
  *   post:
  *     summary: Load login page
  *     description: >
@@ -83,7 +83,7 @@ exports.postLogin = (req, res, next) => {
 
 /**
  * @swagger
- * /signup:
+ * /account/signup:
  *   get:
  *     summary: Load signup page
  *     description: >
@@ -158,11 +158,13 @@ exports.postSignup = async (req, res, next) => {
 
 /**
  * @swagger
- * /logout:
- *   post:
+ * /account/logout:
+ *   get:
  *     summary: Log out the user
  *     description: >
  *       Logs out the authenticated user and redirects them to the home page.
+ *     security:
+ *         - SessionAuth: []
  *     responses:
  *       200:
  *         description: Successful request; user is logged out and redirected to the login page.
@@ -172,6 +174,10 @@ exports.postSignup = async (req, res, next) => {
  *               type: string
  */
 exports.Logout = (req, res) => {
+  if(!req.isAuthenticated()) {
+    req.flash('errors', { msg: 'You are not logged in.' });
+    return res.redirect('/account/login');
+  }
   req.logout((err) => {
     if (err) console.log('Error : Failed to logout.', err);
     req.session.destroy((err) => {
