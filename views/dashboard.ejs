@@ -265,19 +265,27 @@
             padding: 12px 20px;
             display: inline-block;
             color: #b11616;
-            border: 3px solid #8b0000;
+            border: 2px solid #8b0000;
             box-sizing: border-box;
             border-radius: 25px;
+
+        }
+        
+
+        #editProfileForm input[type="text"]:focus,
+        #editProfileForm input[type="email"]:focus {
+            outline: none;
         }
 
+
         #editProfileForm input[type="submit"] {
-            background-color: #8b0000;
-            color: #ffffff;
+            background-color: #ffffff;
+            color: #b11616;
             padding: 10px;
             cursor: pointer;
             width: 60%;
             border-radius: 25px;
-            border: 1px solid #ffffff;
+            border: 2px solid #8b0000;
             font-weight: bold;
         }
 
@@ -338,7 +346,7 @@
             left: 0; 
             width: 100%; 
             height: 100%; 
-            background-color: rgba(0,0,0,0.5); 
+            background-color: rgba(0,0,0,0.7); 
             justify-content: center; 
             align-items: center;
         }
@@ -348,7 +356,7 @@
             padding: 0px 20px 20px; 
             border-radius: 10px; 
             max-width: 4000px; 
-            width: 500px;
+            width: auto;
             height: auto;
             display: flex;
             flex-direction: column;
@@ -359,14 +367,14 @@
         #closeBuyPointsForm {
             color: #b11616;
             width: 100%;
-            height: 15px;
+            height: 30px;
             padding-bottom: 5px;
         }
 
         #closeBuyPointsForm i {
             width: 30px;
-            height: 60%;
-            font-size: 20px; 
+            height: 100%;
+            font-size: 30px; 
             font-weight: bold;
             position: relative;
             display: flex;
@@ -386,8 +394,8 @@
             color: white; 
             padding: 20px; 
             border-radius: 10px;
-            width: 93%;
-            height: 90%;
+            width: 400px;
+            height: 150px;
         }
 
         #purchaseSubmitForm input[type="submit"]:hover {
@@ -1074,7 +1082,7 @@
 		<div class="row row-1">
 			<div class="row-content">
 				<div class="col col-1 ">
-					<div class="block block-1 title"> 
+					<div class="block block-1 title" onclick="window.location.href = '/';" style="cursor: pointer;"> 
                         <h3> See Heroes </h3> 
                     </div>
 				</div>
@@ -1147,11 +1155,11 @@
                         <a id="closeEditMenuForm">
                             <i onclick="document.getElementById('modalEditMenu').style.display='none'; document.getElementById('editProfileForm').reset();" >&times;</i>
                         </a>
-                        <form id="editProfileForm" style="position: relative;">
-                            <input type="text" id="name" name="name" placeholder="Name" required>
-                            <input type="text" id="username" name="username" placeholder="Username" required>
-                            <input type="email" id="email" name="email" placeholder="Email" required>
-                            <input type="submit" value="Update Profile" >
+                        <form id="editProfileForm" style="position: relative; color: #b11616;">
+                            <input type="text" id="name" name="name" placeholder="Name" style="color: #b11616;">
+                            <input type="text" id="username" name="username" placeholder="Username" style="color: #b11616;">
+                            <input type="email" id="email" name="email" placeholder="Email" required style="color: #b11616;">
+                            <input type="submit" value="Update Profile" style="color: #b11616;">
                         </form>
                     </div>
                 </div>
@@ -1181,7 +1189,7 @@
                                         <i onclick="document.getElementById('modalPoints').style.display='none'; document.getElementById('purchaseSubmitForm').reset(); document.getElementById('totalCost').innerHTML = 'Total Cost: 1 €'; " style="color: #b11616;">&times;</i>
                                     </a>
                                     <form id="purchaseSubmitForm" style="position: relative; padding-top: 30px;">
-                                    <select id="amount" name="amount" style="width: 100%; margin-bottom: 10px; background-color: white; color: #b11616; border: 2px solid #b11616; border-radius: 25px; padding: 5px;" onchange="updateTotalCost()">
+                                    <select id="amount" name="amount" style="width: 60%; margin-bottom: 10px; background-color: white; color: #b11616; border: 2px solid #b11616; border-radius: 25px; padding: 5px;" onchange="updateTotalCost()">
                                         <% for (let i = 1; i <= 100; i++) { %>
                                             <option value="<%= i %>"><%= i %> points</option>
                                         <% } %>
@@ -1195,7 +1203,7 @@
                                             document.getElementById('totalCost').innerHTML = 'Total Cost: ' + amount + '€';
                                         }
                                     </script>
-                                    <input type="submit" value="Purchase" style="width: 100%; margin-top: 10px; padding: 10px; background-color: white; color: #b11616; border: 2px solid #b11616; border-radius: 25px; cursor: pointer;">
+                                    <input type="submit" value="Purchase" style="width: 60%; margin-top: 10px; padding: 10px; background-color: white; color: #b11616; border: 2px solid #b11616; border-radius: 25px; cursor: pointer;">
                                 </form>
                             </div>
                         </div>
