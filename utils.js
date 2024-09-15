@@ -21,5 +21,11 @@ function checkDoubleFigs(userFigurines) {
   }
 
 
+function handleError(errorMsg, req, res) {
+    req.flash('errors', { msg: errorMsg });
+    return res.status(400).render('home', { messages: {errors: req.flash('errors') }});
+  }
+
 module.exports.loginRedirect = loginRedirect;
 module.exports.checkDoubleFigs = checkDoubleFigs;
+module.exports.handleError = handleError;

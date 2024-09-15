@@ -1126,7 +1126,7 @@
                                 <span id="pageNum"></span>
                                 <span id="nextPage">→</span>
                             </div>
-                            <div class="userFigurines" value="<%= user_figurines %>">
+                            <div class="userFigurines">
                                 <!-- This container will be filled dynamically on dashboard load -->
                             </div>
                         </div>
@@ -1238,6 +1238,13 @@
             </div>
         </div>
     </div>
+
+    <% if(messages.errors) { %>
+        <script>
+            const errors = <%- JSON.stringify(messages.errors) %>;
+            alert(errors[0].msg);
+        </script>
+    <% } %>
     
     
 

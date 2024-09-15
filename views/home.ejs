@@ -373,6 +373,12 @@
 					</div>
 				</div>
 			</div>
+			<% if(messages.errors) { %>
+				<script>
+					const errors = <%- JSON.stringify(messages.errors) %>;
+					alert(errors[0].msg);
+				</script>
+			<% } %>
 	</body>
 
 </html>

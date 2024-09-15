@@ -53,6 +53,8 @@ const colors = {
  *               type: string
  *       302:
  *         description: Redirects to login page if not authenticated.
+ *       400:
+ *         description: bad request parameter or malformed request, redirect to home page
  */
 exports.getDashboard = async (req, res) => {
     /* middleware that evaluates if the request has SessionID and if it is correct */
@@ -71,25 +73,18 @@ exports.getDashboard = async (req, res) => {
                                 return res.render('dashboard', {user_profile: user_profile, user_packets: user_packets, user_figurines: userFigurines, user_doublefigurines: userDoubleFigurines } );
                             })
                             .catch((error) => {
-                                console.log('couldn\'t find user figurines \n error : ' + error)
-                                req.flash('errors', { msg: "couldn\'t find user figurines \n error : " + error });
-                                return res.render('dashboard', { messages: { errors: req.flash('errors') } });
+                                utils.handleError('couldn\'t find user figurines \n error : ' + error, req, res);
                             })
                     })
                     .catch((error) => {
-                        console.log('couldn\'t find user packets \n error : ' + error)
-                        req.flash('errors', { msg: "couldn\'t find user packets \n error : " + error });
-                        return res.render('dashboard', { messages: { errors: req.flash('errors') } });
+                        utils.handleError('couldn\'t find user packets \n error : ' + error, req, res);
                     })                
             })
             .catch((error) => {
-                console.log(error);
-                req.flash('errors', { msg: "error validating user" });
-                return res.render('dashboard', { messages: { errors: req.flash('errors') } });
-
+                utils.handleError('couldn\'t find user \n error : ' + error, req, res);
             });
         } else {
-            loginRedirect(req, res);
+            utils.loginRedirect(req, res);
         }
 }
 
@@ -123,6 +118,8 @@ exports.getDashboard = async (req, res) => {
  *                   type: boolean
  *       302:
  *         description: Redirects to login page if not authenticated.
+ *       400:
+ *         description: bad request parameter or malformed request, redirect to home page
  */
 exports.postBuyPoints =  async (req, res) => {
     if(req.isAuthenticated()) {
@@ -135,13 +132,10 @@ exports.postBuyPoints =  async (req, res) => {
                 res.json({ success: true })
             })
             .catch((error) => {
-                console.log('errors' + error);
-                req.flash('errors', { msg: "error validating user" });
-                // return res.render('dashboard', { messages: { errors: req.flash('errors') } })
-            
+                utils.handleError('couldn\'t find user and update points \n error : ' + error, req, res,);
             });
         } else {
-            loginRedirect(req, res);
+            utils.loginRedirect(req, res);
     }
 }
 
@@ -167,9 +161,7 @@ exports.getPacketPage = async (req, res) => {
     if(req.isAuthenticated()) {
         return res.render('packetspurchase')
     } else {
-        
-        alert("you must be logged in to access this page")
-        res.redirect('/')
+        utils.loginRedirect(req, res);
     }
 
 }
@@ -226,33 +218,25 @@ exports.postBuyPackets = async (req, res) => {
                                         console.log("user " + req.session.passport.user + " created successfully" + " packet " + packet._id)
                                     })
                                     .catch((error) => {
-                                        console.log('error saving packet \n error: ${error}');
-                                        req.flash('errors', { msg: "error saving packet \n error: ${error}" });
-                                        return res.render('packetspurchase', { messages: { errors: req.flash('errors') } });
+                                        utils.handleError('error saving packet \n error: ' + error, req, res);
                                     });
                                 }
                                 return res.redirect('/account/dashboard');
                         })
                         .catch((error) => {
-                            console.log('error getting user and decreasing points. \n Error: ', error);
-                            req.flash('errors', { msg: "error getting user and decreasing points. Error: ${error}" });
-                            return res.render('packetspurchase', { messages: { errors: req.flash('errors') } });
-
+                            utils.handleError('error getting user and decreasing points. \n Error: ' + error, req, res);
                         });
                 } else {
-                    console.log('user hasn\'t enough points');
-                    req.flash('errors', { msg: "you don't have enough points" });
-                    return res.render('packetspurchase', { messages: { errors: req.flash('errors') } });
+                    utils.handleError('user hasn\'t enough points', req, res);
                 }
             })
             .catch((error) => {
-                console.log('errors' + error);
-                req.flash('errors', { msg: "error validating user" });
+                utils.handleError('errors getting user profile' + error, req, res);
             });
 
 
     } else {
-        loginRedirect(req, res);
+        utils.loginRedirect(req, res);
     }
 }
 
@@ -360,9 +344,7 @@ exports.openPacket = (req, res) => {
             fetchFigure(); // Start the fetching process
         })
         .catch((error) => {
-            console.log('couldn\'t find and delete packet. \n error : ' + error)
-            req.flash('errors', { msg: "couldn\'t find and delete packet. \n error : " + error });
-            return res.render('dashboard', { messages: { errors: req.flash('errors') } })
+            utils.handleError('couldn\'t find and delete packet. \n error : ' + error, req, res);
         })
     } else {
         utils.loginRedirect(req, res);
@@ -426,9 +408,7 @@ exports.getCharacter = (req, res) => {
                     res.send(figurine)
             })
             .catch((error) => {
-            console.log('Error fetching API: ' + error)
-            req.flash('errors', { msg: "Error fetching API: " + error });
-            return res.render('dashboard', { messages: { errors: req.flash('errors') } })
+                utils.handleError('Error fetching API: ' + error, req, res);
             })
     } else {
         utils.loginRedirect(req, res);
