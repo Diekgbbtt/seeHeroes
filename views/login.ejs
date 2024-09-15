@@ -95,11 +95,10 @@
     <footer>
         <p>&copy; 2023 See Heroes. All rights reserved.</p>
     </footer>
-    <% if(messages.redirectError) { %>
+    <% if(messages.redirectErrors) { %>
         <script>
-            const redirectError = <%- JSON.stringify(messages.redirectError) %>;
-            console.log(redirectError);
-            alert(redirectError[0].msg);
+            const redirectErrors = <%- JSON.stringify(messages.redirectErrors) %>;
+            alert(redirectErrors[0].msg);
         </script>
     <% } %>
 </body>

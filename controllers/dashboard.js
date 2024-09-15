@@ -35,21 +35,6 @@ const colors = {
     }
   };
 
-  function checkDoubleFigs(userFigurines) {
-
-    const userDoubleFigurines = [];
-
-    userFigurines.forEach(figurine => {
-        userFigurines.forEach(figurine_1 => {
-            if(figurine._id !== figurine_1._id && figurine.id_figurine === figurine_1.id_figurine) {
-                userFigurines.splice(userFigurines.indexOf(figurine_1), 1);
-                userDoubleFigurines.push(figurine_1);
-            }
-        });
-    });
-    return {userFigurines, userDoubleFigurines};
-  }
-  
 
 /**
  * @swagger
@@ -80,7 +65,7 @@ exports.getDashboard = async (req, res) => {
                         usersFigurines.find( { id_user: user_profile.id } )
                             .then((user_figurines) => {
                                 console.log(user_figurines)
-                                const { userFigurines, userDoubleFigurines } = checkDoubleFigs(user_figurines)
+                                const { userFigurines, userDoubleFigurines } = utils.checkDoubleFigs(user_figurines)
                                 console.log(colors.fg.black + colors.bg.red + "list of user figurine : \n" + userFigurines + colors.reset)
                                 console.log(colors.fg.black + colors.bg.yellow + "list of user double figurine : \n" + userDoubleFigurines + colors.reset)
                                 return res.render('dashboard', {user_profile: user_profile, user_packets: user_packets, user_figurines: userFigurines, user_doublefigurines: userDoubleFigurines } );
@@ -103,6 +88,8 @@ exports.getDashboard = async (req, res) => {
                 return res.render('dashboard', { messages: { errors: req.flash('errors') } });
 
             });
+        } else {
+            loginRedirect(req, res);
         }
 }
 
@@ -154,9 +141,7 @@ exports.postBuyPoints =  async (req, res) => {
             
             });
         } else {
-        
-        alert("you must be logged in to access this page")
-        res.redirect('/')
+            loginRedirect(req, res);
     }
 }
 
@@ -267,9 +252,7 @@ exports.postBuyPackets = async (req, res) => {
 
 
     } else {
-        
-        alert("you must be logged in to access this page")
-        res.redirect('/')
+        loginRedirect(req, res);
     }
 }
 
@@ -382,7 +365,7 @@ exports.openPacket = (req, res) => {
             return res.render('dashboard', { messages: { errors: req.flash('errors') } })
         })
     } else {
-        loginRedirect();
+        loginRedirect(req, res);
     }
 }
 
@@ -448,7 +431,7 @@ exports.getCharacter = (req, res) => {
             return res.render('dashboard', { messages: { errors: req.flash('errors') } })
             })
     } else {
-        utils.loginRedirect();
+        utils.loginRedirect(req, res);
     }
 }
 
