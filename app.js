@@ -91,7 +91,7 @@ const swaggerOptions = {
       SessionAuth: []
     }
   ],
-  apis: ['./controllers/account.js', './controllers/home.js', './controllers/dashboard.js'] // Path to the API docs
+  apis: ['./controllers/account.js', './controllers/home.js', './controllers/dashboard.js', './controllers/marketplace.js'] // Path to the API docs
 };
 
 const swaggerDocs = swaggerJsdoc(swaggerOptions);

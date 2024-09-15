@@ -241,7 +241,7 @@ exports.getMarketplace = async (req, res) => {
 
 /**
  * @swagger
- * /exchange/{exchange_offer_id}:
+ * /marketplace/exchange/{exchange_offer_id}:
  *   post:
  *     summary: Exchange an offer
  *     description: Handles the exchange of offers based on user authentication and available resources.
@@ -266,12 +266,10 @@ exports.getMarketplace = async (req, res) => {
  *                 errorMessage:
  *                   type: string
  *                   example: ''
- *       401:
+ *       302:
  *         description: Unauthorized, user needs to be authenticated
- *       404:
+ *       400:
  *         description: Not Found, resource could not be found
- *       500:
- *         description: Internal Server Error, something went wrong on the server
  */
 exports.Exchange = (req, res) => {
 
@@ -326,7 +324,7 @@ exports.Exchange = (req, res) => {
 
 /**
  * @swagger
- * /heroes/{search_term}:
+ * /marketplace/newoffer/search/{search_term}:
  *   get:
  *     summary: Get pertinent Marvel heroes
  *     description: Retrieves Marvel heroes whose names start with the provided search term.
@@ -356,12 +354,10 @@ exports.Exchange = (req, res) => {
  *                   image_path:
  *                     type: string
  *                     description: URL of the hero's image
- *       401:
- *         description: Unauthorized, user needs to be authenticated
- *       404:
- *         description: Not Found, Marvel API or heroes not found
- *       500:
- *         description: Internal Server Error, something went wrong on the server
+ *       302:
+ *         description: Redirection due to unauthorized access, user needs to be authenticated
+ *       400:
+ *         description: Bad Request, invalid search term or Marvel API error
  */
 exports.getPertinentHeroes = (req, res) => {
 
@@ -411,7 +407,7 @@ exports.getPertinentHeroes = (req, res) => {
 
 /**
  * @swagger
- * /offer:
+ * /marketplace/newoffer/confirm:
  *   post:
  *     summary: Create a new marketplace offer
  *     description: Allows an authenticated user to post a new offer to the marketplace.
@@ -430,7 +426,17 @@ exports.getPertinentHeroes = (req, res) => {
  *                   figurines:
  *                     type: array
  *                     items:
- *                       type: string
+ *                       type: object
+ *                       properties: 
+ *                          figurine_name:
+ *                              type: string
+ *                              description: hero name
+ *                          figurine_image_path:
+ *                              type: string
+ *                              description: hero image url
+ *                          figurine_id:
+ *                              type: string
+ *                              description: id that identifies the hero                       
  *                     description: List of figurines requested
  *               selling:
  *                 type: object
@@ -440,8 +446,17 @@ exports.getPertinentHeroes = (req, res) => {
  *                     description: Points offered in exchange
  *                   figurines:
  *                     type: array
- *                     items:
- *                       type: string
+ *                       type: object
+ *                       properties: 
+ *                          figurine_name:
+ *                              type: string
+ *                              description: hero name
+ *                          figurine_image_path:
+ *                              type: string
+ *                              description: hero image url
+ *                          figurine_id:
+ *                              type: string
+ *                              description: id that identifies the figurine        
  *                     description: List of figurines offered
  *             required:
  *               - buying
@@ -462,6 +477,8 @@ exports.getPertinentHeroes = (req, res) => {
  *                   example: ''
  *       400:
  *         description: Bad Request, offer data is incomplete or invalid
+ *       302:
+ *         description: Unauthorized request, redirect to login page
  * 
  */
 exports.postNewOffer = (req, res) => {
