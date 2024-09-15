@@ -164,7 +164,11 @@
             font-weight: bold;
         }
 
-        .row-2 .col-1 .data .edit-button a{
+        .edit-button:hover {
+            cursor: pointer;
+        }
+
+        .row-2 .col-1 .data .edit-button span{
             display: inline-block; 
             padding: 10px 20px; 
             background-color: #b11616; 
@@ -1021,11 +1025,25 @@
                         <p><%= user_profile.username %></p>
                         <p><%= user_profile.email %></p>
                         <br>
-                        <div class="edit-button">
-                            <a href="/dashboard/edit">Edit Profile</a>
+                        <div onclick="openEditMenu()" class="edit-button">
+                            <span>Edit Profile</span>
                         </div>
                     </div>
 				</div>
+                <div id="modalEditMenu" style="padding: 0">
+                    <div id="modalEditMenuContent">
+                        <a id="closeEditMenuForm">
+                            <i onclick="document.getElementById('modalEditMenu').style.display='none'; document.getElementById('editProfileForm').reset();" style="color: #b11616;">&times;</i>
+                        </a>
+                        <form id="editProfileForm" style="position: relative; padding-top: 30px;">
+                            <input type="text" id="name" name="name" placeholder="Name" required>
+                            <input type="text" id="username" name="username" placeholder="Username" required>
+                            <input type="email" id="email" name="email" placeholder="Email" required>
+                            <input type="submit" value="Update Profile" style="width: 100%; margin-top: 10px; padding: 10px; background-color: white; color: #b11616; border: 2px solid #b11616; border-radius: 25px; cursor: pointer;">
+                        </form>
+                    </div>
+                </div>
+                
 				
 				<div class="col col-2 mrvcard">
 					<div class="container-mrvcard">

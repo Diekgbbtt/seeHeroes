@@ -19,7 +19,6 @@ Used in conjunction with express-session middleware to persist session informati
 const homeController = require('./controllers/home');
 const accountRoutes = require('./routes/accountRoutes');
 const marketplaceRoutes = require('./routes/marketplaceRoutes');
-const packetRoutes = require('./routes/packetRoutes');
 
 /* Passport configuration for authentication*/
 // const passportConfig = require('./config/passport')
@@ -184,7 +183,6 @@ This allows the app to redirect users back to the page they were trying to acces
 app.use('/faq', homeController.getFAQ);
 app.use('/account', accountRoutes);
 app.use('/marketplace', marketplaceRoutes);
-app.use('/packets', packetRoutes);
 app.use('/', homeController.getHome);
 // app.use('/addpoints', stripetestpayment)
 

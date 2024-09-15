@@ -245,6 +245,8 @@ exports.getMarketplace = async (req, res) => {
  *   post:
  *     summary: Exchange an offer
  *     description: Handles the exchange of offers based on user authentication and available resources.
+ *     security:
+ *         - SessionAuth: []
  *     parameters:
  *       - name: exchange_offer_id
  *         in: path
@@ -328,6 +330,8 @@ exports.Exchange = (req, res) => {
  *   get:
  *     summary: Get pertinent Marvel heroes
  *     description: Retrieves Marvel heroes whose names start with the provided search term.
+ *     security:
+ *         - SessionAuth: []
  *     parameters:
  *       - name: search_term
  *         in: path
@@ -411,6 +415,8 @@ exports.getPertinentHeroes = (req, res) => {
  *   post:
  *     summary: Create a new marketplace offer
  *     description: Allows an authenticated user to post a new offer to the marketplace.
+ *     security:
+ *         - SessionAuth: []
  *     requestBody:
  *       content:
  *         application/json:
@@ -428,15 +434,15 @@ exports.getPertinentHeroes = (req, res) => {
  *                     items:
  *                       type: object
  *                       properties: 
- *                          figurine_name:
- *                              type: string
- *                              description: hero name
- *                          figurine_image_path:
- *                              type: string
- *                              description: hero image url
- *                          figurine_id:
- *                              type: string
- *                              description: id that identifies the hero                       
+ *                         figurine_name:
+ *                           type: string
+ *                           description: Hero name
+ *                         figurine_image_path:
+ *                           type: string
+ *                           description: Hero image URL
+ *                         figurine_id:
+ *                           type: string
+ *                           description: ID that identifies the hero                       
  *                     description: List of figurines requested
  *               selling:
  *                 type: object
@@ -446,17 +452,18 @@ exports.getPertinentHeroes = (req, res) => {
  *                     description: Points offered in exchange
  *                   figurines:
  *                     type: array
+ *                     items:
  *                       type: object
  *                       properties: 
- *                          figurine_name:
- *                              type: string
- *                              description: hero name
- *                          figurine_image_path:
- *                              type: string
- *                              description: hero image url
- *                          figurine_id:
- *                              type: string
- *                              description: id that identifies the figurine        
+ *                         figurine_name:
+ *                           type: string
+ *                           description: Hero name
+ *                         figurine_image_path:
+ *                           type: string
+ *                           description: Hero image URL
+ *                         figurine_id:
+ *                           type: string
+ *                           description: ID that identifies the figurine        
  *                     description: List of figurines offered
  *             required:
  *               - buying
@@ -479,7 +486,6 @@ exports.getPertinentHeroes = (req, res) => {
  *         description: Bad Request, offer data is incomplete or invalid
  *       302:
  *         description: Unauthorized request, redirect to login page
- * 
  */
 exports.postNewOffer = (req, res) => {
     if (req.isAuthenticated()) {

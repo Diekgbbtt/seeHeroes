@@ -44,6 +44,8 @@ const colors = {
  *     description: >
  *       Retrieves the dashboard for the authenticated user, including user profile, 
  *       packets, and figurines. Redirects to login page if not authenticated.
+ *     security:
+ *         - SessionAuth: []
  *     responses:
  *       200:
  *         description: Successful request; user dashboard is displayed.
@@ -96,6 +98,8 @@ exports.getDashboard = async (req, res) => {
  *     description: >
  *       Allows the authenticated user to buy points by updating their profile.
  *       If not authenticated, redirects to login page.
+ *     security:
+ *         - SessionAuth: []
  *     requestBody:
  *       required: true
  *       content:
@@ -147,6 +151,8 @@ exports.postBuyPoints =  async (req, res) => {
  *     description: >
  *       Renders the packet purchase page for authenticated users. Redirects to login 
  *       if not authenticated.
+ *     security:
+ *         - SessionAuth: []
  *     responses:
  *       200:
  *         description: Successful request; packet purchase page is displayed.
@@ -175,6 +181,8 @@ exports.getPacketPage = async (req, res) => {
  *       Allows the authenticated user to purchase packets using points.
  *       If the user has enough points, packets are added to their account. Otherwise, 
  *       an error is displayed.
+ *     security:
+ *         - SessionAuth: []
  *     requestBody:
  *       required: true
  *       content:
@@ -250,6 +258,8 @@ exports.postBuyPackets = async (req, res) => {
  *     description: >
  *       Opens a packet by removing it from the user's account and fetching the figurines 
  *       included in the packet. Displays all the figurines obtained.
+ *     security:
+ *         - SessionAuth: []
  *     parameters:
  *       - in: path
  *         name: packet_id
