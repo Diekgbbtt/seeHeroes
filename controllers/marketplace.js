@@ -187,43 +187,42 @@ function exchangeData(offer, id_user) {
     return check;
 };
 
-// function checkDoubleOffer(user_offers, user_new_offer) {
-//     let checkRequesting = true;
-//     let checkOffering = true;
-//     user_offers.forEach(offer => {
-//         offer.requesting.figurines.forEach(offerFigurine => {
-//             user_new_offer.buying.figurines.forEach(newOfferFigurine => {
-//                 if(offerFigurine.figurine_id !== newOfferFigurine.figurine_id) {
-//                     // checkRequesting = false;
-//                     // counter, if different 
-//                 }
-//             });
-//         });
-//         offer.offering.figurines.forEach(offerFigurine => {
-//             user_new_offer.selling.figurines.forEach(newOfferFigurine => {
-//                 if(offerFigurine.figurine_id !== newOfferFigurine.figurine_id) {
-//                     // checkOffering = false;
-//                 }
-//             });
-//         });
-
-//     });
-//     return !(checkRequesting || checkOffering);
-// }
+/**
+ * @swagger
+ * /marketplace:
+ *   get:
+ *     summary: Get marketplace offers
+ *     description: >
+ *       Retrieve all marketplace offers. If authenticated, it will also return the user's figurines and points.
+ *     responses:
+ *       200:
+ *         description: Successful request; returns marketplace offers and user data (if authenticated).
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 offers:
+ *                   type: array
+ *                   items:
+ *                     type: object
+ *                     description: List of marketplace offers.
+ *                 user_doublefigurines:
+ *                   type: array
+ *                   items:
+ *                     type: object
+ *                     description: User's double figurines if authenticated.
+ *                 user_points:
+ *                   type: integer
+ *                   description: Points available for the user if authenticated.
+ *       401:
+ *         description: Unauthorized, user is not authenticated.
+ *       500:
+ *         description: Internal server error.
+ */
 
 exports.getMarketplace = (req, res) => {
-    /* rendering marketplace with values in db */
 
-    /*  const all_offers;
-        marketplaceOffers.find().limit(500)
-        .then(offers => {
-            while offers.lenght>0
-                all_offers.push(offers)
-                offers = await marketplaceOffers.find().limit(500).skip(all_offers.lenght)
-            res.render('marketplace', {offers: all_offers});
-        })
-    */
- 
     marketplaceOffers.find()
         .then((offers) => {
             if(req.isAuthenticated()) {

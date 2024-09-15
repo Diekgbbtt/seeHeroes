@@ -9,6 +9,8 @@ const mongoose = require('mongoose');
 const passport = require('passport');
 const MongoStore = require('connect-mongo');
 const flash = require('express-flash');
+const swaggerJsdoc = require('swagger-jsdoc');
+const swaggerUi = require('swagger-ui-express');
 /* Connect-mongo is a MongoDB session store for Express and Connect.
 Specifically designed to store session data in MongoDB.
 Used in conjunction with express-session middleware to persist session information in MongoDB instead of in-memory storage.
@@ -29,6 +31,60 @@ const app = express();
 
 app.use(express.static(path.join(__dirname)));
 
+
+const swaggerOptions = {
+  definition: {
+    openapi: '3.0.0',
+    info: {
+      title: 'see-heroes APIs swagger',
+      version: '1.0.0',
+      description: 'backend portal for web application see-heroes, exposes all application APIs',
+    },
+    servers: [
+      {
+        url: 'http://localhost:8080',
+      },
+    ],
+  },
+  components: {
+    schemas: {
+      Figurine: {
+        type: 'object',
+        properties: {
+          id_user: {
+            type: 'string',
+          },
+          id_figurine: {
+            type: 'string',
+          },
+          name: {
+            type: 'string',
+          },
+          image_path: {
+            type: 'string',
+          },
+          ext: {
+            type: 'string',
+          },
+          description: {
+            type: 'string'
+          },
+          appearances: {
+            type: 'array',
+            items: {
+              type: 'integer'
+            }
+          }
+        }
+      }
+    }
+  },
+  apis: ['./controllers/account.js', './controllers/home.js', './controllers/dashboard.js'] // Path to the API docs
+};
+
+const swaggerDocs = swaggerJsdoc(swaggerOptions);
+
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocs));
 
 
 app.set('port', process.env.PORT || 8080);

@@ -1,18 +1,6 @@
 
 
-/* 
 
-/ --> redirect a /dashboard se cookie ed è corretto
-        /dashboard/buypackets --> buy packets
-/login --> login
-/signup --> signup
-/logout --> logout
-/pwdreset --> pwdreset
-/pwdreset/:token --> pwdreset/token
-
-
-
-*/
 
 const User = require('../models/users');
 const passport = require('passport');
@@ -20,7 +8,22 @@ const { promisify } = require('util');
 const crypto = require('crypto');
 const validator = require('validator');
 
-
+/**
+ * @swagger
+ *  /login:
+ *      get:
+ *        summary: load login page
+ *        description: >
+ *           login page is rendered for not logged clients, 
+ *           let acess to signup page as well
+ *        responses:
+ *               200:
+ *                 description: successfull request
+ *                 content:
+ *                    text/html:
+ *                      schema: 
+ *                        type: string
+ */
 exports.getLogin = (req, res) => {
 
       if (req.isAuthenticated()) {
@@ -30,6 +33,22 @@ exports.getLogin = (req, res) => {
 
 }
 
+/**
+ * @swagger
+ * /login:
+ *   post:
+ *     summary: Load login page
+ *     description: >
+ *       The login page is rendered for clients who are not logged in. It also provides access 
+ *       to the signup page.
+ *     responses:
+ *       200:
+ *         description: Successful request; login page is rendered.
+ *         content:
+ *           text/html:
+ *             schema:
+ *               type: string
+ */
 exports.postLogin = (req, res, next) => {
   const validationErrors = [];
   console.log(req.body.email)
@@ -61,6 +80,23 @@ exports.postLogin = (req, res, next) => {
 
 };
 
+
+/**
+ * @swagger
+ * /signup:
+ *   get:
+ *     summary: Load signup page
+ *     description: >
+ *       The signup page is rendered for clients who are not logged in, providing access to create 
+ *       a new account.
+ *     responses:
+ *       200:
+ *         description: Successful request; signup page is rendered.
+ *         content:
+ *           text/html:
+ *             schema:
+ *               type: string
+ */
 exports.getSignup = (req, res) => {
   if(req.isAuthenticated()){
       return res.redirect('/account/dashboard');
@@ -70,6 +106,22 @@ exports.getSignup = (req, res) => {
 
 }
 
+/**
+ * @swagger
+ * /signup:
+ *   post:
+ *     summary: Submit signup form
+ *     description: >
+ *       Submits the signup form to create a new account. 
+ *       If successful, the user will be registered and redirected.
+ *     responses:
+ *       200:
+ *         description: Successful request; user signup form is processed.
+ *         content:
+ *           text/html:
+ *             schema:
+ *               type: string
+ */
 exports.postSignup = async (req, res, next) => {
   const validationErrors = [];
   if (!validator.isEmail(req.body.email)) validationErrors.push({ msg: 'Please enter a valid email address.' });
@@ -104,6 +156,21 @@ exports.postSignup = async (req, res, next) => {
   }
 };
 
+/**
+ * @swagger
+ * /logout:
+ *   post:
+ *     summary: Log out the user
+ *     description: >
+ *       Logs out the authenticated user and redirects them to the home page.
+ *     responses:
+ *       200:
+ *         description: Successful request; user is logged out and redirected to the login page.
+ *         content:
+ *           text/html:
+ *             schema:
+ *               type: string
+ */
 exports.Logout = (req, res) => {
   req.logout((err) => {
     if (err) console.log('Error : Failed to logout.', err);

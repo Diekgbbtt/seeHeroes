@@ -51,7 +51,24 @@ const colors = {
   }
   
 
-
+/**
+ * @swagger
+ * /dashboard:
+ *   get:
+ *     summary: Get user dashboard
+ *     description: >
+ *       Retrieves the dashboard for the authenticated user, including user profile, 
+ *       packets, and figurines. Redirects to login page if not authenticated.
+ *     responses:
+ *       200:
+ *         description: Successful request; user dashboard is displayed.
+ *         content:
+ *           text/html:
+ *             schema:
+ *               type: string
+ *       302:
+ *         description: Redirects to login page if not authenticated.
+ */
 exports.getDashboard = async (req, res) => {
     /* middleware that evaluates if the request has SessionID and if it is correct */
     /* redirect a /dashboard se cookie ed è corretto */
@@ -89,7 +106,37 @@ exports.getDashboard = async (req, res) => {
         }
 }
 
-
+/**
+ * @swagger
+ *  /dashboard/buypoints/confirm:
+ *   post:
+ *     summary: Buy points for the user
+ *     description: >
+ *       Allows the authenticated user to buy points by updating their profile.
+ *       If not authenticated, redirects to login page.
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               pointsAmount:
+ *                 type: integer
+ *                 description: The number of points to be purchased.
+ *     responses:
+ *       200:
+ *         description: Successful request; points added to user's profile.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *       302:
+ *         description: Redirects to login page if not authenticated.
+ */
 exports.postBuyPoints =  async (req, res) => {
     if(req.isAuthenticated()) {
 
@@ -113,7 +160,24 @@ exports.postBuyPoints =  async (req, res) => {
     }
 }
 
-
+/**
+ * @swagger
+ * /dashboard/buypackets:
+ *   get:
+ *     summary: Get packet purchase page
+ *     description: >
+ *       Renders the packet purchase page for authenticated users. Redirects to login 
+ *       if not authenticated.
+ *     responses:
+ *       200:
+ *         description: Successful request; packet purchase page is displayed.
+ *         content:
+ *           text/html:
+ *             schema:
+ *               type: string
+ *       302:
+ *         description: Redirects to login page if not authenticated.
+ */
 exports.getPacketPage = async (req, res) => {
     if(req.isAuthenticated()) {
         return res.render('packetspurchase')
@@ -125,7 +189,37 @@ exports.getPacketPage = async (req, res) => {
 
 }
 
-
+/**
+ * @swagger
+ * /dashboard/buypackets/confirm:
+ *   post:
+ *     summary: Purchase packets
+ *     description: >
+ *       Allows the authenticated user to purchase packets using points.
+ *       If the user has enough points, packets are added to their account. Otherwise, 
+ *       an error is displayed.
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               amount:
+ *                 type: integer
+ *                 description: The number of packets to be purchased.
+ *     responses:
+ *       200:
+ *         description: Successful request; packets purchased.
+ *         content:
+ *           text/html:
+ *             schema:
+ *               type: string
+ *       400:
+ *         description: Insufficient points for the purchase; or other server errors fetching user data
+ *       302:
+ *         description: Redirects to login page if not authenticated.
+ */
 exports.postBuyPackets = async (req, res) => {
     console.log(req.body.amount);
     if(req.isAuthenticated()) {
@@ -181,7 +275,33 @@ exports.postBuyPackets = async (req, res) => {
 
 
 
-
+/**
+ * @swagger
+ * /dashboard/packets/{packet_id}:
+ *   post:
+ *     summary: Open a packet
+ *     description: >
+ *       Opens a packet by removing it from the user's account and fetching the figurines 
+ *       included in the packet. Displays all the figurines obtained.
+ *     parameters:
+ *       - in: path
+ *         name: packet_id
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: The ID of the packet to be opened.
+ *     responses:
+ *       200:
+ *         description: Packet opened successfully; figurines are returned.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/Figurine'
+ *       302:
+ *         description: Redirects to login page if not authenticated.
+ */
 exports.openPacket = (req, res) => {
 
     if(req.isAuthenticated()){
@@ -266,7 +386,52 @@ exports.openPacket = (req, res) => {
 
 }
 
-
+/**
+ * @swagger
+ * dashboard/fig/{fig_id}:
+ *   get:
+ *     summary: Get character details
+ *     description: >
+ *       Fetches the details of a figurine by its ID for the authenticated user.
+ *     parameters:
+ *       - in: path
+ *         name: fig_id
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: The ID of the figurine.
+ *     responses:
+ *       200:
+ *         description: Figurine details retrieved successfully.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 id_figurine:
+ *                   type: integer
+ *                   example: 1001
+ *                 name:
+ *                   type: string
+ *                   example: Iron Man
+ *                 image_path:
+ *                   type: string
+ *                   example: http://image.url/path
+ *                 ext:
+ *                   type: string
+ *                   example: jpg
+ *                 description:
+ *                   type: string
+ *                   example: "A billionaire inventor and industrialist."
+ *                 appearances:
+ *                   type: array
+ *                   items:
+ *                     type: integer
+ *                   description: Array of appearances in comics, series, stories, and events.
+ *                   example: [500, 200, 150, 20]
+ *       302:
+ *         description: Redirects to login page if not authenticated.
+ */
 exports.getCharacter = (req, res) => {
 
     if(req.isAuthenticated()) {
