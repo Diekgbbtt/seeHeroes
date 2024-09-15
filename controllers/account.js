@@ -67,7 +67,7 @@ exports.postLogin = (req, res, next) => {
   passport.authenticate('local', (err, user, info) => {
     if (err) { return next(err); }
     if (!user) {
-      req.flash('errors', info);
+      req.flash('errors', {msg: 'incorrect email or password'});
       console.log("user not found")
       return res.redirect('/account/login');
     }

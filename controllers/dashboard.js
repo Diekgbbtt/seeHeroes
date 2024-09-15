@@ -1,8 +1,8 @@
 const users = require('../models/users');
 const usersPackets = require('../models/packets');
 const usersFigurines = require('../models/usersFigurines')
-const usersNotifications = require('../models/notifications');
 const crypto = require('crypto');
+const utils = require('../utils');
 
 const colors = {
     reset: "\x1b[0m",
@@ -381,6 +381,8 @@ exports.openPacket = (req, res) => {
             req.flash('errors', { msg: "couldn\'t find and delete packet. \n error : " + error });
             return res.render('dashboard', { messages: { errors: req.flash('errors') } })
         })
+    } else {
+        loginRedirect();
     }
 }
 
@@ -430,7 +432,7 @@ exports.openPacket = (req, res) => {
  *                   description: Array of appearances in comics, series, stories, and events.
  *                   example: [500, 200, 150, 20]
  *       302:
- *         description: Redirects to login page if not authenticated.
+ *         description: Redirects to login page if not authenticated and shows not logged in alert
  */
 exports.getCharacter = (req, res) => {
 
@@ -446,8 +448,7 @@ exports.getCharacter = (req, res) => {
             return res.render('dashboard', { messages: { errors: req.flash('errors') } })
             })
     } else {
-        req.flash('errors', { msg: "You are not logged in." });
-        return res.status(302).render('login', { redirectError: req.flash('errors') });
+        utils.loginRedirect();
     }
 }
 
