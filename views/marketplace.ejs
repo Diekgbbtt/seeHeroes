@@ -896,6 +896,12 @@
             </div>
         </div>
     </div>
+    <% if(messages.errors) { %>
+        <script>
+            const Errors = <%- JSON.stringify(messages.errors) %>;
+            alert(Errors[0].msg);
+        </script>
+    <% } %>
 
 
     <script>
@@ -1523,7 +1529,7 @@
                         console.log('success')
                         window.location.href = '/marketplace';
                     } else {
-                        console.log('error creating exchange \n ' + data.errorMessage)
+                        alert('error creating exchange \n ' + data.errorMessage)
                     }
                 })
 

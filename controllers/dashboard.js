@@ -54,7 +54,7 @@ const colors = {
  *       302:
  *         description: Redirects to login page if not authenticated.
  *       400:
- *         description: bad request parameter or malformed request, redirect to home page
+ *         description: bad request parameter or other server errors fetching user data; redirect to home page
  */
 exports.getDashboard = async (req, res) => {
     /* middleware that evaluates if the request has SessionID and if it is correct */
@@ -119,7 +119,7 @@ exports.getDashboard = async (req, res) => {
  *       302:
  *         description: Redirects to login page if not authenticated.
  *       400:
- *         description: bad request parameter or malformed request, redirect to home page
+ *         description: bad request parameter or other server errors fetching user data; redirect to home page
  */
 exports.postBuyPoints =  async (req, res) => {
     if(req.isAuthenticated()) {
@@ -268,6 +268,8 @@ exports.postBuyPackets = async (req, res) => {
  *                 $ref: '#/components/schemas/Figurine'
  *       302:
  *         description: Redirects to login page if not authenticated.
+ *       400:
+ *         description: bad request parameter or other server errors fetching user data; redirect to home page
  */
 exports.openPacket = (req, res) => {
 
@@ -375,6 +377,8 @@ exports.openPacket = (req, res) => {
  *             schema:
  *               type: object
  *               properties:
+ *                 id_user:
+ *                  type: string
  *                 id_figurine:
  *                   type: integer
  *                   example: 1001
@@ -389,15 +393,15 @@ exports.openPacket = (req, res) => {
  *                   example: jpg
  *                 description:
  *                   type: string
- *                   example: "A billionaire inventor and industrialist."
  *                 appearances:
  *                   type: array
  *                   items:
  *                     type: integer
  *                   description: Array of appearances in comics, series, stories, and events.
- *                   example: [500, 200, 150, 20]
  *       302:
  *         description: Redirects to login page if not authenticated and shows not logged in alert
+ *       400:
+ *         description: bad request parameter or other server errors fetching user data; redirect to home page
  */
 exports.getCharacter = (req, res) => {
 

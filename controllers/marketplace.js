@@ -38,21 +38,6 @@ const colors = {
   };
 
 
-
-function filterDobuleFigurines(userFigurines) {
-    const userDoubleFigurines = [];
-
-    userFigurines.forEach(figurine => {
-        userFigurines.forEach(figurine_1 => {
-            if(figurine._id !== figurine_1._id && figurine.id_figurine === figurine_1.id_figurine) {
-                userFigurines.splice(userFigurines.indexOf(figurine_1), 1);
-                userDoubleFigurines.push(figurine_1);
-            }
-        });
-    });
-    return userDoubleFigurines;
-}
-
 function checkIsOfferComplete(offer) {
 
     let check = true
@@ -236,16 +221,12 @@ exports.getMarketplace = async (req, res) => {
                             res.render('marketplace', {offers: offers, user: req.session.passport.user, user_doublefigurines: userDoubleFigurines || [], user_points: user_profile.points});
                         })
                         .catch((error) => {
-                            console.log('couldn\'t get user figurines \n error : ' + error)
-                            req.flash('errors', { msg: "couldn\'t get user figurines \n error : " + error });
-                            return res.render('marketplace', { messages: { errors: req.flash('errors') } });
+                            utils.handleError('couldn\'t get user figurines \n error : ' + error, req, res);
                         });
                         
                     })
                     .catch((error) => {
-                        console.log('couldn\'t get user profile \n error : ' + error)
-                        req.flash('errors', { msg: "couldn\'t get user profile \n error : " + error });
-                        return res.render('marketplace', { messages: { errors: req.flash('errors') } });
+                        utils.handleError('couldn\'t get user profile \n error : ' + error, req, res);
                     })
                 
             } else {
@@ -254,12 +235,44 @@ exports.getMarketplace = async (req, res) => {
 
         })
         .catch((error) => {
-            console.log('couldn\'t load marketplace figurines \n error : ' + error)
-            req.flash('errors', { msg: "couldn\'t load marketplace figurines \n error : " + error });
-            return res.render('marketplace', { messages: { errors: req.flash('errors') } });
+            utils.handleError('couldn\'t load marketplace figurines \n error : ' + error, req, res);
         });
 }
 
+/**
+ * @swagger
+ * /exchange/{exchange_offer_id}:
+ *   post:
+ *     summary: Exchange an offer
+ *     description: Handles the exchange of offers based on user authentication and available resources.
+ *     parameters:
+ *       - name: exchange_offer_id
+ *         in: path
+ *         required: true
+ *         description: The ID of the exchange offer to process.
+ *         schema:
+ *           type: string
+ *     responses:
+ *       200:
+ *         description: Successful exchange of the offer
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                   example: true
+ *                 errorMessage:
+ *                   type: string
+ *                   example: ''
+ *       401:
+ *         description: Unauthorized, user needs to be authenticated
+ *       404:
+ *         description: Not Found, resource could not be found
+ *       500:
+ *         description: Internal Server Error, something went wrong on the server
+ */
 exports.Exchange = (req, res) => {
 
     if(req.isAuthenticated()) { 
@@ -294,28 +307,62 @@ exports.Exchange = (req, res) => {
                             }
                         })
                         .catch((error) => {
-                            console.log('couldn\'t get user figurines \n error : ' + error)
-                            req.flash('errors', { msg: "couldn\'t get user figurines \n error : " + error });
-                            return res.render('marketplace', { messages: { errors: req.flash('errors') } });
+                            utils.handleError('couldn\'t get user figurines \n error : ' + error, req, res);
                         });
 
                 })
                 .catch((error) => {
-                    console.log('couldn\'t get user profile \n error : ' + error)
-                    req.flash('errors', { msg: "couldn\'t get user profile \n error :" + error })
-                    return res.render('marketplace', { messages: { errors: req.flash('errors') } });
+                    utils.handleError('couldn\'t get user profile \n error : ' + error, req, res);
                 })
             })
             .catch((error) => {
-                console.log('couldn\'t get offer \n error : ' + error)
-                req.flash('errors', { msg: "couldn\'t get offer \n error : " + error });
-                return res.render('marketplace', { messages: { errors: req.flash('errors') } });
+                utils.handleError('couldn\'t get offer \n error : ' + error, req, res);
             })
+    } else {
+        utils.loginRedirect(req, res);
     }
-
-   
 }
 
+
+/**
+ * @swagger
+ * /heroes/{search_term}:
+ *   get:
+ *     summary: Get pertinent Marvel heroes
+ *     description: Retrieves Marvel heroes whose names start with the provided search term.
+ *     parameters:
+ *       - name: search_term
+ *         in: path
+ *         required: true
+ *         description: The search term to filter Marvel heroes by name.
+ *         schema:
+ *           type: string
+ *     responses:
+ *       200:
+ *         description: Successful retrieval of Marvel heroes
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 type: object
+ *                 properties:
+ *                   name:
+ *                     type: string
+ *                     description: The name of the Marvel hero
+ *                   id:
+ *                     type: integer
+ *                     description: The ID of the Marvel hero
+ *                   image_path:
+ *                     type: string
+ *                     description: URL of the hero's image
+ *       401:
+ *         description: Unauthorized, user needs to be authenticated
+ *       404:
+ *         description: Not Found, Marvel API or heroes not found
+ *       500:
+ *         description: Internal Server Error, something went wrong on the server
+ */
 exports.getPertinentHeroes = (req, res) => {
 
     if(req.isAuthenticated()) { 
@@ -348,9 +395,6 @@ exports.getPertinentHeroes = (req, res) => {
                         pertinentHero.image_path = hero.thumbnail.path
                         pertinentHeroes.push(pertinentHero)
                     })
-                    // const PersistentHeroesNameDict = {
-                    //     "pertinentHeroesName": pertinentHeroesName
-                    // }
                     return res.send(pertinentHeroes);
                 }
                 else {
@@ -360,9 +404,66 @@ exports.getPertinentHeroes = (req, res) => {
 
 
     } else {
-        console.log('not authenticated')
+        utils.loginRedirect(req, res);
     }
 }
+
+
+/**
+ * @swagger
+ * /offer:
+ *   post:
+ *     summary: Create a new marketplace offer
+ *     description: Allows an authenticated user to post a new offer to the marketplace.
+ *     requestBody:
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               buying:
+ *                 type: object
+ *                 properties:
+ *                   points:
+ *                     type: integer
+ *                     description: Points requested for the exchange
+ *                   figurines:
+ *                     type: array
+ *                     items:
+ *                       type: string
+ *                     description: List of figurines requested
+ *               selling:
+ *                 type: object
+ *                 properties:
+ *                   points:
+ *                     type: integer
+ *                     description: Points offered in exchange
+ *                   figurines:
+ *                     type: array
+ *                     items:
+ *                       type: string
+ *                     description: List of figurines offered
+ *             required:
+ *               - buying
+ *               - selling
+ *     responses:
+ *       200:
+ *         description: Successful creation of the offer
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                   example: true
+ *                 errorMessage:
+ *                   type: string
+ *                   example: ''
+ *       400:
+ *         description: Bad Request, offer data is incomplete or invalid
+ * 
+ */
 exports.postNewOffer = (req, res) => {
     if (req.isAuthenticated()) {
       if(checkIsOfferComplete(req.body)) {
@@ -406,31 +507,46 @@ exports.postNewOffer = (req, res) => {
                             errorMessage: ""
                             })
                         } else {
-                            console.log('user isn\'t selling double figurines')
-                            // return res.send()
+                            res.status(400).json({
+                                success: false,
+                                errorMessage: 'you aren\'t selling double figurines'
+                            })
                         }
                         } else {
-                        console.log('user is already selling this figurine')
+                            res.status(400).json({
+                                success: false,
+                                errorMessage: 'user is already selling this figurine'
+                            })
                         }
                     })
                     .catch((error) => {
-                    console.log('couldn\'t find user offers \n error : ' + error)
+                    console.log('couldn\'t find user of the offer offers \n error : ' + error)
+                        res.status(400).json({
+                            success: false,
+                            errorMessage: 'couldn\'t load user figurines \n error : ' + error
+                        })
                     })
                 })
                 .catch((error) => {
-                console.log('couldn\'t load user figurines \n error : ' + error)
+                    console.log('couldn\'t load user figurines \n error : ' + error)
+                    res.status(400).json({
+                        success: false,
+                        errorMessage: 'couldn\'t load user figurines \n error : ' + error
+                    })
                 })
             })
             .catch((error) => {
-            console.log('couldn\'t find the user \n error : ' + error)
+                utils.handleError('error getting user profile \n error: ' + error, req, res)
             })
       } else {
         console.log('offer isn\'t complete, there must be at least a figurine or point reuqest in both buying and selling')
-        res.json({
+        res.status(400).json({
             success: false,
             errorMessage: 'offer isn\'t complete, there must be at least a figurine or point reuqest in both buying and selling'
         })
-    }
+      }
+    } else {
+        utils.loginRedirect(req, res);
     }
 }
 
