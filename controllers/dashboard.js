@@ -447,7 +447,7 @@ exports.getCharacter = (req, res) => {
             })
     } else {
         req.flash('errors', { msg: "You are not logged in." });
-        return res.redirect('/account/login');
+        return res.status(302).render('login', { redirectError: req.flash('errors') });
     }
 }
 
