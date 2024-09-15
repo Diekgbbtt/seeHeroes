@@ -23,7 +23,7 @@ function checkDoubleFigs(userFigurines) {
 
 function handleError(errorMsg, req, res, page = 'home') {
     req.flash('errors', { msg: errorMsg });
-    return res.status(400).render(page, { messages: {errors: req.flash('errors') }});
+    return res.status(400).render(page, { isAuthenticated: true, messages: {errors: req.flash('errors') }});
 }
 
 module.exports.loginRedirect = loginRedirect;
