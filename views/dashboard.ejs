@@ -132,6 +132,14 @@
             width: auto;
             height: auto;
         }
+        .row-2 .col-1 .block-1{
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-top: 5px;
+            width: auto;
+            height: auto;
+        }
 
         .row-2 .col-1 .picture {
             width: 150px; 
@@ -165,6 +173,9 @@
         }
 
         .edit-button:hover {
+            text-decoration: none;
+            transform: scale(1.02);
+            box-shadow: 0 0 10px rgba(146, 88, 8, 0.5);
             cursor: pointer;
         }
 
@@ -179,6 +190,68 @@
             font-weight: bold
         }
 
+        #modalEditMenu {
+            display: none; 
+            position: fixed; 
+            z-index: 1; 
+            left: 0;
+            top: 0;
+            width: 100%; 
+            height: 100%; 
+            overflow: auto; 
+            background-color: rgb(0,0,0); 
+            background-color: rgba(0,0,0,0.4); 
+        }
+
+        #modalEditMenuContent {
+            background-color: #fefefe;
+            margin: 15% auto; 
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%; 
+            max-width: 500px;
+        }
+
+        #closeEditMenuForm {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+        }
+
+        #closeEditMenuForm:hover,
+        #closeEditMenuForm:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        #editProfileForm input[type="text"],
+        #editProfileForm input[type="email"] {
+            width: 100%;
+            padding: 12px 20px;
+            margin: 8px 0;
+            display: inline-block;
+            border: 1px solid #ccc;
+            box-sizing: border-box;
+        }
+
+        #editProfileForm input[type="submit"] {
+            background-color: #b11616;
+            color: white;
+            padding: 14px 20px;
+            margin: 8px 0;
+            border: none;
+            cursor: pointer;
+            width: 100%;
+        }
+
+        #editProfileForm input[type="submit"]:hover {
+            opacity: 0.8;
+        }
+
+
+
         .button-logout {
         display: flex;
         justify-content: center;
@@ -186,6 +259,7 @@
         margin-top: 15px;
         margin-bottom: 10px;
         text-decoration: none;
+        width: 30%
         }
 
         .button-logout i {
@@ -1025,8 +1099,10 @@
                         <p><%= user_profile.username %></p>
                         <p><%= user_profile.email %></p>
                         <br>
-                        <div onclick="openEditMenu()" class="edit-button">
-                            <span>Edit Profile</span>
+                        <div class="edit-button">
+                            <a onclick="openEditMenu()">
+                                <span>Edit Profile</span>
+                            </a>
                         </div>
                     </div>
 				</div>
@@ -1267,6 +1343,38 @@
     
 
     <script>
+        function openEditMenu() {
+
+            document.getElementById('modalEditMenu').style.display = 'flex';
+            
+            document.getElementById('editProfileForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+            
+            const formData = {
+                name: document.getElementById('name').value,
+                username: document.getElementById('username').value,
+                email: document.getElementById('email').value
+            };
+
+            fetch('/account/edit', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(formData)
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log('Success:', data);
+                document.getElementById('modalEditMenu').style.display='none';
+                document.getElementById('editProfileForm').reset();
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+            });
+            });
+        }
+
         function openBuyForm() {
             const modal = document.getElementById('modalPoints');
             const moadlContent = document.getElementById('modalPointsContent');

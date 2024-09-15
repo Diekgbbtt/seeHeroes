@@ -198,6 +198,36 @@ exports.Logout = (req, res) => {
   });
 };
 
+exports.postEditProfile = async (req, res) => {
+  const validationErrors = [];
+  if (req.body.email) {
+      if (!validator.isEmail(req.body.email)) validationErrors.push({ msg: 'Please enter a valid email address.' });
+  }
+  if (validationErrors.length) {
+    req.flash('errors', validationErrors);
+    return res.redirect('/account/dashboard');
+  }
+  if (req.body.email) req.body.email = validator.normalizeEmail(req.body.email, { gmail_remove_dots: false });
+
+  const updateFields = {};
+  if (req.body.name) updateFields.name = req.body.name;
+  if (req.body.username) updateFields.username = req.body.username;
+  if (req.body.email) updateFields.email = req.body.email;
+
+  User.findByIdAndUpdate({ _id: req.session.passport.user },
+    { $set: updateFields },
+    { new: true }
+  )
+  .then((updatedUser) => {
+    return res.json({success: true, msg: 'Profile information has been updated.'});
+  })
+  .catch((err) => {
+    console.log(err);
+    return res.json({success: false, msg: 'couldn\'t update profile information.'});
+  });
+}
+
+
 
 
 

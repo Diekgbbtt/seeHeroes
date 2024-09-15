@@ -42,4 +42,7 @@ router.get('/logout', accountController.Logout);
 router.post('/login', accountController.postLogin);
 router.post('/signup', accountController.postSignup);
 
+
+router.post('/edit', accountController.postEditProfile);
+
 module.exports = router;
