@@ -27,7 +27,8 @@ const userFigurineSchema = new mongoose.Schema({
       },
       description: {
         type: String,
-        required: true
+        required: false,
+        default: 'description not available'
       },
       appearances: {
         type: Array,

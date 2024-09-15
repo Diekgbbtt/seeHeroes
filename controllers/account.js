@@ -74,7 +74,7 @@ exports.postLogin = (req, res, next) => {
     req.logIn(user, (err) => {
       if (err) { return next(err); }
       req.flash('success', { msg: 'Success! You are logged in.' });
-      res.redirect('account/dashboard' || req.session.returnTo );
+      res.redirect('/account/dashboard' || req.session.returnTo );
     });
   })(req, res, next);
 
@@ -172,18 +172,28 @@ exports.postSignup = async (req, res, next) => {
  *           text/html:
  *             schema:
  *               type: string
+ *       302:
+ *          description: Unauthorized request; user is not logged in; redirect to login page.
+ *          content:
+ *              application/json:
+ *                schema:
+ *                  type: object
+ *                  properties:
+ *                    error:
+ *                      type: string
+ *                      description: Error message
  */
 exports.Logout = (req, res) => {
   if(!req.isAuthenticated()) {
     req.flash('errors', { msg: 'You are not logged in.' });
-    return res.redirect('/account/login');
+    return res.status(302).json({ error: 'You are not logged in.' });
   }
   req.logout((err) => {
     if (err) console.log('Error : Failed to logout.', err);
     req.session.destroy((err) => {
       if (err) console.log('Error : Failed to destroy the session during logout.', err);
       req.user = null;
-      res.redirect('/');
+      return res.redirect('/');
     });
   });
 };

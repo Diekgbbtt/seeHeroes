@@ -88,19 +88,19 @@ exports.getDashboard = async (req, res) => {
                             .catch((error) => {
                                 console.log('couldn\'t find user figurines \n error : ' + error)
                                 req.flash('errors', { msg: "couldn\'t find user figurines \n error : " + error });
-                                return res.render('dashboard', { mesasges: { errors: req.flash('errors') } });
+                                return res.render('dashboard', { messages: { errors: req.flash('errors') } });
                             })
                     })
                     .catch((error) => {
                         console.log('couldn\'t find user packets \n error : ' + error)
                         req.flash('errors', { msg: "couldn\'t find user packets \n error : " + error });
-                        return res.render('dashboard', { mesasges: { errors: req.flash('errors') } });
+                        return res.render('dashboard', { messages: { errors: req.flash('errors') } });
                     })                
             })
             .catch((error) => {
                 console.log(error);
                 req.flash('errors', { msg: "error validating user" });
-                return res.render('dashboard', { mesasges: { errors: req.flash('errors') } });
+                return res.render('dashboard', { messages: { errors: req.flash('errors') } });
 
             });
         }
@@ -150,7 +150,7 @@ exports.postBuyPoints =  async (req, res) => {
             .catch((error) => {
                 console.log('errors' + error);
                 req.flash('errors', { msg: "error validating user" });
-                // return res.render('dashboard', { mesasges: { errors: req.flash('errors') } })
+                // return res.render('dashboard', { messages: { errors: req.flash('errors') } })
             
             });
         } else {
@@ -382,13 +382,11 @@ exports.openPacket = (req, res) => {
             return res.render('dashboard', { messages: { errors: req.flash('errors') } })
         })
     }
-    
-
 }
 
 /**
  * @swagger
- * dashboard/fig/{fig_id}:
+ * /dashboard/fig/{fig_id}:
  *   get:
  *     summary: Get character details
  *     description: >
@@ -400,6 +398,8 @@ exports.openPacket = (req, res) => {
  *         schema:
  *           type: string
  *         description: The ID of the figurine.
+ *     security:
+ *         - SessionAuth: []
  *     responses:
  *       200:
  *         description: Figurine details retrieved successfully.
@@ -435,24 +435,6 @@ exports.openPacket = (req, res) => {
 exports.getCharacter = (req, res) => {
 
     if(req.isAuthenticated()) {
-        /* const ts = new Date().toLocaleString('en-GB', {
-            year: 'numeric',
-            month: '2-digit',
-            day: '2-digit',
-            hour: '2-digit',
-            minute: '2-digit',
-            second: '2-digit',
-            hour12: false
-            }).replace(/[/,: ]/g, '-');
-        const hash_data = `${ts}${process.env.MARVEL_PRIVATE_KEY}${process.env.MARVEL_PUBLIC_KEY}`;
-        const hash = crypto.createHash('md5').update(hash_data).digest('hex');
-        console.log(req.params.fig_id)
-        const url = `https://gateway.marvel.com:443/v1/public/characters/${req.params.fig_id}?apikey=de511cb926dc8e0b6caf71daa20b40be&ts=${ts}&hash=${hash}`
-        console.log(url)
-
-        fetch(url) 
-        .then((response) => response.json()))
-        */
         usersFigurines.findOne({ id_figurine: req.params.fig_id, id_user: req.session.passport.user})
             .then((figurine) =>  {
                     console.log(figurine)
@@ -461,8 +443,11 @@ exports.getCharacter = (req, res) => {
             .catch((error) => {
             console.log('Error fetching API: ' + error)
             req.flash('errors', { msg: "Error fetching API: " + error });
-            return
+            return res.render('dashboard', { messages: { errors: req.flash('errors') } })
             })
+    } else {
+        req.flash('errors', { msg: "You are not logged in." });
+        return res.redirect('/account/login');
     }
 }
 
