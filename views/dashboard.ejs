@@ -172,7 +172,19 @@
             font-weight: bold;
         }
 
-        .edit-button:hover {
+        .edit-button {
+            width:60%;
+            height:40px;
+            background-color: #b11616; 
+            border-radius: 25px; 
+            border: 2px solid #8b0000; 
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .edit-button:hover{
             text-decoration: none;
             transform: scale(1.02);
             box-shadow: 0 0 10px rgba(146, 88, 8, 0.5);
@@ -182,16 +194,15 @@
         .row-2 .col-1 .data .edit-button span{
             display: inline-block; 
             padding: 10px 20px; 
-            background-color: #b11616; 
             color: white; 
             text-decoration: none; 
-            border-radius: 25px; 
-            border: 2px solid #8b0000; 
             font-weight: bold
         }
 
         #modalEditMenu {
-            display: none; 
+            display: none;
+            justify-content: center;
+            align-items: center;
             position: fixed; 
             z-index: 1; 
             left: 0;
@@ -199,21 +210,32 @@
             width: 100%; 
             height: 100%; 
             overflow: auto; 
-            background-color: rgb(0,0,0); 
-            background-color: rgba(0,0,0,0.4); 
+            background-color: rgba(0,0,0,0.7); 
         }
 
         #modalEditMenuContent {
-            background-color: #fefefe;
-            margin: 15% auto; 
-            padding: 20px;
-            border: 1px solid #888;
-            width: 80%; 
+            background-color: #ffffff;
+            padding: 0px 20px 20px 20px;
+            width: auto; 
+            height: auto;
             max-width: 500px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            border-radius: 10px;
+            gap: 5px;
         }
 
         #closeEditMenuForm {
-            color: #aaa;
+            display: flex;
+            width: 100%;
+            height: 20px;
+            padding-top: 10px;
+            justify-content: flex-end;
+        }
+        #closeEditMenuForm i {
+            color: #b11616;
             float: right;
             font-size: 28px;
             font-weight: bold;
@@ -221,36 +243,47 @@
 
         #closeEditMenuForm:hover,
         #closeEditMenuForm:focus {
-            color: black;
             text-decoration: none;
             cursor: pointer;
         }
 
+        #editProfileForm {
+            display: flex;
+            flex-direction: column;
+            justify-content: top;
+            align-items: center;
+            gap: 10px;
+            width: 380px;
+            border-radius: 10px;
+            background-color: #b11616;
+            padding: 20px
+        }
+
         #editProfileForm input[type="text"],
         #editProfileForm input[type="email"] {
-            width: 100%;
+            width: 80%;
             padding: 12px 20px;
-            margin: 8px 0;
             display: inline-block;
-            border: 1px solid #ccc;
+            color: #b11616;
+            border: 3px solid #8b0000;
             box-sizing: border-box;
+            border-radius: 25px;
         }
 
         #editProfileForm input[type="submit"] {
-            background-color: #b11616;
-            color: white;
-            padding: 14px 20px;
-            margin: 8px 0;
-            border: none;
+            background-color: #8b0000;
+            color: #ffffff;
+            padding: 10px;
             cursor: pointer;
-            width: 100%;
+            width: 60%;
+            border-radius: 25px;
+            border: 1px solid #ffffff;
+            font-weight: bold;
         }
 
         #editProfileForm input[type="submit"]:hover {
             opacity: 0.8;
         }
-
-
 
         .button-logout {
         display: flex;
@@ -357,6 +390,9 @@
             height: 90%;
         }
 
+        #purchaseSubmitForm input[type="submit"]:hover {
+            opacity: 0.8;
+        }
 
         .row-2 .col-2 .text-container-mrvcard {
             padding-top: 10px;
@@ -1099,23 +1135,23 @@
                         <p><%= user_profile.username %></p>
                         <p><%= user_profile.email %></p>
                         <br>
-                        <div class="edit-button">
-                            <a onclick="openEditMenu()">
+                        <a class="edit-button" onclick="openEditMenu()">
+                            <div>
                                 <span>Edit Profile</span>
-                            </a>
-                        </div>
+                            </div>
+                        </a>
                     </div>
 				</div>
                 <div id="modalEditMenu" style="padding: 0">
                     <div id="modalEditMenuContent">
                         <a id="closeEditMenuForm">
-                            <i onclick="document.getElementById('modalEditMenu').style.display='none'; document.getElementById('editProfileForm').reset();" style="color: #b11616;">&times;</i>
+                            <i onclick="document.getElementById('modalEditMenu').style.display='none'; document.getElementById('editProfileForm').reset();" >&times;</i>
                         </a>
-                        <form id="editProfileForm" style="position: relative; padding-top: 30px;">
+                        <form id="editProfileForm" style="position: relative;">
                             <input type="text" id="name" name="name" placeholder="Name" required>
                             <input type="text" id="username" name="username" placeholder="Username" required>
                             <input type="email" id="email" name="email" placeholder="Email" required>
-                            <input type="submit" value="Update Profile" style="width: 100%; margin-top: 10px; padding: 10px; background-color: white; color: #b11616; border: 2px solid #b11616; border-radius: 25px; cursor: pointer;">
+                            <input type="submit" value="Update Profile" >
                         </form>
                     </div>
                 </div>

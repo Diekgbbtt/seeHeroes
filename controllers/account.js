@@ -219,6 +219,7 @@ exports.postEditProfile = async (req, res) => {
     { new: true }
   )
   .then((updatedUser) => {
+    console.log(updatedUser);
     return res.json({success: true, msg: 'Profile information has been updated.'});
   })
   .catch((err) => {
