@@ -41,6 +41,17 @@ exports.getLogin = (req, res) => {
  *     description: >
  *       the login data is submitted, if a corresponding user is found;
  *        the user is logged in and redirected to the dashboard.
+ *     requestBody:
+ *        required: true
+ *        content:
+ *          application/json:
+ *            schema:
+ *              type: object
+ *              properties:
+ *                email:
+ *                  type: string
+ *                password:
+ *                  type: string   
  *     responses:
  *       200:
  *         description: Successful request; the user is logged in and redirected to the dashboard.
@@ -48,6 +59,19 @@ exports.getLogin = (req, res) => {
  *           text/html:
  *             schema:
  *               type: string
+ *       400:
+ *         description: Bad request, malformed request body or values in body attributes
+ *         content:
+ *           text/html:
+ *             schema:
+ *               type: string
+ *       404:
+ *         description: User not found, invalid credentials
+ *         content:
+ *           text/html:
+ *             schema:
+ *               type: string
+ *      
  */
 exports.postLogin = (req, res, next) => {
   const validationErrors = [];
@@ -60,7 +84,7 @@ exports.postLogin = (req, res, next) => {
       console.log(ve.msg)
     }
     req.flash('errors', validationErrors);
-    return res.redirect('/account/login');
+    return res.status(400).render('login', { messages: {errors: req.flash('errors') , redirectErrors:[] }});
   }
   req.body.email = validator.normalizeEmail(req.body.email, { gmail_remove_dots: false });
 
@@ -69,39 +93,15 @@ exports.postLogin = (req, res, next) => {
     if (!user) {
       req.flash('errors', {msg: 'incorrect email or password'});
       console.log("user not found")
-      return res.status(400).render('login', { messages: {errors: [], redirectErrors: req.flash('errors') }});
+      return res.status(404).render('login', { messages: {errors: req.flash('errors'), redirectErrors: [] }});
     }
     req.logIn(user, (err) => {
       if (err) { return next(err); }
       req.flash('success', { msg: 'Success! You are logged in.' });
-      res.redirect('/account/dashboard' || req.session.returnTo );
+      res.redirect('/account/dashboard');
     });
   })(req, res, next);
-
-//   passport.authenticate('local')
-//     .then((user) => {
-//       if (!user) {
-//         req.flash('errors', {msg: 'incorrect email or password'});
-//         console.log("user not found")
-//         return res.status(400).render('login', { messages: {errors: req.flash('errors'), redirectErrors: [] }});
-//       }
-//       req.logIn(user)
-//         .then(() => {
-//           req.flash('success', { msg: 'Success! You are logged in.' });
-//           res.redirect('/account/dashboard' || req.session.returnTo );
-//         })
-//         .catch(err => {
-//           req.flash('errors', {msg: 'couldn\t log in the user'});
-//           console.log("couldn\t log in the user")
-//           return res.status(400).render('login', { messages: {errors: req.flash('errors'), redirectErrors: [] }});
-//         })
-//     })
-//     .catch(err => {
-//       req.flash('errors', {msg: 'couldn\t auth the user'});
-//       console.log("couldn\t auth the user")
-//       return res.status(400).render('login', { messages: {errors: req.flash('errors'), redirectErrors: [] }});
-//     });
-// };
+}
 
 
 /**
@@ -131,7 +131,7 @@ exports.getSignup = (req, res) => {
 
 /**
  * @swagger
- * /signup:
+ * /account/signup:
  *   post:
  *     summary: Submit signup form
  *     description: >
@@ -249,10 +249,4 @@ exports.postEditProfile = async (req, res) => {
     console.log(err);
     return res.json({success: false, msg: 'couldn\'t update profile information.'});
   });
-}
-
-
-
-
-
-
+};

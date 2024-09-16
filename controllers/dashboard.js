@@ -38,7 +38,7 @@ const colors = {
 
 /**
  * @swagger
- * /dashboard:
+ * /account/dashboard:
  *   get:
  *     summary: Get user dashboard
  *     description: >
@@ -55,8 +55,16 @@ const colors = {
  *               type: string
  *       302:
  *         description: Redirects to login page if not authenticated.
+ *         content:
+ *           text/html:
+ *             schema:
+ *               type: string
  *       400:
  *         description: bad request parameter or other server errors fetching user data; redirect to home page
+ *         content:
+ *           text/html:
+ *             schema:
+ *               type: string
  */
 exports.getDashboard = async (req, res) => {
     /* middleware that evaluates if the request has SessionID and if it is correct */
