@@ -248,7 +248,6 @@
             color: #b11616; 
             position: relative;
             width: 26px;
-            z-index: 1;
             text-align: center;
         }
 
@@ -445,7 +444,7 @@
             display: flex;
             justify-content: flex-start;
             align-items: center;
-            gap: 250px
+            gap: 237px
         }
 
         .mainFigurinesChoiche input {
@@ -508,7 +507,7 @@
             flex-direction: row;
             gap: 20px;
             overflow-x: auto;
-            padding: 10px 0px
+            padding: 20px 0px
         }
 
         .figurinesList::-webkit-scrollbar {
@@ -862,7 +861,7 @@
                 <div class="figurinesChoiche">
                     <div class="mainFigurinesChoiche">
                         <a id="closeNewofferMenu" >
-                            <i onclick="document.querySelector('.modalNewOffer').style.display='none'; sessionStorage.clear(); document.querySelector('.figurinesList').innerHTML = ''; document.querySelector('.buyingItemsList').innerHTML = ''; document.querySelector('.sellingItemsList').innerHTML = ''; document.getElementById('suggestions').innerHTML = '';" style="color: #ffffff;">&times;</i>
+                            <i onclick="document.querySelector('.modalNewOffer').style.display='none'; sessionStorage.clear(); document.querySelector('.figurinesList').innerHTML = ''; document.querySelector('.buyingItemsList').innerHTML = ''; document.querySelector('.sellingItemsList').innerHTML = ''; document.getElementById('suggestions').innerHTML = ''; document.getElementById('search-input').value = '';" style="color: #ffffff;">&times;</i>
                         </a>
                         <input type="text" id="search-input" placeholder="&#128269; Enter figurine name">
                     </div>
@@ -1133,7 +1132,7 @@
 
                 const pointsValue = document.createElement('span');
                 pointsValue.textContent = offer.offering.points;
-                pointsValue.style.cssText = 'font-size: 24px; color: #b11616; position: relative; z-index: 1;';
+                pointsValue.style.cssText = 'font-size: 24px; color: #b11616; position: relative;';
 
                 innerPointsCircle.appendChild(pointsValue);
                 pointsCircle.appendChild(innerPointsCircle);

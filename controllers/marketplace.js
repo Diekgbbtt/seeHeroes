@@ -63,6 +63,7 @@ function checkAreSellingFigurinesDouble(sellingFigurines, userDoubleFigurines) {
 
 function checkAlreadySellingFigurines(offerSellingFigurines, user_offers) {
     let check = true;
+    let sellingFigs = []
     offerSellingFigurines.forEach(sellingFigurine => {
         user_offers.forEach(offer => {
             offer.offering.figurines.forEach(offerFigurine => {
@@ -70,11 +71,12 @@ function checkAlreadySellingFigurines(offerSellingFigurines, user_offers) {
                 console.log(colors.fg.magenta + sellingFigurine + colors.reset)
                 if(sellingFigurine.figurine_id === offerFigurine.figurine_id) {
                     check = false;
+                    sellingFigs.push(sellingFigurine.figurine_name);
                 }
             });
         });
     });
-    return check;
+    return {check, sellingFigs};
 }
 
 function checkUserHasBuyingOfferFigurine(offerRequestingFigurines, userFigurines) {
@@ -503,42 +505,48 @@ exports.postNewOffer = (req, res) => {
                     username: user_profile.username
                     })
                     .then((user_offers) => {
-                        if (checkAlreadySellingFigurines(req.body.selling.figurines, user_offers)) {
-                        if (checkAreSellingFigurinesDouble(req.body.selling.figurines, userDoubleFigurines)) {
-                            const marketplaceOffer = new marketplaceOffers({
-                            username: user_profile.username,
-                            requesting: {
-                                figurines: [],
-                                points: req.body.buying.points
-                            },
-                            offering: {
-                                figurines: [],
-                                points: req.body.selling.points
+
+                        const {check, sellingFigs} =  checkAlreadySellingFigurines(req.body.selling.figurines, user_offers)
+                        if (check) {
+                            if (checkAreSellingFigurinesDouble(req.body.selling.figurines, userDoubleFigurines)) {
+                                const marketplaceOffer = new marketplaceOffers({
+                                username: user_profile.username,
+                                requesting: {
+                                    figurines: [],
+                                    points: req.body.buying.points
+                                },
+                                offering: {
+                                    figurines: [],
+                                    points: req.body.selling.points
+                                }
+                                })
+                                req.body.buying.figurines.forEach((figurine) => {
+                                marketplaceOffer.requesting.figurines.push(figurine)
+                                })
+                                req.body.selling.figurines.forEach((figurine) => {
+                                marketplaceOffer.offering.figurines.push(figurine)
+                                })
+                                console.log(colors.fg.red + marketplaceOffer + colors.reset)
+                                marketplaceOffer.save()
+                                res.statusCode = 200;
+                                res.json({
+                                success: true,
+                                errorMessage: ""
+                                })
+                            } else {
+                                res.status(400).json({
+                                    success: false,
+                                    errorMessage: 'you aren\'t selling double figurines'
+                                })
                             }
-                            })
-                            req.body.buying.figurines.forEach((figurine) => {
-                            marketplaceOffer.requesting.figurines.push(figurine)
-                            })
-                            req.body.selling.figurines.forEach((figurine) => {
-                            marketplaceOffer.offering.figurines.push(figurine)
-                            })
-                            console.log(colors.fg.red + marketplaceOffer + colors.reset)
-                            marketplaceOffer.save()
-                            res.statusCode = 200;
-                            res.json({
-                            success: true,
-                            errorMessage: ""
-                            })
                         } else {
+                            let errorMessage = 'you are already selling these figurines : \n'
+                            sellingFigs.forEach((figurine) => {
+                                errorMessage += figurine + '\n'
+                            })
                             res.status(400).json({
                                 success: false,
-                                errorMessage: 'you aren\'t selling double figurines'
-                            })
-                        }
-                        } else {
-                            res.status(400).json({
-                                success: false,
-                                errorMessage: 'user is already selling this figurine'
+                                errorMessage: errorMessage
                             })
                         }
                     })
