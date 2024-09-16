@@ -591,6 +591,44 @@ exports.postNewOffer = (req, res) => {
     }
 }
 
+exports.removeOffer = (req, res) => {
+    if(req.isAuthenticated()) {
+        users.findById(req.session.passport.user)
+        .then((user_profile) => {
+            marketplaceOffers.findOneAndDelete({
+                _id: req.body.offerId,
+                username: user_profile.username
+            })
+            .then((deletedOffer) => {
+                if(deletedOffer.offering.points > 0) {
+                    users.findOneAndUpdate({_id: user_profile._id}, 
+                        { $inc: { points: deletedOffer.offering.points } },
+                        { new: true }
+                    )
+                    .then((user) => {
+                        console.log(colors.fg.red + colors.bg.green + 'user updated' + colors.reset)  
+                    })
+                    .catch((error) => {
+                        utils.handleError('couldn\'t update user points \n error: ' + error, req, res)
+                    })
+                }
+                res.status(200).json({
+                    success: true,
+                    errorMessage: ''
+                })
+            })
+            .catch((error) => {
+                utils.handleError('bad request parameter or you don\'t own the offer \n error: ' + error, req, res)
+            })
+        })
+        .catch((error) => {
+            utils.handleError('error getting user profile \n error: ' + error, req, res)
+        })
+    } else {
+        utils.loginRedirect(req, res);
+    }
+}
+
 exports.getFilteredMarketplace = (req, res) => {
    
 }

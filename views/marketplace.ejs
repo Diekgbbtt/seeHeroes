@@ -355,7 +355,7 @@
             transition: all 0.3s ease;
         }
 
-        .removeButton:hover {
+        .removeButtonInternal:hover {
             transform: scale(1.05);
             box-shadow: 0 0 10px #8b0000;
         }
@@ -1099,11 +1099,14 @@
 
             const offerRemoveFooter = document.createElement('div');
             offerRemoveFooter.className = 'offerRemoveFooter';
-            offerRemoveFooter.innerHTML = ' <a class="removeButton" onclick="removeOffer(this)"><div class="removeButtonInternal"> <span>Remove</span> </div></a><% } %>'
-            if(user_offers.contains(offerContainer.getAttribute("data-key"))) {
-                offerRemoveFooter.innerHTML = ' <a class="removeButton" onclick="removeOffer(this)"><div class="removeButtonInternal"> <span>Remove</span> </div></a>';
-            } else {
-                offerRemoveFooter.stylee.display = 'none';
+            try {    
+                if(user_offers.includes(offer._id)) {
+                    offerRemoveFooter.innerHTML = ' <a class="removeButton" onclick="removeOffer(this)"><div class="removeButtonInternal"> <span>Remove</span> </div></a>';
+                } else {
+                    offerRemoveFooter.stylee.display = 'none';
+                }
+            } catch (error) {
+                console.log(error);
             }
 
             if(offer.requesting.points > 0) {
@@ -1582,7 +1585,7 @@
                     console.log('success')
                     console.log(data)
                     sessionStorage.clear();
-                    window.location.href = '/marketplace';
+                    window.location.reload();
                 } else {
                     alert(data.errorMessage)
                 }
@@ -1602,6 +1605,30 @@
                     }
                 })
 
+    }
+
+    function removeOffer(target) {
+        const offerContainer = target.parentNode.parentNode
+        const offerId = offerContainer.getAttribute('data-key')
+
+        fetch('/marketplace/offer/remove/', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                offerId: offerId
+            })
+        })
+        .then((response) => response.json())
+        .then((data) => {
+                if(data.success) {
+                    console.log('success')
+                    window.location.reload();
+                } else {
+                    alert('Error removing offer \n' + data.errorMessage)
+                }
+            })
     }
 
 
