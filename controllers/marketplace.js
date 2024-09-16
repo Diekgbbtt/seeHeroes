@@ -90,25 +90,46 @@ function checkAlreadySellingFigurines(offerSellingFigurines, user_offers) {
 
 function checkUserHasBuyingOfferFigurine(offerRequestingFigurines, userFigurines) {
     let check = 0;
+    let checkResult = true
+    let userFigurinesId = []
     if(offerRequestingFigurines.length > 0) {
         if(userFigurines.length > 0) {
             offerRequestingFigurines.forEach(requestingFigurine => {
                 userFigurines.forEach(figurine => {
                     if(requestingFigurine.figurine_name === figurine.name) {
+                        sellingFigs.push(figurine._id);
                         check++;
                         return true;
                     }
                 });
             });
         } else {
-            return false;
+            checkResult = false;
+            return {checkResult, userFigurinesId};
         }
     } else {
-        return true; // offer has no requesting figurine, only points if there are no userFigurines will be handled later
+        checkResult = true;
+        return {checkResult, userFigurinesId}; // offer has no requesting figurine, only points if there are no userFigurines will be handled later
     }
-    return (check === offerRequestingFigurines.length);
+    checkResult = check === offerRequestingFigurines.length
+    return {checkResult, userFigurinesId};
 }
 
+function checkuserFigurinesInAnotherOffer(userFigurinesId, username) {
+    let check = true;
+    marketplaceOffers.find({username: username})
+    .then((user_offers) => {
+        user_offers.offering.figurines.forEach(offerFigurine => {
+            userFigurinesId.forEach(figId => {
+                if(offerFigurine.figurine_id === figId) {
+                    console.log(colors.fg.yellow + "user figurine already in another offer" + figId + colors.reset)
+                    check = false;
+                }
+            });
+        });
+    })
+    return check;
+}
 function exchangeData(offer, id_user) {
     let check = true;
     users.findOne({username: offer.username })
@@ -295,9 +316,14 @@ exports.Exchange = (req, res) => {
                                 res.json({success: false, errorMessage: 'you don\'t have enough points to accept this exchange'});
                                 return;
                             }
-                            const { check, userFigurines }
-                            if(!check(offer.requesting.figurines, user_figurines)) {
-                                res.json({success: false, errorMessage: 'you don\'t have the figurines requested in the exchange offer'});
+                            const { checkResult, userFigurinesId } = checkUserHasBuyingOfferFigurine(offer.requesting.figurines, user_figurines)
+                            if(checkResult) {
+                                if(!checkuserFigurinesInAnotherOffer(userFigurinesId, user_profile.username)) {
+                                    res.status(400).json({success: false, errorMessage: 'the figurine requested in the exchange is already in another offer'});
+                                    return;
+                                }
+                            } else {
+                                res.status(400).json({success: false, errorMessage: 'you don\'t have the figurines requested in the exchange offer'});
                                 return;
                             }
                             if(exchangeData(offer, id_user)) {

@@ -1086,24 +1086,34 @@
 
             const offerFooter = document.createElement('div');
             offerFooter.className = 'offerFooter';
-            const exchangeButton = document.createElement('a');
-            exchangeButton.className = 'exchangeButton';
-            exchangeButton.setAttribute('onclick', 'exchange(this)');
-            const exchangeButtonInternal= document.createElement('div');
-            exchangeButtonInternal.className = 'exchangeButtonInternal';
-            const exchangeButtonText = document.createElement('span')
-            exchangeButtonText.textContent = 'Exchange';
-            exchangeButtonInternal.appendChild(exchangeButtonText);
-            exchangeButton.appendChild(exchangeButtonInternal);
-            offerFooter.appendChild(exchangeButton);
-
             const offerRemoveFooter = document.createElement('div');
             offerRemoveFooter.className = 'offerRemoveFooter';
             try {    
                 if(user_offers.includes(offer._id)) {
-                    offerRemoveFooter.innerHTML = ' <a class="removeButton" onclick="removeOffer(this)"><div class="removeButtonInternal"> <span>Remove</span> </div></a>';
+                    const removeButton = document.createElement('a');
+                    removeButton.className = 'removeButton';
+                    removeButton.setAttribute('onclick', 'removeOffer(this)');
+                    const removeButtonInternal = document.createElement('div');
+                    removeButtonInternal.className = 'removeButtonInternal';
+                    const removeButtonText = document.createElement('span')
+                    removeButtonText.textContent = 'Remove';
+                    removeButtonInternal.appendChild(removeButtonText);
+                    removeButton.appendChild(removeButtonInternal);
+                    offerRemoveFooter.appendChild(removeButton);
+                    offerFooter.style.display = 'none';
                 } else {
-                    offerRemoveFooter.stylee.display = 'none';
+                    const exchangeButton = document.createElement('a');
+                    exchangeButton.className = 'exchangeButton';
+                    exchangeButton.setAttribute('onclick', 'exchange(this)');
+                    const exchangeButtonInternal= document.createElement('div');
+                    exchangeButtonInternal.className = 'exchangeButtonInternal';
+                    const exchangeButtonText = document.createElement('span')
+                    exchangeButtonText.textContent = 'Exchange';
+                    exchangeButtonInternal.appendChild(exchangeButtonText);
+                    exchangeButton.appendChild(exchangeButtonInternal);
+                    offerFooter.appendChild(exchangeButton);
+
+                    offerRemoveFooter.style.display = 'none';
                 }
             } catch (error) {
                 console.log(error);
