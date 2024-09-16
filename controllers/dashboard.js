@@ -222,8 +222,16 @@ exports.getPacketPage = async (req, res) => {
  *               type: string
  *       400:
  *         description: Insufficient points for the purchase; or other server errors fetching user data
+ *         content:
+ *           text/html:
+ *             schema:
+ *               type: string
  *       302:
  *         description: Redirects to login page if not authenticated.
+ *         content:
+ *           text/html:
+ *             schema:
+ *               type: string
  */
 exports.postBuyPackets = async (req, res) => {
     console.log(req.body.amount);
@@ -317,9 +325,17 @@ exports.postBuyPackets = async (req, res) => {
  *                               type: integer
  *       302:
  *         description: Redirects to login page if not authenticated.
+ *         content:
+ *           text/html:
+ *             schema:
+ *               type: string
  *          
  *       400:
  *         description: bad request parameter or other server errors fetching user data; redirect to home page
+ *         content:
+ *           text/html:
+ *             schema:
+ *               type: string
  */
 exports.openPacket = (req, res) => {
 
@@ -450,8 +466,16 @@ exports.openPacket = (req, res) => {
  *                   description: Array of appearances in comics, series, stories, and events.
  *       302:
  *         description: Redirects to login page if not authenticated and shows not logged in alert
+ *         content:
+ *           text/html:
+ *             schema:
+ *               type: string
  *       400:
  *         description: bad request parameter or other server errors fetching user data; redirect to home page
+ *         content:
+ *           text/html:
+ *             schema:
+ *               type: string
  */
 exports.getCharacter = (req, res) => {
 
