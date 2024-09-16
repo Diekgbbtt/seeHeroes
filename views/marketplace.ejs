@@ -293,7 +293,7 @@
             flex-direction: row;
             justify-content: center;
             cursor: pointer;
-            border-radius: 10px;
+            border-radius: 25px;
         }
 
         .exchangeButtonInternal {
@@ -306,7 +306,7 @@
             color: #ffffff;
             background-color: #b11616;
             border: 2px solid #8b0000;
-            border-radius: 10px;
+            border-radius: 25px;
             padding: 15px 15px;
             box-sizing: border-box;
             transition: all 0.3s ease;
@@ -316,6 +316,50 @@
             transform: scale(1.05);
             box-shadow: 0 0 10px #8b0000;
         }
+
+        .offerRemoveFooter {
+            width: 100%;
+            height: 10%;
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .removeButton{
+            text-decoration: none; 
+            color: #b11616;
+            width: 120px;
+            height: 100%;
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+            cursor: pointer;
+            border-radius: 10px;
+        }
+
+        .removeButtonInternal {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+            align-items: center;
+            color: #8b0000;
+            font-weight: bold;
+            border: 2px solid #8b0000;
+            border-radius: 25px;
+            padding: 15px 15px;
+            box-sizing: border-box;
+            transition: all 0.3s ease;
+        }
+
+        .removeButton:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 10px #8b0000;
+        }
+
 
         .pagination-controls {
             width: 100%; 
@@ -1052,6 +1096,21 @@
             exchangeButton.appendChild(exchangeButtonInternal);
             offerFooter.appendChild(exchangeButton);
 
+            const offerRemoveFooter = document.createElement('div');
+            offerRemoveFooter.className = 'offerRemoveFooter';
+            const removeButton = document.createElement('a');
+            removeButton.className = 'removeButton';
+            removeButton.setAttribute('onclick', 'removeOffer(this)');
+            const removeButtonInternal= document.createElement('div');
+            removeButtonInternal.className = 'removeButtonInternal';
+            const removeButtonText = document.createElement('span')
+            removeButtonText.textContent = 'Remove';
+            removeButtonInternal.appendChild(removeButtonText);
+            removeButton.appendChild(removeButtonInternal);
+            offerRemoveFooter.appendChild(removeButton);
+
+
+
 
             if(offer.requesting.points > 0) {
                 const pointsNumber = document.createElement('span');
@@ -1194,6 +1253,7 @@
         offerContainer.appendChild(offerHeader);
         offerContainer.appendChild(offerCentral);
         offerContainer.appendChild(offerFooter);
+        offerContainer.appendChild(offerRemoveFooter);
 
         return offerContainer;
 
