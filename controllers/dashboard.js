@@ -100,7 +100,7 @@ exports.getDashboard = async (req, res) => {
 
 /**
  * @swagger
- *  /dashboard/buypoints/confirm:
+ *  /account/dashboard/buypoints/confirm:
  *   post:
  *     summary: Buy points for the user
  *     description: >
@@ -130,8 +130,16 @@ exports.getDashboard = async (req, res) => {
  *                   type: boolean
  *       302:
  *         description: Redirects to login page if not authenticated.
+ *         content:
+ *           text/html:
+ *             schema:
+ *               type: string
  *       400:
  *         description: bad request parameter or other server errors fetching user data; redirect to home page
+ *         content:
+ *           text/html:
+ *             schema:
+ *               type: string
  */
 exports.postBuyPoints =  async (req, res) => {
     if(req.isAuthenticated()) {
@@ -153,7 +161,7 @@ exports.postBuyPoints =  async (req, res) => {
 
 /**
  * @swagger
- * /dashboard/buypackets:
+ * /account/dashboard/buypackets:
  *   get:
  *     summary: Get packet purchase page
  *     description: >
@@ -170,6 +178,10 @@ exports.postBuyPoints =  async (req, res) => {
  *               type: string
  *       302:
  *         description: Redirects to login page if not authenticated.
+ *         content:
+ *           text/html:
+ *             schema:
+ *               type: string
  */
 exports.getPacketPage = async (req, res) => {
     if(req.isAuthenticated()) {
@@ -182,7 +194,7 @@ exports.getPacketPage = async (req, res) => {
 
 /**
  * @swagger
- * /dashboard/buypackets/confirm:
+ * /account/dashboard/buypackets/confirm:
  *   post:
  *     summary: Purchase packets
  *     description: >
@@ -260,8 +272,8 @@ exports.postBuyPackets = async (req, res) => {
 
 /**
  * @swagger
- * /dashboard/packets/{packet_id}:
- *   post:
+ * /account/dashboard/packets/{packet_id}:
+ *   get:
  *     summary: Open a packet
  *     description: >
  *       Opens a packet by removing it from the user's account and fetching the figurines 
@@ -283,9 +295,29 @@ exports.postBuyPackets = async (req, res) => {
  *             schema:
  *               type: array
  *               items:
- *                 $ref: '#/components/schemas/Figurine'
+ *                  type: object        
+ *                  properties:
+ *                       _id: 
+ *                          type: string
+ *                       id_user:
+ *                           type: string
+ *                       id_figurine:
+ *                           type: string
+ *                       name:
+ *                           type: string
+ *                       image_path:
+ *                           type: string
+ *                       ext:
+ *                           type: string
+ *                       description:
+ *                           type: string
+ *                       appearances:
+ *                           type: array
+ *                           items:
+ *                               type: integer
  *       302:
  *         description: Redirects to login page if not authenticated.
+ *          
  *       400:
  *         description: bad request parameter or other server errors fetching user data; redirect to home page
  */
@@ -373,7 +405,7 @@ exports.openPacket = (req, res) => {
 
 /**
  * @swagger
- * /dashboard/fig/{fig_id}:
+ * /account/dashboard/fig/{fig_id}:
  *   get:
  *     summary: Get character details
  *     description: >
