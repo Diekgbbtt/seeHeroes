@@ -993,6 +993,7 @@
 
 
     const all_offers = <%- JSON.stringify(offers); %> ;
+    const user_offers = <%- JSON.stringify(user_offers); %> ;
     const elementsPerPageInput = document.getElementById('elementsPerPage');
     let currentPage = 1;
     let offersPerPage = parseInt(elementsPerPageInput.value);
@@ -1098,19 +1099,12 @@
 
             const offerRemoveFooter = document.createElement('div');
             offerRemoveFooter.className = 'offerRemoveFooter';
-            const removeButton = document.createElement('a');
-            removeButton.className = 'removeButton';
-            removeButton.setAttribute('onclick', 'removeOffer(this)');
-            const removeButtonInternal= document.createElement('div');
-            removeButtonInternal.className = 'removeButtonInternal';
-            const removeButtonText = document.createElement('span')
-            removeButtonText.textContent = 'Remove';
-            removeButtonInternal.appendChild(removeButtonText);
-            removeButton.appendChild(removeButtonInternal);
-            offerRemoveFooter.appendChild(removeButton);
-
-
-
+            offerRemoveFooter.innerHTML = ' <a class="removeButton" onclick="removeOffer(this)"><div class="removeButtonInternal"> <span>Remove</span> </div></a><% } %>'
+            if(user_offers.contains(offerContainer.getAttribute("data-key"))) {
+                offerRemoveFooter.innerHTML = ' <a class="removeButton" onclick="removeOffer(this)"><div class="removeButtonInternal"> <span>Remove</span> </div></a>';
+            } else {
+                offerRemoveFooter.stylee.display = 'none';
+            }
 
             if(offer.requesting.points > 0) {
                 const pointsNumber = document.createElement('span');

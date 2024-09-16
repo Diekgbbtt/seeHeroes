@@ -60,6 +60,15 @@ function checkAreSellingFigurinesDouble(sellingFigurines, userDoubleFigurines) {
     return check;
 }
 
+function filterUserOffers(allOffers, username) {
+    let userOffers = [];
+    allOffers.forEach(offer => {
+        if(offer.username === username) {
+            userOffers.push(offer._id);
+        }
+    });
+    return userOffers;
+}
 
 function checkAlreadySellingFigurines(offerSellingFigurines, user_offers) {
     let check = true;
@@ -220,7 +229,8 @@ exports.getMarketplace = async (req, res) => {
                         .then((user_figurines) => {
                             console.log(utils)
                             const { userDoubleFigurines } = utils.checkDoubleFigs(user_figurines)
-                            res.render('marketplace', {offers: offers, user: req.session.passport.user, user_doublefigurines: userDoubleFigurines || [], user_points: user_profile.points});
+                            const userOffers = filterUserOffers(offers, user_profile.username);
+                            res.render('marketplace', {offers: offers, user_offers: userOffers || [], user: req.session.passport.user, user_doublefigurines: userDoubleFigurines || [], user_points: user_profile.points});
                         })
                         .catch((error) => {
                             utils.handleError('couldn\'t get user figurines \n error : ' + error, req, res);
