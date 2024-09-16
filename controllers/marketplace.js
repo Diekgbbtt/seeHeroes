@@ -492,6 +492,7 @@ exports.getPertinentHeroes = (req, res) => {
 exports.postNewOffer = (req, res) => {
     if (req.isAuthenticated()) {
       if(checkIsOfferComplete(req.body)) {
+        
         users.findById(req.session.passport.user)
             .then((user_profile) => {
             usersFigurines.find({
@@ -505,7 +506,6 @@ exports.postNewOffer = (req, res) => {
                     username: user_profile.username
                     })
                     .then((user_offers) => {
-
                         const {check, sellingFigs} =  checkAlreadySellingFigurines(req.body.selling.figurines, user_offers)
                         if (check) {
                             if (checkAreSellingFigurinesDouble(req.body.selling.figurines, userDoubleFigurines)) {
@@ -570,10 +570,10 @@ exports.postNewOffer = (req, res) => {
                 utils.handleError('error getting user profile \n error: ' + error, req, res)
             })
       } else {
-        console.log('offer isn\'t complete, there must be at least a figurine or point reuqest in both buying and selling')
+        console.log('offer isn\'t complete, there must be at least a figurine or point request in both buying and selling')
         res.status(400).json({
             success: false,
-            errorMessage: 'offer isn\'t complete, there must be at least a figurine or point reuqest in both buying and selling'
+            errorMessage: 'offer isn\'t complete, there must be at least a figurine or point request in both buying and selling'
         })
       }
     } else {
