@@ -166,14 +166,7 @@ function exchangeData(offer, id_user) {
                 .then((updated_user) => {
                     console.log(colors.fg.green + "current user " + updated_user.username + " has " + updated_user.points + " points" + colors.reset)
                 })
-                users.findOneAndUpdate(
-                    {_id: offer_user._id},
-                    { $inc: {points: -offer.offering.points} },
-                    {new: true}
-                )
-                .then((updated_user) => {
-                    console.log(colors.fg.yellow + "offer user " + updated_user.username + " has " + updated_user.points + " points" + colors.reset)
-                })
+                // for the user of the offer, selling points were deducted on offer creation to preserve credits
             }
 
         })
@@ -302,7 +295,8 @@ exports.Exchange = (req, res) => {
                                 res.json({success: false, errorMessage: 'you don\'t have enough points to accept this exchange'});
                                 return;
                             }
-                            if(!checkUserHasBuyingOfferFigurine(offer.requesting.figurines, user_figurines)) {
+                            const { check, userFigurines }
+                            if(!check(offer.requesting.figurines, user_figurines)) {
                                 res.json({success: false, errorMessage: 'you don\'t have the figurines requested in the exchange offer'});
                                 return;
                             }
@@ -502,93 +496,107 @@ exports.getPertinentHeroes = (req, res) => {
 exports.postNewOffer = (req, res) => {
     if (req.isAuthenticated()) {
       if(checkIsOfferComplete(req.body)) {
-        
-        users.findById(req.session.passport.user)
-            .then((user_profile) => {
-            usersFigurines.find({
-                id_user: user_profile.id
-                })
-                .then((user_figurines) => {
-                const { userDoubleFigurines } = utils.checkDoubleFigs(user_figurines);
-                console.log(colors.fg.blue + req.body + colors.reset)
-                // check user isn't  creating an offer equal to another of his own
-                marketplaceOffers.find({
-                    username: user_profile.username
-                    })
-                    .then((user_offers) => {
-                        const {check, sellingFigs} =  checkAlreadySellingFigurines(req.body.selling.figurines, user_offers)
-                        if (check) {
-                            if (checkAreSellingFigurinesDouble(req.body.selling.figurines, userDoubleFigurines)) {
-                                const marketplaceOffer = new marketplaceOffers({
-                                username: user_profile.username,
-                                requesting: {
-                                    figurines: [],
-                                    points: req.body.buying.points
-                                },
-                                offering: {
-                                    figurines: [],
-                                    points: req.body.selling.points
+        // check user has enough selling points included in the offer
+        users.findOne({ _id: req.session.passport.user })
+        .then((user_profile) => {
+            if (req.body.selling.points <= user_profile.points) {
+                users.findOneAndUpdate({ _id: req.session.passport.user},
+                        { $inc: { points: -req.body.selling.points } },
+                        { new: true }
+                    )
+                    .then((user_profile) => {
+                        usersFigurines.find({
+                            id_user: user_profile.id
+                        })
+                        .then((user_figurines) => {
+                        const { userDoubleFigurines } = utils.checkDoubleFigs(user_figurines);
+                        console.log(colors.fg.blue + req.body + colors.reset)
+                        marketplaceOffers.find({
+                            username: user_profile.username
+                            })
+                            .then((user_offers) => {
+                                const {check, sellingFigs} =  checkAlreadySellingFigurines(req.body.selling.figurines, user_offers)
+                                if (check) {
+                                    if (checkAreSellingFigurinesDouble(req.body.selling.figurines, userDoubleFigurines)) {
+                                        const marketplaceOffer = new marketplaceOffers({
+                                        username: user_profile.username,
+                                        requesting: {
+                                            figurines: [],
+                                            points: req.body.buying.points
+                                        },
+                                        offering: {
+                                            figurines: [],
+                                            points: req.body.selling.points
+                                        }
+                                        })
+                                        req.body.buying.figurines.forEach((figurine) => {
+                                        marketplaceOffer.requesting.figurines.push(figurine)
+                                        })
+                                        req.body.selling.figurines.forEach((figurine) => {
+                                        marketplaceOffer.offering.figurines.push(figurine)
+                                        })
+                                        console.log(colors.fg.red + marketplaceOffer + colors.reset)
+                                        marketplaceOffer.save()
+                                        res.status(200).json({
+                                        success: true,
+                                        errorMessage: ""
+                                        })
+                                    } else {
+                                        res.status(400).json({
+                                            success: false,
+                                            errorMessage: 'you aren\'t selling double figurines'
+                                        })
+                                    }
+                                } else {
+                                    let errorMessage = 'you are already selling these figurines : \n'
+                                    sellingFigs.forEach((figurine) => {
+                                        errorMessage += figurine + '\n'
+                                    })
+                                    res.status(400).json({
+                                        success: false,
+                                        errorMessage: errorMessage
+                                    })
                                 }
-                                })
-                                req.body.buying.figurines.forEach((figurine) => {
-                                marketplaceOffer.requesting.figurines.push(figurine)
-                                })
-                                req.body.selling.figurines.forEach((figurine) => {
-                                marketplaceOffer.offering.figurines.push(figurine)
-                                })
-                                console.log(colors.fg.red + marketplaceOffer + colors.reset)
-                                marketplaceOffer.save()
-                                res.statusCode = 200;
-                                res.json({
-                                success: true,
-                                errorMessage: ""
-                                })
-                            } else {
+                            })
+                            .catch((error) => {
+                            console.log('couldn\'t find user of the offer offers \n error : ' + error)
                                 res.status(400).json({
                                     success: false,
-                                    errorMessage: 'you aren\'t selling double figurines'
+                                    errorMessage: 'couldn\'t load user figurines \n error : ' + error
                                 })
-                            }
-                        } else {
-                            let errorMessage = 'you are already selling these figurines : \n'
-                            sellingFigs.forEach((figurine) => {
-                                errorMessage += figurine + '\n'
                             })
+                        })
+                        .catch((error) => {
+                            console.log('couldn\'t load user figurines \n error : ' + error)
                             res.status(400).json({
                                 success: false,
-                                errorMessage: errorMessage
+                                errorMessage: 'couldn\'t load user figurines \n error : ' + error
                             })
-                        }
-                    })
-                    .catch((error) => {
-                    console.log('couldn\'t find user of the offer offers \n error : ' + error)
-                        res.status(400).json({
-                            success: false,
-                            errorMessage: 'couldn\'t load user figurines \n error : ' + error
                         })
                     })
-                })
-                .catch((error) => {
-                    console.log('couldn\'t load user figurines \n error : ' + error)
-                    res.status(400).json({
-                        success: false,
-                        errorMessage: 'couldn\'t load user figurines \n error : ' + error
+                    .catch((error) => {
+                        utils.handleError('error getting user profile \n error: ' + error, req, res)
                     })
-                })
+        } else {
+            res.status(400).json({
+                success: false,
+                errorMessage: 'you don\'t have enough points to create this exchange offer'
             })
-            .catch((error) => {
-                utils.handleError('error getting user profile \n error: ' + error, req, res)
-            })
-      } else {
+        }
+     })
+        .catch((error) => {
+            utils.handleError('error getting user profile \n error: ' + error, req, res)
+        })  
+    } else {
         console.log('offer isn\'t complete, there must be at least a figurine or point request in both buying and selling')
         res.status(400).json({
             success: false,
             errorMessage: 'offer isn\'t complete, there must be at least a figurine or point request in both buying and selling'
         })
-      }
-    } else {
-        utils.loginRedirect(req, res);
     }
+  } else {
+      utils.loginRedirect(req, res);
+  }
 }
 
 exports.removeOffer = (req, res) => {
