@@ -20,9 +20,6 @@ const homeController = require('./controllers/home');
 const accountRoutes = require('./routes/accountRoutes');
 const marketplaceRoutes = require('./routes/marketplaceRoutes');
 
-/* Passport configuration for authentication*/
-// const passportConfig = require('./config/passport')
-
 dotenv.config({ path: '.env' });
 
 const app = express();
