@@ -37,13 +37,13 @@ exports.getLogin = (req, res) => {
  * @swagger
  * /account/login:
  *   post:
- *     summary: Load login page
+ *     summary: Submit login form
  *     description: >
- *       The login page is rendered for clients who are not logged in. It also provides access 
- *       to the signup page.
+ *       the login data is submitted, if a corresponding user is found;
+ *        the user is logged in and redirected to the dashboard.
  *     responses:
  *       200:
- *         description: Successful request; login page is rendered.
+ *         description: Successful request; the user is logged in and redirected to the dashboard.
  *         content:
  *           text/html:
  *             schema:
@@ -69,7 +69,7 @@ exports.postLogin = (req, res, next) => {
     if (!user) {
       req.flash('errors', {msg: 'incorrect email or password'});
       console.log("user not found")
-      return res.redirect('/account/login');
+      return res.status(400).render('login', { messages: {errors: [], redirectErrors: req.flash('errors') }});
     }
     req.logIn(user, (err) => {
       if (err) { return next(err); }
@@ -78,7 +78,30 @@ exports.postLogin = (req, res, next) => {
     });
   })(req, res, next);
 
-};
+//   passport.authenticate('local')
+//     .then((user) => {
+//       if (!user) {
+//         req.flash('errors', {msg: 'incorrect email or password'});
+//         console.log("user not found")
+//         return res.status(400).render('login', { messages: {errors: req.flash('errors'), redirectErrors: [] }});
+//       }
+//       req.logIn(user)
+//         .then(() => {
+//           req.flash('success', { msg: 'Success! You are logged in.' });
+//           res.redirect('/account/dashboard' || req.session.returnTo );
+//         })
+//         .catch(err => {
+//           req.flash('errors', {msg: 'couldn\t log in the user'});
+//           console.log("couldn\t log in the user")
+//           return res.status(400).render('login', { messages: {errors: req.flash('errors'), redirectErrors: [] }});
+//         })
+//     })
+//     .catch(err => {
+//       req.flash('errors', {msg: 'couldn\t auth the user'});
+//       console.log("couldn\t auth the user")
+//       return res.status(400).render('login', { messages: {errors: req.flash('errors'), redirectErrors: [] }});
+//     });
+// };
 
 
 /**
@@ -113,7 +136,7 @@ exports.getSignup = (req, res) => {
  *     summary: Submit signup form
  *     description: >
  *       Submits the signup form to create a new account. 
- *       If successful, the user will be registered and redirected.
+ *       If successful, the user will be registered, logged and redirected to dashboard
  *     responses:
  *       200:
  *         description: Successful request; user signup form is processed.

@@ -146,36 +146,6 @@ If deserialization is successful, Passport attaches the user object to the reque
 In your routes, you can then check req.isAuthenticated() (provided by Passport) to see if a user is logged in
 */
 
-app.use((req, res, next) => {
-  res.locals.user = req.user;
-  next();
-});
-/* This makes the user object available to all views rendered during this request cycle.
-It's useful for passing the authenticated user's information to your views without having to pass it explicitly in every route.
-next() passes control to the next middleware function in the stack.
-*/
-app.use((req, res, next) => {
-  // After successful login, redirect back to the intended page
-  if (!req.user
-    && req.path !== '/login'
-    && req.path !== '/signup'
-    && !req.path.match(/^\/auth/)
-    && !req.path.match(/\./)) {
-    req.session.returnTo = req.originalUrl;
-  } else if (req.user
-    && (req.path === '/account')) {
-    req.session.returnTo = req.originalUrl;
-  }
-  next();
-});
-/* This middleware manages redirects after successful login or signup.
-It's used to redirect the user back to the page they were trying to access after successful authentication.
-Assigns the original URL to the session variable returnTo if the user is not authenticated and the user is not trying to access the login or signup pages.
-or if teh user is logged in and trying to access the account page
-This allows the app to redirect users back to the page they were trying to access before being prompted to log in.
-*/
-
-
 
 app.use('/faq', homeController.getFAQ);
 app.use('/account', accountRoutes);
