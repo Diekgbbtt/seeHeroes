@@ -76,8 +76,6 @@ function checkAlreadySellingFigurines(offerSellingFigurines, user_offers) {
     offerSellingFigurines.forEach(sellingFigurine => {
         user_offers.forEach(offer => {
             offer.offering.figurines.forEach(offerFigurine => {
-                console.log(colors.fg.cyan + offerFigurine + colors.reset)
-                console.log(colors.fg.magenta + sellingFigurine + colors.reset)
                 if(sellingFigurine.figurine_id === offerFigurine.figurine_id) {
                     check = false;
                     sellingFigs.push(sellingFigurine.figurine_name);
@@ -89,7 +87,6 @@ function checkAlreadySellingFigurines(offerSellingFigurines, user_offers) {
 }
 
 function checkUserHasBuyingOfferFigurine(offerRequestingFigurines, userFigurines) {
-    let check = 0;
     let checkResult = true
     let userFigurinesId = []
     if(offerRequestingFigurines.length > 0) {
@@ -97,8 +94,9 @@ function checkUserHasBuyingOfferFigurine(offerRequestingFigurines, userFigurines
             offerRequestingFigurines.forEach(requestingFigurine => {
                 userFigurines.forEach(figurine => {
                     if(requestingFigurine.figurine_name === figurine.name) {
-                        sellingFigs.push(figurine._id);
-                        check++;
+                        console.log(colors.fg.green + "FOUND: " + figurine._id + colors.reset)
+                        userFigurinesId.push(figurine._id);
+                        offerRequestingFigurines.splice(offerRequestingFigurines.indexOf(requestingFigurine), 1);
                         return true;
                     }
                 });
@@ -111,7 +109,7 @@ function checkUserHasBuyingOfferFigurine(offerRequestingFigurines, userFigurines
         checkResult = true;
         return {checkResult, userFigurinesId}; // offer has no requesting figurine, only points if there are no userFigurines will be handled later
     }
-    checkResult = check === offerRequestingFigurines.length
+    checkResult = offerRequestingFigurines.length === 0;
     return {checkResult, userFigurinesId};
 }
 
@@ -119,7 +117,8 @@ function checkuserFigurinesInAnotherOffer(userFigurinesId, username) {
     let check = true;
     marketplaceOffers.find({username: username})
     .then((user_offers) => {
-        user_offers.offering.figurines.forEach(offerFigurine => {
+        user_offers.forEach((offer) => {
+            offer.offering.figurines.forEach(offerFigurine => {
             userFigurinesId.forEach(figId => {
                 if(offerFigurine.figurine_id === figId) {
                     console.log(colors.fg.yellow + "user figurine already in another offer" + figId + colors.reset)
@@ -127,6 +126,7 @@ function checkuserFigurinesInAnotherOffer(userFigurinesId, username) {
                 }
             });
         });
+    });
     })
     return check;
 }
@@ -241,7 +241,6 @@ exports.getMarketplace = async (req, res) => {
                     .then((user_profile) => {
                         usersFigurines.find( { id_user: user_profile.id } )
                         .then((user_figurines) => {
-                            console.log(utils)
                             const { userDoubleFigurines } = utils.checkDoubleFigs(user_figurines)
                             const userOffers = filterUserOffers(offers, user_profile.username);
                             res.render('marketplace', {offers: offers, user_offers: userOffers || [], user: req.session.passport.user, user_doublefigurines: userDoubleFigurines || [], user_points: user_profile.points});
@@ -308,14 +307,12 @@ exports.Exchange = (req, res) => {
             .then((offer) => {
                 users.findById(id_user)
                 .then((user_profile) => {
+                        if(offer.requesting.points > user_profile.points) {
+                            res.json({success: false, errorMessage: 'you don\'t have enough points to accept this exchange'});
+                            return;
+                        }
                     usersFigurines.find( { id_user: id_user } )
-                        .then((user_figurines) => {
-                            console.log(colors.fg.blue + user_figurines + '\n\n\n')
-                            console.log(colors.fg.magenta + offer + '\n\n\n')
-                            if(offer.requesting.points > user_profile.points) {
-                                res.json({success: false, errorMessage: 'you don\'t have enough points to accept this exchange'});
-                                return;
-                            }
+                    .then((user_figurines) => {
                             const { checkResult, userFigurinesId } = checkUserHasBuyingOfferFigurine(offer.requesting.figurines, user_figurines)
                             if(checkResult) {
                                 if(!checkuserFigurinesInAnotherOffer(userFigurinesId, user_profile.username)) {
