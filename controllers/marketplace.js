@@ -118,9 +118,10 @@ function checkuserFigurinesInAnotherOffer(userFigurinesId, username) {
     let check = true;
     marketplaceOffers.find({username: username})
     .then((user_offers) => {
+        userFigurinesId.forEach(figId => {
         user_offers.forEach((offer) => {
             offer.offering.figurines.forEach(offerFigurine => {
-            userFigurinesId.forEach(figId => {
+                console.log(" in this offer user is selling fig: "+offerFigurine.figurine_id + "we are checking: "+figId)
                 if(offerFigurine.figurine_id === figId) {
                     console.log(colors.fg.yellow + "user figurine already in another offer" + figId + colors.reset)
                     check = false;
