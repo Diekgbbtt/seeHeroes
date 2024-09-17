@@ -220,7 +220,6 @@ function exchangeData(offer, id_user) {
  *       500:
  *         description: Internal server error.
  */
-
 exports.getMarketplace = async (req, res) => {
 
     marketplaceOffers.find()
@@ -306,11 +305,8 @@ exports.Exchange = (req, res) => {
                             const { checkResult, missingFigurines } = checkUserHasBuyingOfferFigurine(offer.requesting.figurines, userDoubleFigurines)
                             console.log(checkResult)
                             if(!checkResult) {
-                                const errorMessage = 'you don\'t have these requested figurines as double or at all: \n';
+                                const errorMessage = 'you don\'t have these requested figurines as double or at all: \n' + missingFigurines + '\n';
                                 console.log(colors.fg.cyan + 'missing figurines : ' + missingFigurines + '\n\n\n' +  colors.reset)
-                                missingFigurines.forEach((figurine) => {
-                                    errorMessage += figurine + '\n';
-                                });
                                 res.status(400).json({success: false, errorMessage: errorMessage});
                                 return;
                             } 
@@ -613,6 +609,50 @@ exports.postNewOffer = (req, res) => {
   }
 }
 
+/**
+ * @swagger
+ * /marketplace/offer/remove:
+ *   post:
+ *
+ *     summary: Remove an offer from the marketplace.
+ *     description: This endpoint allows authenticated users to remove their offer from the marketplace. It deletes the offer and updates user points if applicable.
+ *     parameters:
+ *       - in: body
+ *         name: body
+ *         description: The ID of the offer to be removed.
+ *         required: true
+ *         schema:
+ *           type: object
+ *           properties:
+ *             offerId:
+ *               type: string
+ *               description: The ID of the offer to be removed.
+ *     responses:
+ *       200:
+ *         description: Successful offer removal.
+ *         schema:
+ *           type: object
+ *           properties:
+ *             success:
+ *               type: boolean
+ *               example: true
+ *             errorMessage:
+ *               type: string
+ *       400:
+ *         description: Bad request or user does not own the offer.
+ *         schema:
+ *           type: object
+ *           properties:
+ *             success:
+ *               type: boolean
+ *               example: false
+ *             errorMessage:
+ *               type: string
+ *       302:
+ *         description: Unauthorized, user needs to be authenticated
+ *     security:
+ *       - cookieAuth: []
+ */
 exports.removeOffer = (req, res) => {
     if(req.isAuthenticated()) {
         users.findById(req.session.passport.user)
@@ -649,10 +689,6 @@ exports.removeOffer = (req, res) => {
     } else {
         utils.loginRedirect(req, res);
     }
-}
-
-exports.getFilteredMarketplace = (req, res) => {
-   
 }
 
 

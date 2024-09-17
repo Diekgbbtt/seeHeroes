@@ -1607,7 +1607,7 @@
         const offerContainer = target.parentNode.parentNode
         const offerId = offerContainer.getAttribute('data-key')
 
-        fetch('/marketplace/offer/remove/', {
+        fetch('/marketplace/offer/remove', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'

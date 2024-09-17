@@ -494,11 +494,3 @@ exports.getCharacter = (req, res) => {
         utils.loginRedirect(req, res);
     }
 }
-
-exports.getProfileEdit = (req, res) => {
-    
-}
-
-exports.postProfileEdit = (req, res) => {
-
-}

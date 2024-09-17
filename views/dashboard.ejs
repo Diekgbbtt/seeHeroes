@@ -506,7 +506,7 @@
         }
 
         #packetBuyButton:hover div {
-            background-color: #ff0000;
+            background-color: hsl(330, 62%, 23%);
             transform: scale(1.02);
             box-shadow: 0 0 10px rgba(146, 88, 8, 0.5);
         }
@@ -1227,9 +1227,17 @@
                                         <a id="button-openpacket" onclick="openPacket(this)" style="cursor: pointer;">
                                             <svg width="70" height="100" viewBox="0 0 70 100" data-key="<%= packet._id %>">
                                                 <defs>
-                                                    <pattern id="stripes" patternUnits="userSpaceOnUse" width="10" height="10">
-                                                        <rect width="10" height="5" fill="#b11616"/>
-                                                        <rect width="10" height="5" y="5" fill="#8b0000"/>
+                                                    <pattern id="stripes-<%= packet._id %>" patternUnits="userSpaceOnUse" width="10" height="10">
+                                                        <% if (packet.type === 'rare') { %>
+                                                            <rect width="10" height="5" fill="#FF00FF"/>
+                                                            <rect width="10" height="5" y="5" fill="#8B008B"/>
+                                                        <% } else if (packet.type === 'legendary') { %>
+                                                            <rect width="10" height="5" fill="#800080"/>
+                                                            <rect width="10" height="5" y="5" fill="#4B0082"/>
+                                                        <% } else { %>
+                                                            <rect width="10" height="5" fill="#b11616"/>
+                                                            <rect width="10" height="5" y="5" fill="#8b0000"/>
+                                                        <% } %>
                                                     </pattern>
                                                 </defs>
                                                 <path d="M0,6.25 L5.83,0 L11.67,6.25 L17.5,0 L23.33,6.25 L29.17,0 L35,6.25 L40.83,0 L46.67,6.25 L52.5,0 L58.33,6.25 L64.17,0 L70,6.25 V93.75 L64.17,100 L58.33,93.75 L52.5,100 L46.67,93.75 L40.83,100 L35,93.75 L29.17,100 L23.33,93.75 L17.5,100 L11.67,93.75 L5.83,100 L0,93.75 Z" fill="url(#stripes)" stroke="#000000"/>
