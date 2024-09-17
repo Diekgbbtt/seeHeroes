@@ -92,14 +92,14 @@ function checkUserHasBuyingOfferFigurine(offerRequestingFigurines, userFigurines
     if(offerRequestingFigurines.length > 0) {
         if(userFigurines.length > 0) {
             offerRequestingFigurines.forEach(requestingFigurine => {
-                userFigurines.forEach(figurine => {
-                    if(requestingFigurine.figurine_name === figurine.name && !userFigurinesId.includes(figurine._id)) {
-                        if(userFigurinesId.lenght === offerRequestingFigurines.indexOf(requestingFigurine))
-                        console.log(colors.fg.green + "FOUND: " + figurine._id + colors.reset)
+                for (let i = 0; i < userFigurines.length; i++) {
+                    const figurine = userFigurines[i];
+                    if (requestingFigurine.figurine_name === figurine.name && !userFigurinesId.includes(figurine._id)) {
+                        console.log(colors.fg.green + "FOUND: " + figurine._id + colors.reset);
                         userFigurinesId.push(figurine._id);
-                        return
+                        return;
                     }
-                });
+                }
             });
         } else {
             checkResult = false;

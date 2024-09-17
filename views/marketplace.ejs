@@ -1329,14 +1329,6 @@
     }
 
     function addSellingItem(target){
-        // check for hero buy and sell request
-        for(let buyingItem of exchangeItems.buying.figurines) {
-            if(buyingItem.figurine_name === target.parentNode.children[0].textContent) {
-                console.log(buyingItem.name)
-                console.log("you are already buying this hero")
-                return
-            }
-        }
 
         target.parentNode.children[0].children[0].classList.toggle('disabled');
         target.parentNode.children[1].classList.toggle('disabled');
@@ -1469,18 +1461,12 @@
     }
 
     function addBuyingItem(itemName){
-        // check for hero buy and sell request
-        for(let sellingItem of exchangeItems.selling.figurines) {
-            if(sellingItem.figurine_name === itemName) {
-                console.log("you are already selling this hero")
-                return
-            }
-        }
+        // check for hero buy and sell requests
         
         // check for hero double buy request
         for(let buyingItem of exchangeItems.buying.figurines) {
             if(buyingItem.figurine_name === itemName) {
-                console.log("you are already buying this hero")
+                alert("you are already buying this hero")
                 return
             }
         }
@@ -1489,7 +1475,7 @@
             if(sessionStorage.hasOwnProperty(key)) {
                 if(key.startsWith('double_')) {
                     if(JSON.parse(sessionStorage.getItem(key)).name === itemName) {
-                        console.log("you already have this hero in doubles, you can have maximum 2 figurines per hero")
+                        alert("you already have this hero in doubles, you can have maximum 2 figurines per hero")
                         return
                     }
                 }
