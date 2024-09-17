@@ -89,6 +89,7 @@ function checkAlreadySellingFigurines(offerSellingFigurines, user_offers) {
 function checkUserHasBuyingOfferFigurine(offerRequestingFigurines, userFigurines) {
     let checkResult = true
     let userFigurinesId = []
+    let missingFigurines = []
     if(offerRequestingFigurines.length > 0) {
         if(userFigurines.length > 0) {
             offerRequestingFigurines.forEach(requestingFigurine => {
@@ -100,39 +101,21 @@ function checkUserHasBuyingOfferFigurine(offerRequestingFigurines, userFigurines
                         return;
                     }
                 }
+                missingFigurines.push(requestingFigurine.figurine_name);
             });
         } else {
             checkResult = false;
-            return {checkResult, userFigurinesId};
+            return {checkResult, missingFigurines};
         }
     } else {
         checkResult = true;
-        return {checkResult, userFigurinesId}; // offer has no requesting figurine, only points if there are no userFigurines will be handled later
+        return {checkResult, missingFigurines}; // offer has no requesting figurine, only points if there are no userFigurines will be handled later
     }
     console.log(userFigurinesId.length)
     console.log(offerRequestingFigurines.length)
     console.log(userFigurinesId.length === offerRequestingFigurines.length)
     checkResult = userFigurinesId.length === offerRequestingFigurines.length;
-    return checkResult
-}
-
-function checkuserFigurinesInAnotherOffer(userFigurinesId, user_offers) {
-    let check = true;
-        console.log(user_offers)
-        userFigurinesId.forEach(figId => {
-        user_offers.forEach((offer) => {
-            offer.offering.figurines.forEach(offerFigurine => {
-                console.log(typeof figId)
-                console.log(typeof offerFigurine.figurine_id)
-                console.log(" in this offer user is selling fig: "+offerFigurine.figurine_id + " we are checking: "+figId)
-                if(offerFigurine.figurine_id === figId) {
-                    console.log(colors.fg.yellow + "user figurine already in another offer" + figId + colors.reset)
-                    check = false;
-                }
-            });
-        });
-    });
-    return check;
+    return {checkResult, missingFigurines}
 }
 
 function exchangeData(offer, id_user) {
@@ -320,9 +303,15 @@ exports.Exchange = (req, res) => {
                     usersFigurines.find( { id_user: id_user } )
                     .then((user_figurines) => {
                         const { userDoubleFigurines } = utils.checkDoubleFigs(user_figurines);
-                            const checkResult = checkUserHasBuyingOfferFigurine(offer.requesting.figurines, userDoubleFigurines)
+                            const { checkResult, missingFigurines } = checkUserHasBuyingOfferFigurine(offer.requesting.figurines, userDoubleFigurines)
+                            console.log(checkResult)
                             if(!checkResult) {
-                                res.status(400).json({success: false, errorMessage: 'you don\'t have the figurines requested in the exchange offer as double or at all'});
+                                const errorMessage = 'you don\'t have these requested figurines as double or at all: \n';
+                                console.log(colors.fg.cyan + 'missing figurines : ' + missingFigurines + '\n\n\n' +  colors.reset)
+                                missingFigurines.forEach((figurine) => {
+                                    errorMessage += figurine + '\n';
+                                });
+                                res.status(400).json({success: false, errorMessage: errorMessage});
                                 return;
                             } 
                             if(exchangeData(offer, id_user)) {
