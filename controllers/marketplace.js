@@ -109,6 +109,9 @@ function checkUserHasBuyingOfferFigurine(offerRequestingFigurines, userFigurines
         checkResult = true;
         return {checkResult, userFigurinesId}; // offer has no requesting figurine, only points if there are no userFigurines will be handled later
     }
+    console.log(userFigurinesId.length)
+    console.log(offerRequestingFigurines.length)
+    console.log(userFigurinesId.length === offerRequestingFigurines.length)
     checkResult = userFigurinesId.length === offerRequestingFigurines.length;
     return checkResult
 }
@@ -317,7 +320,7 @@ exports.Exchange = (req, res) => {
                     usersFigurines.find( { id_user: id_user } )
                     .then((user_figurines) => {
                         const { userDoubleFigurines } = utils.checkDoubleFigs(user_figurines);
-                            const {checkResult} = checkUserHasBuyingOfferFigurine(offer.requesting.figurines, userDoubleFigurines)
+                            const checkResult = checkUserHasBuyingOfferFigurine(offer.requesting.figurines, userDoubleFigurines)
                             if(!checkResult) {
                                 res.status(400).json({success: false, errorMessage: 'you don\'t have the figurines requested in the exchange offer as double or at all'});
                                 return;
