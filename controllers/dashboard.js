@@ -234,20 +234,22 @@ exports.getPacketPage = async (req, res) => {
  *               type: string
  */
 exports.postBuyPackets = async (req, res) => {
-    console.log(req.body.amount);
+    const typeMoltiplicator = {
+        'basic': 3,
+        'rare': 5,
+        'legendary': 7
+    }
+    const pointsMoltiplicator = typeMoltiplicator[req.body.type] || 1
     if(req.isAuthenticated()) {
         users.findById( {_id: req.session.passport.user})
             .then((user) => {
-                console.log(user.points);
-                console.log(user._id);
-                console.log(user.id);
                 if(user.points >= req.body.amount) {
-                    users.findOneAndUpdate( { _id: user._id }, { $inc: {points: -req.body.amount } })
+                    users.findOneAndUpdate( { _id: user._id }, { $inc: {points: -req.body.amount*pointsMoltiplicator } })
                         .then(() => {
                             for (let i = 0; i < req.body.amount; i++) {
                                 const packet = new usersPackets({
                                     id_user: req.session.passport.user,
-                                    type: 'basic'
+                                    type: req.body.type
                                 })
                                 packet.save()
                                     .then((packet) => {
