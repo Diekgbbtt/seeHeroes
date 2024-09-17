@@ -144,7 +144,7 @@ function exchangeData(offer, id_user) {
                         {new: true}
                     )
                     .then((updated_user_figurine) => {
-                      console.log(colors.fg.red + "updated user of requesting figurine " + id_user + " to " + updated_user_figurine.id_user + colors.reset)
+                      console.log(colors.fg.red + "updated user of requesting figurine <" + updated_user_figurine._id + "> from " + id_user + " to " + updated_user_figurine.id_user + colors.reset)
                     })
                 })
             }
@@ -170,12 +170,12 @@ function exchangeData(offer, id_user) {
             if(offer.offering.figurines.length > 0) {
                 offer.offering.figurines.forEach((sellingFigurine) => {
                     usersFigurines.findOneAndUpdate(
-                        {_id: sellingFigurine.figurine_id, id_user: offer_user._id},
+                        {_id: sellingFigurine.figurine_id},
                         { $set: {id_user: id_user} },
                         {new: true}
                     )
                     .then((updated_user_figurine) => {
-                      console.log(colors.fg.red + "updated user of selling figurine " + offer_user._id + " to " + updated_user_figurine.id_user + colors.reset)
+                      console.log(colors.fg.red + "updated user of selling figurine <" + updated_user_figurine._id + "> from " + offer_user._id + " to " + updated_user_figurine.id_user + colors.reset)
                     })
                 })
             }
@@ -315,9 +315,10 @@ exports.Exchange = (req, res) => {
                         }
                     usersFigurines.find( { id_user: id_user } )
                     .then((user_figurines) => {
-                            const { checkResult, userFigurinesId } = checkUserHasBuyingOfferFigurine(offer.requesting.figurines, user_figurines)
+                        const { userDoubleFigurines } = utils.checkDoubleFigs(user_figurines);
+                            const { checkResult, userFigurinesId } = checkUserHasBuyingOfferFigurine(offer.requesting.figurines, userDoubleFigurines)
                             if(!checkResult) {
-                                res.status(400).json({success: false, errorMessage: 'you don\'t have the figurines requested in the exchange offer'});
+                                res.status(400).json({success: false, errorMessage: 'you don\'t have the figurines requested in the exchange offer as double or at all'});
                                 return;
                             } 
                             console.log('you have the figurines requested in the exchange offer');
@@ -325,7 +326,7 @@ exports.Exchange = (req, res) => {
                                 res.status(400).json({success: false, errorMessage: 'the figurine requested in the exchange is already in another offer'});
                                 return;
                             }
-                            console.log('the figurines that match the requested figurines are not already being sold \n\n exchanginData');
+                            console.log('the figurines that match the requested figurines are not already being sold \n' + userFigurinesId + '\n\n exchanginData');
                             console.log(offer.requesting.figurines);
                             if(exchangeData(offer, id_user)) {
                                 marketplaceOffers.findOneAndDelete({_id: exchange_offer_id})
