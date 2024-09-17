@@ -323,7 +323,9 @@ exports.Exchange = (req, res) => {
                                 return;
                             } 
                             console.log('you have the figurines requested in the exchange offer');
-                            if(!checkuserFigurinesInAnotherOffer(userFigurinesId, user_profile.username)) {
+                            console.log(userFigurinesId);
+                            const check = checkuserFigurinesInAnotherOffer(userFigurinesId, user_profile.username);
+                            if(!check) {
                                 res.status(400).json({success: false, errorMessage: 'the figurine requested in the exchange is already in another offer'});
                                 return;
                             }
