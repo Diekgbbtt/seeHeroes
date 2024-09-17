@@ -905,7 +905,7 @@
                 <div class="figurinesChoiche">
                     <div class="mainFigurinesChoiche">
                         <a id="closeNewofferMenu" >
-                            <i onclick="document.querySelector('.modalNewOffer').style.display='none'; sessionStorage.clear(); document.querySelector('.figurinesList').innerHTML = ''; document.querySelector('.buyingItemsList').innerHTML = ''; document.querySelector('.sellingItemsList').innerHTML = ''; document.getElementById('suggestions').innerHTML = ''; document.getElementById('search-input').value = '';" style="color: #ffffff;">&times;</i>
+                            <i onclick="closeNewOfferMenu()" style="color: #ffffff;">&times;</i>
                         </a>
                         <input type="text" id="search-input" placeholder="&#128269; Enter figurine name">
                     </div>
@@ -1564,6 +1564,23 @@
             } else {
             console.log('element not recognized')
             }
+    }
+
+    function closeNewOfferMenu() {
+        document.querySelector('.modalNewOffer').style.display='none'; 
+
+        document.querySelector('.figurinesList').innerHTML = ''; 
+        document.querySelector('.buyingItemsList').innerHTML = ''; 
+        document.querySelector('.sellingItemsList').innerHTML = ''; 
+        document.getElementById('suggestions').innerHTML = ''; 
+        document.getElementById('search-input').value = '';
+
+        sessionStorage.clear(); 
+
+        exchangeItems.buying.points = 0;
+        exchangeItems.buying.figurines = [];
+        exchangeItems.selling.points = 0;
+        exchangeItems.selling.figurines = [];
     }
 
     function confirmNewOffer() {
