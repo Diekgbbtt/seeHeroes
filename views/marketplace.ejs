@@ -1475,7 +1475,7 @@
             if(sessionStorage.hasOwnProperty(key)) {
                 if(key.startsWith('double_')) {
                     if(JSON.parse(sessionStorage.getItem(key)).name === itemName) {
-                        alert("you already have this hero in doubles, you can have maximum 2 figurines per hero")
+                        alert("this hero is already in doubles, you can't buy another one")
                         return
                     }
                 }

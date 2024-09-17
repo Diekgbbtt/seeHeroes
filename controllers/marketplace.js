@@ -170,7 +170,7 @@ function exchangeData(offer, id_user) {
             if(offer.offering.figurines.length > 0) {
                 offer.offering.figurines.forEach((sellingFigurine) => {
                     usersFigurines.findOneAndUpdate(
-                        {_id: sellingFigurine.figurine_id},
+                        {_id: sellingFigurine.figurine_id, id_user: offer_user._id},
                         { $set: {id_user: id_user} },
                         {new: true}
                     )
