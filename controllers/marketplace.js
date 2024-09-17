@@ -93,11 +93,11 @@ function checkUserHasBuyingOfferFigurine(offerRequestingFigurines, userFigurines
         if(userFigurines.length > 0) {
             offerRequestingFigurines.forEach(requestingFigurine => {
                 userFigurines.forEach(figurine => {
-                    if(requestingFigurine.figurine_name === figurine.name) {
+                    if(requestingFigurine.figurine_name === figurine.name && !userFigurinesId.includes(figurine._id)) {
+                        if(userFigurinesId.lenght === offerRequestingFigurines.indexOf(requestingFigurine))
                         console.log(colors.fg.green + "FOUND: " + figurine._id + colors.reset)
                         userFigurinesId.push(figurine._id);
-                        offerRequestingFigurines.splice(offerRequestingFigurines.indexOf(requestingFigurine), 1);
-                        return true;
+                        return
                     }
                 });
             });
@@ -110,7 +110,7 @@ function checkUserHasBuyingOfferFigurine(offerRequestingFigurines, userFigurines
         return {checkResult, userFigurinesId}; // offer has no requesting figurine, only points if there are no userFigurines will be handled later
     }
     console.log(colors.fg.yellow + "user figurines id: " + userFigurinesId + colors.reset)
-    checkResult = offerRequestingFigurines.length === 0;
+    checkResult = userFigurinesId.length === offerRequestingFigurines.length;
     return {checkResult, userFigurinesId};
 }
 
