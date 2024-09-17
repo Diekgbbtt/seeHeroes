@@ -135,6 +135,7 @@ function exchangeData(offer, id_user) {
     let check = true;
     users.findOne({username: offer.username })
         .then((offer_user) => {
+            console.log(colors.fg.red + "requesting figurines: " + offer.requesting.figurines + colors.reset)
             if(offer.requesting.figurines.length > 0) {
                 offer.requesting.figurines.forEach((requestingFigurine) => {
                     usersFigurines.findOneAndUpdate(
@@ -143,7 +144,7 @@ function exchangeData(offer, id_user) {
                         {new: true}
                     )
                     .then((updated_user_figurine) => {
-                      //  console.log(colors.fg.red + "updated user figurine " + updated_user_figurine._id + " to " + updated_user_figurine.id_user + colors.reset)
+                      console.log(colors.fg.red + "updated user of requesting figurine " + id_user + " to " + updated_user_figurine.id_user + colors.reset)
                     })
                 })
             }
@@ -155,7 +156,7 @@ function exchangeData(offer, id_user) {
                     {new: true}
                 )
                 .then((updated_user) => {
-                    //console.log(colors.fg.green + "current user " + updated_user.username + " has " + updated_user.points + " points" + colors.reset)
+                    console.log(colors.fg.green + "current user " + updated_user.username + " has " + updated_user.points + " points" + colors.reset)
                 })
                 users.findOneAndUpdate(
                     {_id: offer_user._id},
@@ -163,7 +164,7 @@ function exchangeData(offer, id_user) {
                     {new: true}
                 )
                 .then((updated_user) => {
-                    //console.log(colors.fg.yellow + "offer user " + updated_user.username + " has " + updated_user.points + " points" + colors.reset)
+                    console.log(colors.fg.yellow + "offer user " + updated_user.username + " has " + updated_user.points + " points" + colors.reset)
                 })
             }
             if(offer.offering.figurines.length > 0) {
@@ -174,7 +175,7 @@ function exchangeData(offer, id_user) {
                         {new: true}
                     )
                     .then((updated_user_figurine) => {
-                      //  console.log(colors.fg.red + "updated user figurine " + updated_user_figurine._id + " to " + updated_user_figurine.id_user + colors.reset)
+                      console.log(colors.fg.red + "updated user of selling figurine " + offer_user._id + " to " + updated_user_figurine.id_user + colors.reset)
                     })
                 })
             }
@@ -186,7 +187,7 @@ function exchangeData(offer, id_user) {
                     {new: true}
                 )
                 .then((updated_user) => {
-                    //console.log(colors.fg.green + "current user " + updated_user.username + " has " + updated_user.points + " points" + colors.reset)
+                    console.log(colors.fg.green + "current user " + updated_user.username + " has " + updated_user.points + " points" + colors.reset)
                 })
                 // for the user of the offer, selling points were deducted on offer creation to preserve credits
             }
@@ -315,17 +316,17 @@ exports.Exchange = (req, res) => {
                     usersFigurines.find( { id_user: id_user } )
                     .then((user_figurines) => {
                             const { checkResult, userFigurinesId } = checkUserHasBuyingOfferFigurine(offer.requesting.figurines, user_figurines)
-                            if(checkResult) {
-                                console.log('you have the figurines requested in the exchange offer');
-                                if(!checkuserFigurinesInAnotherOffer(userFigurinesId, user_profile.username)) {
-                                    res.status(400).json({success: false, errorMessage: 'the figurine requested in the exchange is already in another offer'});
-                                    return;
-                                }
-                            } else {
+                            if(!checkResult) {
                                 res.status(400).json({success: false, errorMessage: 'you don\'t have the figurines requested in the exchange offer'});
                                 return;
+                            } 
+                            console.log('you have the figurines requested in the exchange offer');
+                            if(!checkuserFigurinesInAnotherOffer(userFigurinesId, user_profile.username)) {
+                                res.status(400).json({success: false, errorMessage: 'the figurine requested in the exchange is already in another offer'});
+                                return;
                             }
-                            console.log('you have the figurines requested in the exchange offer \n\n exchanginData');
+                            console.log('the figurines that match the requested figurines are not already being sold \n\n exchanginData');
+                            console.log(offer.requesting.figurines);
                             if(exchangeData(offer, id_user)) {
                                 marketplaceOffers.findOneAndDelete({_id: exchange_offer_id})
                                 .then((deletedOffer) => {
