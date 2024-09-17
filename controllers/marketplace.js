@@ -114,10 +114,9 @@ function checkUserHasBuyingOfferFigurine(offerRequestingFigurines, userFigurines
     return {checkResult, userFigurinesId};
 }
 
-function checkuserFigurinesInAnotherOffer(userFigurinesId, username) {
+function checkuserFigurinesInAnotherOffer(userFigurinesId, user_offers) {
     let check = true;
-    marketplaceOffers.find({username: username})
-    .then((user_offers) => {
+        console.log(user_offers)
         userFigurinesId.forEach(figId => {
         user_offers.forEach((offer) => {
             offer.offering.figurines.forEach(offerFigurine => {
@@ -129,9 +128,9 @@ function checkuserFigurinesInAnotherOffer(userFigurinesId, username) {
             });
         });
     });
-    })
     return check;
 }
+
 function exchangeData(offer, id_user) {
     let check = true;
     users.findOne({username: offer.username })
@@ -324,11 +323,14 @@ exports.Exchange = (req, res) => {
                             } 
                             console.log('you have the figurines requested in the exchange offer');
                             console.log(userFigurinesId);
-                            const check = checkuserFigurinesInAnotherOffer(userFigurinesId, user_profile.username);
-                            if(!check) {
-                                res.status(400).json({success: false, errorMessage: 'the figurine requested in the exchange is already in another offer'});
-                                return;
-                            }
+                            marketplaceOffers.find({username: user_profile.username })
+                            .then((user_offers) => {
+                                const check = checkuserFigurinesInAnotherOffer(userFigurinesId, user_offers);
+                                if(!check) {
+                                    res.status(400).json({success: false, errorMessage: 'the figurine requested in the exchange is already in another offer'});
+                                    return;
+                                }
+                            });
                             console.log('the figurines that match the requested figurines are not already being sold \n' + userFigurinesId + '\n\n exchanginData');
                             console.log(offer.requesting.figurines);
                             if(exchangeData(offer, id_user)) {
