@@ -1,9 +1,10 @@
-function loginRedirect(req, res) {
+
+exports.loginRedirect = (req, res) => {
     req.flash('errors', { msg: "You are not logged in." });
     return res.status(302).render('login', { messages: {errors: [], redirectErrors: req.flash('errors') }});
   }
 
-function checkDoubleFigs(userFigurines) {
+exports.checkDoubleFigs = (userFigurines) => {
 
     const userDoubleFigurines = [];
 
@@ -19,12 +20,7 @@ function checkDoubleFigs(userFigurines) {
     return {userFigurines, userDoubleFigurines};
   }
 
-
-function handleError(errorMsg, req, res, page = 'home') {
+exports.handleError = (errorMsg, req, res, page = 'home') => {
     req.flash('errors', { msg: errorMsg });
     return res.status(400).render(page, { isAuthenticated: true, messages: {errors: req.flash('errors') }});
 }
-
-module.exports.loginRedirect = loginRedirect;
-module.exports.checkDoubleFigs = checkDoubleFigs;
-module.exports.handleError = handleError;

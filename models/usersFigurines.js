@@ -36,10 +36,4 @@ const userFigurineSchema = new mongoose.Schema({
       }
 });
 
-
-
-/* check that doesn't already exsits such an offer or an opposite offer*/
-
-
-
 module.exports = mongoose.model('UserFigurine', userFigurineSchema);

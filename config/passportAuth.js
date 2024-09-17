@@ -1,11 +1,5 @@
 const passport = require('passport');
 const { Strategy: LocalStrategy } = require('passport-local');
-const { OAuth2Strategy: GoogleStrategy } = require('passport-google-oauth');
-const localStrategy = require('passport-local').Strategy;   
-const session = require('express-session');
-const bcrypt = require('bcryptjs');
-
-
 const user = require('../models/users');
 
 

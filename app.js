@@ -15,18 +15,11 @@ const swaggerUi = require('swagger-ui-express');
 Specifically designed to store session data in MongoDB.
 Used in conjunction with express-session middleware to persist session information in MongoDB instead of in-memory storage.
 */
-
 const homeController = require('./controllers/home');
 const accountRoutes = require('./routes/accountRoutes');
 const marketplaceRoutes = require('./routes/marketplaceRoutes');
 
 dotenv.config({ path: '.env' });
-
-const app = express();
-
-
-app.use(express.static(path.join(__dirname)));
-
 
 const swaggerOptions = {
   definition: {
@@ -92,12 +85,13 @@ const swaggerOptions = {
 
 const swaggerDocs = swaggerJsdoc(swaggerOptions);
 
-app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocs));
-
+const app = express();
 
 app.set('port', process.env.PORT || 8080);
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
+
+app.use(express.static(path.join(__dirname)));
 /* By setting this directory, you can simply refer to view names in your route handlers 
 without specifying the full path each time*/
 app.use(bodyParser.json());
@@ -146,12 +140,11 @@ If deserialization is successful, Passport attaches the user object to the reque
 In your routes, you can then check req.isAuthenticated() (provided by Passport) to see if a user is logged in
 */
 
-
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocs));
 app.use('/faq', homeController.getFAQ);
 app.use('/account', accountRoutes);
 app.use('/marketplace', marketplaceRoutes);
 app.use('/', homeController.getHome);
-// app.use('/addpoints', stripetestpayment)
 
 
 
@@ -164,12 +157,6 @@ mongoose.connection.on('error', (err) => {
 mongoose.connection.on('connected', () => {
   console.log('Connected to MongoDB');
 });
-
-
-
-
-
-
 
 app.listen(app.get('port'), () => {
   console.log('Server is running on port', app.get('port'));
