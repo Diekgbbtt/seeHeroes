@@ -243,7 +243,7 @@ exports.postBuyPackets = async (req, res) => {
     if(req.isAuthenticated()) {
         users.findById( {_id: req.session.passport.user})
             .then((user) => {
-                if(user.points >= req.body.amount) {
+                if(user.points >= req.body.amount*pointsMoltiplicator) {
                     users.findOneAndUpdate( { _id: user._id }, { $inc: {points: -req.body.amount*pointsMoltiplicator } })
                         .then(() => {
                             for (let i = 0; i < req.body.amount; i++) {
