@@ -109,9 +109,8 @@ function checkUserHasBuyingOfferFigurine(offerRequestingFigurines, userFigurines
         checkResult = true;
         return {checkResult, userFigurinesId}; // offer has no requesting figurine, only points if there are no userFigurines will be handled later
     }
-    console.log(colors.fg.yellow + "user figurines id: " + userFigurinesId + colors.reset)
     checkResult = userFigurinesId.length === offerRequestingFigurines.length;
-    return {checkResult, userFigurinesId};
+    return checkResult
 }
 
 function checkuserFigurinesInAnotherOffer(userFigurinesId, user_offers) {
@@ -120,7 +119,9 @@ function checkuserFigurinesInAnotherOffer(userFigurinesId, user_offers) {
         userFigurinesId.forEach(figId => {
         user_offers.forEach((offer) => {
             offer.offering.figurines.forEach(offerFigurine => {
-                console.log(" in this offer user is selling fig: "+offerFigurine.figurine_id + "we are checking: "+figId)
+                console.log(typeof figId)
+                console.log(typeof offerFigurine.figurine_id)
+                console.log(" in this offer user is selling fig: "+offerFigurine.figurine_id + " we are checking: "+figId)
                 if(offerFigurine.figurine_id === figId) {
                     console.log(colors.fg.yellow + "user figurine already in another offer" + figId + colors.reset)
                     check = false;
@@ -170,7 +171,7 @@ function exchangeData(offer, id_user) {
             if(offer.offering.figurines.length > 0) {
                 offer.offering.figurines.forEach((sellingFigurine) => {
                     usersFigurines.findOneAndUpdate(
-                        {_id: sellingFigurine.figurine_id},
+                        {name: sellingFigurine.figurine_name, id_user: offer_user._id},
                         { $set: {id_user: id_user} },
                         {new: true}
                     )
@@ -316,23 +317,11 @@ exports.Exchange = (req, res) => {
                     usersFigurines.find( { id_user: id_user } )
                     .then((user_figurines) => {
                         const { userDoubleFigurines } = utils.checkDoubleFigs(user_figurines);
-                            const { checkResult, userFigurinesId } = checkUserHasBuyingOfferFigurine(offer.requesting.figurines, userDoubleFigurines)
+                            const {checkResult} = checkUserHasBuyingOfferFigurine(offer.requesting.figurines, userDoubleFigurines)
                             if(!checkResult) {
                                 res.status(400).json({success: false, errorMessage: 'you don\'t have the figurines requested in the exchange offer as double or at all'});
                                 return;
                             } 
-                            console.log('you have the figurines requested in the exchange offer');
-                            console.log(userFigurinesId);
-                            marketplaceOffers.find({username: user_profile.username })
-                            .then((user_offers) => {
-                                const check = checkuserFigurinesInAnotherOffer(userFigurinesId, user_offers);
-                                if(!check) {
-                                    res.status(400).json({success: false, errorMessage: 'the figurine requested in the exchange is already in another offer'});
-                                    return;
-                                }
-                            });
-                            console.log('the figurines that match the requested figurines are not already being sold \n' + userFigurinesId + '\n\n exchanginData');
-                            console.log(offer.requesting.figurines);
                             if(exchangeData(offer, id_user)) {
                                 marketplaceOffers.findOneAndDelete({_id: exchange_offer_id})
                                 .then((deletedOffer) => {
@@ -342,7 +331,7 @@ exports.Exchange = (req, res) => {
                                 })
 
                             } else {
-                                res.json({success: false, errorMessage: 'error exchanging data'});
+                                res.status(400).json({success: false, errorMessage: 'error exchanging data'});
                             }
                         })
                         .catch((error) => {
